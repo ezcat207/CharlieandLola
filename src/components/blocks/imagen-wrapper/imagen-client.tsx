@@ -92,12 +92,43 @@ interface ImagenClientProps {
 }
 
 export default function ImagenClient({ translations: t }: ImagenClientProps) {
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEYS.uploadedImages);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+          console.warn('Failed to parse saved uploaded images:', e);
+        }
+      }
+    }
+    return [];
+  });
+  const [generatedImage, setGeneratedImage] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEYS.generatedImage);
+      if (saved && saved !== 'null') return saved;
+    }
+    return null;
+  });
   const [isGenerating, setIsGenerating] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState('charlie-lola');
-  const [customPrompt, setCustomPrompt] = useState<string>('');
+  const [selectedStyle, setSelectedStyle] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEYS.selectedStyle);
+      if (saved) return saved;
+    }
+    return 'charlie-lola';
+  });
+  const [customPrompt, setCustomPrompt] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEYS.customPrompt);
+      if (saved) return saved;
+    }
+    return '';
+  });
   const [currentBgImage, setCurrentBgImage] = useState(0);
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [outputFormat, setOutputFormat] = useState('jpeg');
