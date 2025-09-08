@@ -3,68 +3,127 @@
 ## Directory Structure
 
 ### Core Application
-- `src/app/` - Next.js App Router with locale-based routing (`[locale]/`)
-  - `(default)/` - Main app pages (landing, console, posts)
-  - `(admin)/` - Admin dashboard pages  
-  - `(docs)/` - Documentation pages
-  - `api/` - API routes and endpoints
+```
+src/app/                    # Next.js App Router
+├── [locale]/              # Internationalized routes  
+├── api/                   # API routes
+│   └── generate-cyberpunk/    # Main image generation endpoint
+└── globals.css            # Global styles
 
-### Components Architecture
-- `src/components/blocks/` - Large layout sections for landing pages
-- `src/components/ui/` - Reusable Shadcn UI components
-- `src/components/console/` - User console/dashboard components
-- `src/components/dashboard/` - Admin dashboard components
+src/components/            # React Components
+├── blocks/                # Landing page sections
+│   └── imagen-wrapper/        # Main image generation interface
+└── ui/                    # Reusable Shadcn UI components
+
+src/aisdk/                 # Custom AI SDK
+└── providers/             # AI provider implementations
+```
 
 ### Data Layer
-- `src/db/` - Drizzle ORM setup, schema, migrations
-- `src/models/` - Data models for database entities  
-- `src/services/` - Business logic and service layer
+```
+src/db/                    # Database configuration
+├── schema/                # Drizzle schema definitions
+├── migrations/            # Database migrations
+└── config.ts              # Drizzle configuration
 
-### AI Integration
-- `src/aisdk/` - Custom AI SDK with video generation capabilities
-- `src/aisdk/provider/` - Extensible provider system
-- `src/aisdk/kling/` - Kling AI provider implementation
+src/models/                # Data models and types
+src/services/              # Business logic layer
+```
 
-### Authentication & Security
-- `src/auth/` - NextAuth.js configuration with multiple providers
-- Custom user handling and session management
-- Invite code system for user onboarding
+### Configuration & Utilities  
+```
+src/auth/                  # NextAuth.js configuration
+├── handler.ts             # Custom user handling
+└── providers/             # OAuth provider configs
 
-### Internationalization
-- `src/i18n/` - next-intl setup with locale routing
-- `src/i18n/messages/` - Translation files (en.json, zh.json)
-- `src/i18n/pages/` - Page-specific translations
+src/i18n/                  # Internationalization
+├── messages/              # Translation files
+└── pages/                 # Page-specific translations
 
-### Configuration & Utils
-- `src/lib/` - Utility functions and custom libraries
-- `src/hooks/` - Custom React hooks
-- `src/types/` - TypeScript type definitions
+src/lib/                   # Utility functions
+src/hooks/                 # Custom React hooks
+src/contexts/              # React context providers
+```
 
-## Database Schema (Multi-tenant SaaS)
-- **users** - User management with OAuth providers and affiliate system
-- **orders** - Stripe subscription and payment tracking  
-- **credits** - Credit-based usage system
-- **apikeys** - API key management for users
-- **posts/categories** - Content management system
-- **affiliates** - Referral/affiliate program
-- **feedbacks** - User feedback collection
+## Database Schema
 
-## API Architecture
-- **RESTful endpoints** in `src/app/api/`
-- **File upload handling** with FormData
-- **Standardized responses**: `{code: 0|1, data?: any, msg?: string}`
-- **Authentication middleware** via NextAuth
-- **Rate limiting** and **credit validation**
+### Core Entities
+- **users**: User accounts with OAuth provider info and affiliate tracking
+- **orders**: Stripe subscription and payment records
+- **credits**: Usage tracking and credit consumption
+- **apikeys**: User API key management
+- **posts/categories**: Content management system
+- **affiliates**: Referral and affiliate program
+- **feedbacks**: User feedback collection
 
-## AI Provider System
-- **Extensible architecture** for multiple AI providers
-- **Type-safe interfaces** for different AI models
-- **Provider-specific settings** and configurations
-- **Video generation capabilities** via Kling provider
+### Relationships
+- Users have many orders (payment history)
+- Users have credit transactions (usage tracking)  
+- Users can have API keys for external access
+- Affiliate system tracks user referrals
+
+## Authentication Flow
+
+### OAuth Integration
+1. **Google OAuth**: Primary authentication method
+2. **GitHub OAuth**: Secondary provider  
+3. **Google One Tap**: Streamlined sign-in experience
+
+### User Management
+- **Automatic Registration**: New users created on first OAuth login
+- **Invite Code System**: Support for referral tracking
+- **Session Management**: JWT-based sessions via NextAuth.js
+
+## AI Integration Architecture
+
+### Image Generation Pipeline
+1. **Upload Handling**: Multi-file upload with validation (max 5 images, 10MB limit)
+2. **Image Processing**: Convert to base64 for API submission
+3. **AI Provider**: Google Gemini 2.5 Flash Image Preview
+4. **Style Application**: Charlie and Lola cartoon transformation
+5. **Storage**: Optional cloud storage with fallback to data URLs
+6. **Response**: Tiered access based on user authentication
+
+### API Pool Management
+- **Key Rotation**: Multiple API keys for load distribution
+- **Failure Handling**: Automatic key marking and retry logic
+- **Quota Management**: Rate limiting and usage tracking
+
+## Internationalization Architecture
+
+### Route Structure
+```
+/[locale]/                 # Language-specific routes
+├── en/                    # English content
+└── zh/                    # Chinese content
+```
+
+### Translation Management
+- **Message Files**: Structured JSON for different page sections
+- **Component Integration**: useTranslations hook throughout components
+- **Dynamic Content**: Runtime translation with parameter substitution
+
+## Payment and Credit System
+
+### Stripe Integration
+- **Subscription Management**: Recurring payment processing
+- **Webhook Handling**: Real-time payment status updates
+- **Plan Management**: Multiple subscription tiers
+
+### Credit System  
+- **Usage Tracking**: Per-generation credit consumption
+- **Free Tier**: Limited access with registration requirements
+- **Premium Features**: Higher quotas and priority processing
 
 ## Deployment Architecture
-- **Standalone output** for containerization
-- **Vercel-optimized** (primary target)
-- **Cloudflare compatibility** (separate branch)
-- **Environment-based configuration**
-- **CDN integration** for static assets
+
+### Vercel (Primary)
+- **Zero-config Deployment**: Automatic builds and deployments
+- **Serverless Functions**: API routes as serverless functions
+- **CDN**: Global content delivery network
+- **Environment Variables**: Secure configuration management
+
+### Cloudflare (Alternative)
+- **Workers**: Serverless compute platform
+- **R2 Storage**: Object storage integration
+- **Custom Configuration**: wrangler.toml setup required
