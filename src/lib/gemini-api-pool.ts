@@ -18,11 +18,12 @@ export class GeminiApiPool {
   private initializeApiKeys() {
     // Get all Gemini API keys from environment variables
     const geminiKeys = [
-      process.env.GOOGLE_API_KEY,
-      process.env.GOOGLE_API_KEY_2, 
-      process.env.GOOGLE_API_KEY_3,
-      process.env.GOOGLE_API_KEY_4,
-      process.env.GOOGLE_API_KEY_5,
+      process.env.GEMINI_API_KEY,
+      process.env.GEMINI_API_KEY_1,
+      process.env.GEMINI_API_KEY_2, 
+      process.env.GEMINI_API_KEY_3,
+      process.env.GEMINI_API_KEY_4,
+      process.env.GEMINI_API_KEY_5,
     ].filter(key => key && key.trim() !== '');
 
     this.apiKeys = geminiKeys.map(key => ({
