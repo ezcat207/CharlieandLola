@@ -116,6 +116,86 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   // Use the credit hook only if user is authenticated
   const { credits, isLoading: creditsLoading, refreshCredits } = useUserCredits();
 
+  // LocalStorage keys for persisting state
+  const STORAGE_KEYS = {
+    generatedImage: 'charlieandlola_generated_image',
+    uploadedImages: 'charlieandlola_uploaded_images',
+    selectedStyle: 'charlieandlola_selected_style',
+    customPrompt: 'charlieandlola_custom_prompt'
+  };
+
+  // Load persisted state on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Restore generated image
+      const savedGeneratedImage = localStorage.getItem(STORAGE_KEYS.generatedImage);
+      if (savedGeneratedImage && savedGeneratedImage !== 'null') {
+        setGeneratedImage(savedGeneratedImage);
+      }
+
+      // Restore uploaded images
+      const savedUploadedImages = localStorage.getItem(STORAGE_KEYS.uploadedImages);
+      if (savedUploadedImages) {
+        try {
+          const parsedImages = JSON.parse(savedUploadedImages);
+          if (Array.isArray(parsedImages)) {
+            setUploadedImages(parsedImages);
+          }
+        } catch (error) {
+          console.warn('Failed to parse saved uploaded images:', error);
+        }
+      }
+
+      // Restore selected style
+      const savedStyle = localStorage.getItem(STORAGE_KEYS.selectedStyle);
+      if (savedStyle) {
+        setSelectedStyle(savedStyle);
+      }
+
+      // Restore custom prompt
+      const savedPrompt = localStorage.getItem(STORAGE_KEYS.customPrompt);
+      if (savedPrompt) {
+        setCustomPrompt(savedPrompt);
+      }
+    }
+  }, []);
+
+  // Save generated image to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (generatedImage) {
+        localStorage.setItem(STORAGE_KEYS.generatedImage, generatedImage);
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.generatedImage);
+      }
+    }
+  }, [generatedImage]);
+
+  // Save uploaded images to localStorage whenever they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (uploadedImages.length > 0) {
+        localStorage.setItem(STORAGE_KEYS.uploadedImages, JSON.stringify(uploadedImages));
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.uploadedImages);
+      }
+    }
+  }, [uploadedImages]);
+
+  // Save selected style to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.selectedStyle, selectedStyle);
+    }
+  }, [selectedStyle]);
+
+  // Save custom prompt to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.customPrompt, customPrompt);
+    }
+  }, [customPrompt]);
+
   // Background image rotation effect
   useEffect(() => {
     const interval = setInterval(() => {
@@ -137,7 +217,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
       tags: t.styles.options.charlie_lola?.tags || ['Cartoon', 'Children\'s Book', 'Whimsical'],
       preview: '/imgs/template/charlie-and-lola-trend-1.jpg',
       referenceImage: '/imgs/template/selfie-charlie.png',
-      prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: plain white or transparent to keep the focus on the character.'
+      prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character.'
     },
     { 
       value: 'commercial-figure', 
@@ -224,6 +304,13 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   const clearAllImages = () => {
     setUploadedImages([]);
     setGeneratedImage(null);
+    
+    // Also clear localStorage when user manually clears
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEYS.uploadedImages);
+      localStorage.removeItem(STORAGE_KEYS.generatedImage);
+      localStorage.removeItem(STORAGE_KEYS.customPrompt);
+    }
   };
 
   const generateImage = async () => {
@@ -316,127 +403,50 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   };
 
   const downloadImage = async () => {
-    if (generatedImage) {
-      // Check if user needs to register to download
-      if (!session) {
-        toast.warning("Please sign in to download the full resolution image!");
-        return;
+    if (!generatedImage) {
+      toast.error("No image to download");
+      return;
+    }
+
+    // Require login to download
+    if (!session) {
+      toast.warning("Please sign in to download the full resolution image!");
+      return;
+    }
+    
+    try {
+      // Use the proxy API instead of direct fetch to avoid CORS issues
+      const proxyUrl = `/api/download-image?url=${encodeURIComponent(generatedImage)}`;
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      const filename = `charlie-lola-${timestamp}.jpg`;
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = proxyUrl;
+      link.download = filename;
+      link.style.display = 'none';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Check if mobile for appropriate success message
+      const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobileDevice) {
+        toast.success('Image downloaded. Check your Downloads folder or long-press to save to photos.');
+      } else {
+        toast.success(t.messages.success.downloaded);
       }
       
-      try {
-        const url = new URL(generatedImage);
-        const pathParts = url.pathname.split('.');
-        const actualExtension = pathParts.length > 1 ? pathParts.pop()?.toLowerCase() : 'jpg';
-        
-        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-        const filename = `imagen-${selectedStyle}-${timestamp}.${actualExtension}`;
-        
-        const response = await fetch(generatedImage, {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'omit',
-          headers: { 'Accept': 'image/*' }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const blob = await response.blob();
-        
-        // Check if running on mobile device
-        const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobileDevice) {
-          // Mobile-specific download: Try to save to photo gallery
-          try {
-            // Check if Web Share API is available for sharing to gallery
-            if (navigator.share && navigator.canShare) {
-              const file = new File([blob], filename, { type: blob.type });
-              const shareData = {
-                files: [file],
-                title: 'Generated Image',
-                text: 'Save this generated image to your photo gallery'
-              };
-              
-              if (navigator.canShare(shareData)) {
-                await navigator.share(shareData);
-                toast.success('Image ready to save to gallery');
-                return;
-              }
-            }
-            
-            // Fallback: Create a download link optimized for mobile
-            const objectUrl = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = objectUrl;
-            link.download = filename;
-            
-            // Add styles for mobile download prompt
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(objectUrl);
-            
-            // Show mobile-specific success message
-            toast.success('Image downloaded. Long-press the image and select "Save to Photos" to add to your gallery.');
-            
-          } catch (mobileError) {
-            console.error('Mobile download failed:', mobileError);
-            // Fallback to opening image in new tab for manual save
-            const objectUrl = window.URL.createObjectURL(blob);
-            window.open(objectUrl, '_blank');
-            toast.success('Image opened in new tab. Long-press to save to photos.');
-            window.URL.revokeObjectURL(objectUrl);
-          }
-        } else {
-          // Desktop download behavior (unchanged)
-          const objectUrl = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = objectUrl;
-          link.download = filename;
-          
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(objectUrl);
-          
-          toast.success(t.messages.success.downloaded);
-        }
-        
-      } catch (error) {
-        console.error('Download failed:', error);
-        
-        try {
-          const proxyUrl = `/api/download-image?url=${encodeURIComponent(generatedImage)}`;
-          const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-          const filename = `imagen-${selectedStyle}-${timestamp}.jpg`;
-          
-          const link = document.createElement('a');
-          link.href = proxyUrl;
-          link.download = filename;
-          
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          
-          // Check if mobile for appropriate success message
-          const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-          if (isMobileDevice) {
-            toast.success('Image downloaded. Check your Downloads folder or long-press to save to photos.');
-          } else {
-            toast.success(t.messages.success.downloaded);
-          }
-          
-        } catch (proxyError) {
-          console.error('Proxy download failed:', proxyError);
-          toast.error(t.messages.errors.download_failed);
-          window.open(generatedImage, '_blank');
-        }
-      }
+    } catch (error) {
+      console.error('Download failed:', error);
+      toast.error(t.messages.errors.download_failed);
+      
+      // Fallback: open in new tab for manual save
+      window.open(generatedImage, '_blank');
+      toast.info("Image opened in new tab. Right-click to save.");
     }
-  };
+  };;
 
   const shareImage = async () => {
     if (generatedImage) {

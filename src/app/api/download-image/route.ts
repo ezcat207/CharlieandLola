@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
       'r2.cloudflarestorage.com',
       'r2.dev', // Cloudflare R2 public domains
       'pub-caf0ef6125ee4999a8a4bc4c0ec36bca.r2.dev', // Your specific R2 domain
+      'pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev', // Charlie & Lola R2 domain
     ];
     
     // Check if the domain is allowed
