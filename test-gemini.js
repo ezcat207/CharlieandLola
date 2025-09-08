@@ -8,8 +8,7 @@ const API_KEY = 'AIzaSyBZb8koXKLk3h5FNWgidSB7EvjsF8dJjdM';
 const MODEL_NAME = 'gemini-2.5-flash-image-preview';
 const IMAGE_URL = 'https://pub-caf0ef6125ee4999a8a4bc4c0ec36bca.r2.dev/input/input_9c7c224d-a0f1-4ed9-9776-c35367e87ba2_0.jpeg';
 
-const PROMPT = `Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children's cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject's original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: plain white or transparent to keep the focus on the character.`;
-
+const PROMPT = "Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children's cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject's original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character. Negative Prompt: No realistic shading, no detailed rendering, no anime or manga style, no 3D modeling, no photographic textures!";
 // Download image function
 function downloadImage(url, filepath) {
   return new Promise((resolve, reject) => {

@@ -146,35 +146,35 @@
   },
   "imagen": {
     "badge": {
-      "text": "神奇角色转换器"
+      "text": "查理罗拉AI潮流"
     },
     "title": {
       "main": "查理和罗拉",
-      "subtitle": "风格魔法"
+      "subtitle": "AI风格魔法"
     },
-    "description": "神奇的AI角色转换服务，使用Gemini 2.5 Flash Image Preview技术。将任何照片转换为可爱的查理和罗拉卡通角色，完美呈现儿童绘本的魅力！",
+    "description": "使用我们的AI生成器，将您的照片转换为迷人的查理和罗拉角色。加入TikTok热门潮流，创作具有手绘感和扁平色彩的独特卡通艺术。",
     "features": {
       "guaranteed": {
-        "title": "100%",
-        "subtitle": "正宗风格"
+        "title": "正宗",
+        "subtitle": "卡通风格"
       },
       "no_lottery": {
-        "title": "神奇",
-        "subtitle": "变身魔法"
+        "title": "即时",
+        "subtitle": "变身"
       },
       "one_sentence": {
         "title": "简单",
-        "subtitle": "照片上传"
+        "subtitle": "照片转艺术"
       },
       "instant": {
-        "title": "可爱",
-        "subtitle": "角色形象"
+        "title": "热门",
+        "subtitle": "潮流就绪"
       }
     },
     "buttons": {
-      "try_now": "立即创作查理罗拉艺术",
+      "try_now": "立即体验查理罗拉AI",
       "browse_gallery": "浏览画廊",
-      "generate": "查理罗拉风格变身",
+      "generate": "生成查理罗拉艺术",
       "login_required": "请先登录",
       "generating": "生成中...",
       "download": "下载",
@@ -191,22 +191,12 @@
       "image_label": "图片 {number}"
     },
     "styles": {
-      "title": "查理罗拉角色风格",
+      "title": "选择您的查理罗拉风格",
       "options": {
         "charlie_lola": {
-          "label": "查理罗拉风格",
-          "description": "转换为经典儿童绘本角色",
-          "tags": "[\"卡通\", \"儿童绘本\", \"可爱风格\"]"
-        },
-        "commercial_figure": {
-          "label": "查理罗拉手办",
-          "description": "创造您的查理罗拉角色手办",
-          "tags": "[\"手办\", \"收藏品\", \"3D\"]"
-        },
-        "celebrity_selfie": {
-          "label": "查理罗拉肖像",
-          "description": "查理罗拉主题肖像风格",
-          "tags": "[\"肖像\", \"艺术\", \"风格化\"]"
+          "label": "查理罗拉卡通风格",
+          "description": "通过手绘轮廓和扁平色彩，转换为经典的儿童绘本角色。",
+          "tags": "[\"AI艺术\", \"卡通风格\", \"儿童绘本\", \"TikTok潮流\", \"手绘\"]"
         }
       }
     },
@@ -223,19 +213,19 @@
       }
     },
     "preview": {
-      "title": "您的查理罗拉角色",
+      "title": "您的查理罗拉AI艺术",
       "placeholder": "您的神奇角色变身将在这里呈现",
       "upload_prompt": "上传照片并创作您的查理罗拉角色"
     },
     "prompt": {
       "title": "自定义您的角色",
-      "current_style": "当前查理罗拉风格",
-      "customize_hint": "添加具体细节以个性化您的查理罗拉角色变身",
-      "reset_button": "重置为默认风格"
+      "current_style": "当前AI提示",
+      "customize_hint": "自定义AI提示，创作独特的查理罗拉艺术（例如：“添加一顶红帽子”，“将背景改为蓝色”）",
+      "reset_button": "重置提示"
     },
     "messages": {
       "success": {
-        "generated": "查理罗拉角色创作成功！",
+        "generated": "查理罗拉AI艺术生成成功！",
         "downloaded": "角色图片下载成功！",
         "url_copied": "角色图片链接已复制到剪贴板！"
       },

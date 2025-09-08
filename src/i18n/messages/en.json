@@ -141,40 +141,40 @@
     "submit": "Submit",
     "loading": "Submitting...",
     "contact_tip": "Other ways to contact us",
-    "rating_tip": "How do you feel about Nano Banana?",
+    "rating_tip": "How do you feel about Charlie and Lola Style Converter?",
     "placeholder": "Leave your words here..."
   },
   "imagen": {
     "badge": {
-      "text": "Magical Character Converter"
+      "text": "Charlie and Lola AI Trend"
     },
     "title": {
       "main": "Charlie & Lola",
-      "subtitle": "Style Magic"
+      "subtitle": "AI Style Magic"
     },
-    "description": "Magical AI-powered character transformation using Gemini 2.5 Flash Image Preview. Transform any photo into beloved Charlie and Lola cartoon characters with authentic children's book charm!",
+    "description": "Transform your photos into charming Charlie and Lola characters with our AI generator. Join the viral TikTok trend and create unique cartoon art with hand-drawn charm and flat colors.",
     "features": {
       "guaranteed": {
-        "title": "100%",
-        "subtitle": "Authentic Style"
+        "title": "Authentic",
+        "subtitle": "Cartoon Style"
       },
       "no_lottery": {
-        "title": "Magical",
+        "title": "Instant",
         "subtitle": "Transformation"
       },
       "one_sentence": {
-        "title": "Simple",
-        "subtitle": "Photo Upload"
+        "title": "Easy",
+        "subtitle": "Photo to Art"
       },
       "instant": {
-        "title": "Adorable",
-        "subtitle": "Characters"
+        "title": "Viral",
+        "subtitle": "Trend Ready"
       }
     },
     "buttons": {
-      "try_now": "Create Charlie & Lola Art Now",
+      "try_now": "Try Charlie & Lola AI Now",
       "browse_gallery": "Browse Gallery",
-      "generate": "Transform with Charlie & Lola Magic",
+      "generate": "Generate Charlie & Lola Art",
       "login_required": "Generate Now",
       "generating": "Generating...",
       "download": "Download",
@@ -191,12 +191,12 @@
       "image_label": "Image {number}"
     },
     "styles": {
-      "title": "Charlie & Lola Character Style",
+      "title": "Choose Your Charlie & Lola Style",
       "options": {
         "charlie_lola": {
-          "label": "Charlie & Lola Style",
-          "description": "Transform into beloved children's book characters",
-          "tags": "[\"Cartoon\", \"Children's Book\", \"Whimsical\"]"
+          "label": "Charlie & Lola Cartoon Style",
+          "description": "Transform into beloved children's book characters with hand-drawn outlines and flat colors.",
+          "tags": "[\"AI Art\", \"Cartoon Style\", \"Children's Book\", \"TikTok Trend\", \"Hand-drawn\"]"
         }
       }
     },
@@ -213,19 +213,19 @@
       }
     },
     "preview": {
-      "title": "Your Charlie & Lola Character",
+      "title": "Your Charlie & Lola AI Art",
       "placeholder": "Your magical character transformation will appear here",
       "upload_prompt": "Upload a photo and create your Charlie & Lola character"
     },
     "prompt": {
       "title": "Customize Your Character",
-      "current_style": "Current Charlie & Lola Style",
-      "customize_hint": "Add specific details to personalize your Charlie & Lola transformation",
-      "reset_button": "Reset to Default Style"
+      "current_style": "Current AI Prompt",
+      "customize_hint": "Customize the AI prompt for unique Charlie & Lola art (e.g., 'add a red hat', 'change background to blue')",
+      "reset_button": "Reset Prompt"
     },
     "messages": {
       "success": {
-        "generated": "Charlie & Lola character created successfully!",
+        "generated": "Charlie & Lola AI art generated successfully!",
         "downloaded": "Character image downloaded successfully!",
         "url_copied": "Character image URL copied to clipboard!"
       },
