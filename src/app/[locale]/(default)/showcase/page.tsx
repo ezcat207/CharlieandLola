@@ -59,6 +59,12 @@ export default function ShowcasePage() {
               <li>Upload your image and click "Generate"</li>
               <li>Download the image and create an animation in TikTok</li>
             </ol>
+            <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <h3 className="text-xl font-semibold mb-2">Prompt for Other Platforms:</h3>
+              <p className="font-mono text-sm bg-gray-200 dark:bg-gray-700 p-3 rounded-md whitespace-pre-wrap">
+                Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children's cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject's original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character. Negative Prompt: No realistic shading, no detailed rendering, no anime or manga style, no 3D modeling, no photographic textures!
+              </p>
+            </div>
           </div>
           <div 
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
