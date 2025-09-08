@@ -209,8 +209,8 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
       label: t.styles.options.charlie_lola?.label || 'Charlie & Lola Style',
       desc: t.styles.options.charlie_lola?.description || 'Transform into beloved children\'s book characters',
       tags: t.styles.options.charlie_lola?.tags || ['Cartoon', 'Children\'s Book', 'Whimsical'],
-      preview: '/imgs/template/russia-2633850_1920.jpg',
-      referenceImage: '/imgs/template/combined_russia.png',
+      preview: '/imgs/template/tennis.png',
+      referenceImage: '/imgs/template/tennis.png',
       prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character.'
     }
   ];

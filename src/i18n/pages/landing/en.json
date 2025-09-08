@@ -115,7 +115,7 @@
     "label": "About",
     "description": "Magical AI-powered character transformation that brings beloved children's book art to life. Transform any photo into adorable Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology.",
     "image": {
-      "src": "/imgs/template/charlie-lola-2025-09-08T06-20-39.jpg"
+      "src": "/imgs/template/car.png"
     },
     "items": [
       {
@@ -137,32 +137,32 @@
   },
   "benefit": {
     "name": "benefit",
-    "title": "Why Choose Charlie and Lola Style Converter",
-    "label": "Benefits",
-    "description": "Experience the magic of beloved children's book art with cutting-edge Gemini 2.5 Flash Image Preview technology - bringing Charlie and Lola's world to life.",
+    "title": "Why Choose Charlie & Lola AI Editor",
+    "label": "Advantages",
+    "description": "Experience the most advanced AI image editing, guaranteed with genuine Google Charlie & Lola AI model - unlike other platforms' lottery systems.",
     "items": [
       {
-        "title": "Authentic Charlie & Lola Art Style",
-        "description": "Our AI perfectly captures the distinctive thin sketchy outlines, flat colors, childlike proportions, and playful hand-drawn charm of the official Charlie and Lola books.",
+        "title": "100% Guaranteed Genuine Model",
+        "description": "Unlike other platforms that claim to use Charlie & Lola AI but may not truly, we 100% guarantee the use of the genuine Google Charlie & Lola AI model.",
         "icon": "RiCpuLine",
         "image": {
-          "src": "/imgs/template/toy_org.jpg"
+          "src": "/imgs/template/cloth.png"
         }
       },
       {
-        "title": "Perfect Children's Gifts",
-        "description": "Create personalized storybook illustrations, custom children's book pages, or magical character portraits. Perfect for birthdays, nursery decor, and special occasions.",
+        "title": "Professional Product Photography",
+        "description": "Instantly transform product photos. Change backgrounds, add logos, modify colors, or update any element. Perfect for e-commerce and marketing.",
         "icon": "RiPaletteLine",
         "image": {
-          "src": "/imgs/template/selfie-7611326_1280.jpg"
+          "src": "/imgs/template/tennis.png"
         }
       },
       {
-        "title": "Heartwarming Character Art",
-        "description": "Transform family photos into whimsical character illustrations that capture the joy and innocence of childhood in the beloved Charlie and Lola style.",
+        "title": "Creative Magic and Perfect Portraits",
+        "description": "Turn ordinary photos into extraordinary art. Add fantasy elements, swap objects, create surreal scenes, or easily enhance portraits.",
         "icon": "RiUserLine",
         "image": {
-          "src": "/imgs/template/selfie-7611326_1280.jpg"
+          "src": "/imgs/template/street.png"
         }
       }
     ]

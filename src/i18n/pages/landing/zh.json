@@ -115,7 +115,7 @@
     "label": "关于",
     "description": "革命性的AI图像编辑技术，理解自然语言。使用我们100%保证的谷歌Charlie and Lola AI模型，只需一句话就能将图像编辑成你想要的任何样子。",
     "image": {
-      "src": "/imgs/template/consistent.jpeg"
+      "src": "/imgs/template/car.png"
     },
     "items": [
       {
@@ -146,7 +146,7 @@
         "description": "不像其他平台声称使用Charlie & Lola AI但可能并不真正使用，我们100%保证使用正版谷歌Charlie & Lola AI模型。",
         "icon": "RiCpuLine",
         "image": {
-          "src": "/imgs/template/toy.jpeg"
+          "src": "/imgs/template/cloth.png"
         }
       },
       {
@@ -154,7 +154,7 @@
         "description": "即时改变产品照片。更改背景、添加标志、修改颜色或更新任何元素。完美适合电商和营销。",
         "icon": "RiPaletteLine",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "/imgs/template/tennis.png"
         }
       },
       {
@@ -162,7 +162,7 @@
         "description": "将普通照片变成非凡艺术。添加奇幻元素、交换物体、创建超现实场景，或轻松增强人像。",
         "icon": "RiUserLine",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "/imgs/template/street.png"
         }
       }
     ]
