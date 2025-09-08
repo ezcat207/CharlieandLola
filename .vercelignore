@@ -17,12 +17,13 @@ content/docs/
 .cursorrules
 .serena/
 
-# Cache and logs
+# Cache and logs - Force skip cache like Build1
 .next/cache/
 .next/standalone/
 *.log
 debug/
 *.tsbuildinfo
+.next/
 
 # Lock files
 yarn.lock
