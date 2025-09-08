@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useUserCredits } from '@/hooks/useUserCredits';
 import CreditDisplay from '@/components/blocks/credits-display';
 import { toast } from 'sonner';
+import { convertToCdnUrl } from '@/lib/cdn-url';
 
 // Type for the translations prop
 interface Translations {
@@ -457,13 +458,14 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
 
   const shareImage = async () => {
     if (generatedImage) {
+      const cdnUrl = convertToCdnUrl(generatedImage);
       try {
-        await navigator.clipboard.writeText(generatedImage);
+        await navigator.clipboard.writeText(cdnUrl);
         toast.success(t.messages.success.url_copied);
       } catch (error) {
         console.error('Share failed:', error);
         const tempInput = document.createElement('input');
-        tempInput.value = generatedImage;
+        tempInput.value = cdnUrl;
         document.body.appendChild(tempInput);
         tempInput.select();
         document.execCommand('copy');
