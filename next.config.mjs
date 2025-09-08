@@ -12,7 +12,8 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  // Remove standalone output for Vercel deployment - reduces bundle size significantly
+  // output: "standalone", // Only needed for Docker/self-hosting
   reactStrictMode: false,
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   images: {
