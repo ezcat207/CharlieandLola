@@ -102,7 +102,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState('celebrity-selfie');
+  const [selectedStyle, setSelectedStyle] = useState('charlie-lola');
   const [customPrompt, setCustomPrompt] = useState<string>('');
   const [currentBgImage, setCurrentBgImage] = useState(0);
   const [aspectRatio, setAspectRatio] = useState('16:9');
@@ -131,22 +131,31 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
 
   const styleOptions = [
     { 
+      value: 'charlie-lola', 
+      label: t.styles.options.charlie_lola?.label || 'Charlie & Lola Style', 
+      desc: t.styles.options.charlie_lola?.description || 'Transform into beloved children\'s book characters',
+      tags: t.styles.options.charlie_lola?.tags || ['Cartoon', 'Children\'s Book', 'Whimsical'],
+      preview: '/imgs/template/charlie-and-lola-trend-1.jpg',
+      referenceImage: '/imgs/template/selfie-charlie.png',
+      prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: plain white or transparent to keep the focus on the character.'
+    },
+    { 
       value: 'commercial-figure', 
       label: t.styles.options.commercial_figure.label, 
       desc: t.styles.options.commercial_figure.description,
       tags: t.styles.options.commercial_figure.tags,
-      preview: '/imgs/template/toy_org.jpg',
-      referenceImage: '/imgs/template/toy.jpeg',
-      prompt: 'Create a 1/7 scale commercial image of the characters in the illustration in a realistic style and environment. Place the figure on the computer desk using a circular transparent acrylic base. There is no text. On the computer screen, display the modeling process of Brush graphics. Place a BANDAI style toy packaging box with original artwork printed on it next to the computer screen.'
+      preview: '/imgs/template/charlie-and-lola-trend-blue-dress.jpeg',
+      referenceImage: '/imgs/template/charlie-and-lola-trend-fur-coat.jpeg',
+      prompt: 'Create a Charlie & Lola style figure of the character from the uploaded image. Transform them into a collectible figure with the distinctive Charlie and Lola art style - thin sketchy lines, flat bright colors, childlike proportions. The figure should capture the whimsical, hand-drawn charm of the original illustrations while maintaining the subject\'s key features and outfit in a simplified, cartoon form.'
     },
     { 
       value: 'celebrity-selfie', 
       label: t.styles.options.celebrity_selfie.label, 
       desc: t.styles.options.celebrity_selfie.description,
       tags: t.styles.options.celebrity_selfie.tags,
-      preview: '/imgs/template/self_org.png',
-      referenceImage: '/imgs/template/self.jpeg',
-      prompt: 'Create a realistic selfie photograph showing [your description] taking a selfie with the Trump President of the United States in the Oval Office of the White House. The scene should show:\\nBoth people positioned as if taking a selfie (one person holding phone/camera)\\nAuthentic Oval Office background with presidential desk, flags, and official decor\\nNatural lighting consistent with indoor White House photography\\nProfessional yet candid selfie composition'
+      preview: '/imgs/template/charlie-and-lola-trend-pink-outfit.jpeg',
+      referenceImage: '/imgs/template/charlie-and-lola-trend-yellow-outfit.jpeg',
+      prompt: 'Create a Charlie & Lola style portrait of the subject from the uploaded image. Transform them into the distinctive children\'s book art style with thin sketchy outlines, flat pastel colors, and childlike proportions. Keep their original facial features, hairstyle, and clothing style but reinterpret them with the whimsical, hand-drawn charm characteristic of Charlie and Lola illustrations. The result should look like they stepped out of a Lauren Child storybook.'
     }
   ];
 
@@ -858,10 +867,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                   <div className="flex gap-2">
                     <Button
                       onClick={() => {
-                        const originalPrompt = selectedStyle === 'commercial-figure' 
-                          ? 'Create a 1/7 scale commercial image of the characters in the illustration in a realistic style and environment. Place the figure on the computer desk using a circular transparent acrylic base. There is no text. On the computer screen, display the modeling process of Brush graphics. Place a BANDAI style toy packaging box with original artwork printed on it next to the computer screen.'
-                          : 'Create a realistic selfie photograph showing [your description] taking a selfie with the Trump President of the United States in the Oval Office of the White House. The scene should show:\\nBoth people positioned as if taking a selfie (one person holding phone/camera)\\nAuthentic Oval Office background with presidential desk, flags, and official decor\\nNatural lighting consistent with indoor White House photography\\nProfessional yet candid selfie composition';
-                        setCustomPrompt(originalPrompt);
+                        setCustomPrompt(''); // Clear custom prompt to show default style prompt
                       }}
                       variant="outline"
                       className="border-gray-600 text-gray-300 hover:bg-gray-700/50"
