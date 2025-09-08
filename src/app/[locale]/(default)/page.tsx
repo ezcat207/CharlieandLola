@@ -68,7 +68,7 @@ export async function generateMetadata({
       siteName: 'CharlieandLola.net',
       images: [
         {
-          url: '/imgs/template/toy_org.jpg',
+          url: 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg',
           width: 1200,
           height: 630,
           alt: isZh ? 'AI角色手办生成示例' : 'AI Character Figure Generation Example',
@@ -83,7 +83,7 @@ export async function generateMetadata({
       description: isZh
         ? '100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成'
         : '100% guaranteed Google Charlie-and-Lola-Edit model with pre-built templates',
-      images: ['/imgs/template/toy_org.jpg'],
+      images: ['https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg'],
     },
     alternates: {
       canonical: canonicalUrl,
@@ -170,7 +170,7 @@ export default async function LandingPage({
         "Free unlimited usage",
         "Real-time high-quality image generation"
       ],
-      "screenshot": `${baseUrl}/imgs/template/toy_org.jpg`,
+      "screenshot": `https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg`,
       "dateModified": new Date().toISOString(),
       "inLanguage": locale,
       "audience": {

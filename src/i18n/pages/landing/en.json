@@ -115,7 +115,7 @@
     "label": "About",
     "description": "Magical AI-powered character transformation that brings beloved children's book art to life. Transform any photo into adorable Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology.",
     "image": {
-      "src": "/imgs/template/car.png"
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/car.png"
     },
     "items": [
       {
@@ -146,7 +146,7 @@
         "description": "Unlike other platforms that claim to use Charlie & Lola AI but may not truly, we 100% guarantee the use of the genuine Google Charlie & Lola AI model.",
         "icon": "RiCpuLine",
         "image": {
-          "src": "/imgs/template/cloth.png"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/cloth.png"
         }
       },
       {
@@ -154,7 +154,7 @@
         "description": "Instantly transform product photos. Change backgrounds, add logos, modify colors, or update any element. Perfect for e-commerce and marketing.",
         "icon": "RiPaletteLine",
         "image": {
-          "src": "/imgs/template/tennis.png"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/tennis.png"
         }
       },
       {
@@ -162,7 +162,7 @@
         "description": "Turn ordinary photos into extraordinary art. Add fantasy elements, swap objects, create surreal scenes, or easily enhance portraits.",
         "icon": "RiUserLine",
         "image": {
-          "src": "/imgs/template/street.png"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/street.png"
         }
       }
     ]
@@ -172,7 +172,7 @@
     "title": "How to Create Charlie & Lola Characters",
     "description": "Transform photos into magical storybook characters in three simple steps:",
     "image": {
-      "src": "/imgs/template/consistent.jpg"
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/consistent.jpg"
     },
     "image_position": "left",
     "text_align": "center",
@@ -181,21 +181,21 @@
         "title": "Upload Your Photo",
         "description": "Upload any photo - family pictures, children's portraits, or selfies. Our AI works best with clear photos showing faces and full bodies for the most magical results.",
         "image": {
-          "src": "/imgs/template/selfie-7611326_1280.jpg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-7611326_1280.jpg"
         }
       },
       {
         "title": "Let the Magic Begin",
         "description": "Our advanced AI automatically applies the Charlie and Lola transformation. Watch as your photo becomes a delightful cartoon character with the series' signature art style.",
         "image": {
-          "src": "/imgs/template/charlie-lola-2025-09-08T06-20-39.jpg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/charlie-lola-2025-09-08T06-20-39.jpg"
         }
       },
       {
         "title": "Download Your Character",
         "description": "Receive your beautiful Charlie and Lola style character in moments. Perfect for printing, sharing, or creating custom storybooks and keepsakes.",
         "image": {
-          "src": "/imgs/template/combined.png"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/combined.png"
         }
       }
     ]

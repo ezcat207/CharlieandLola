@@ -33,13 +33,13 @@
   ],
   "screenshots": [
     {
-      "src": "/imgs/template/toy_org.jpg",
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg",
       "sizes": "1200x630",
       "type": "image/jpeg",
       "label": "3D Figure Generation Example"
     },
     {
-      "src": "/imgs/template/selfie-7611326_1280.jpg",
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-7611326_1280.jpg",
       "sizes": "1200x630",
       "type": "image/jpeg",
       "label": "Celebrity Selfie Generation Example"

@@ -77,15 +77,23 @@ interface Translations {
 
 // Gallery images for Charlie and Lola style examples
 const galleryImages = [
-  '/imgs/template/charlie-lola-2025-09-08T06-20-39.jpg',
-  '/imgs/template/combined_russia.png',
-  '/imgs/template/combined.png',
-  '/imgs/template/russia-2633850_1920.jpg',
-  '/imgs/template/self_org.png',
-  '/imgs/template/selfie-7611326_1280.jpg',
-  '/imgs/template/selfie-charlie.png',
-  '/imgs/template/toy_org.jpg'
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/charlie-lola-2025-09-08T06-20-39.jpg',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/combined_russia.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/combined.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/russia-2633850_1920.jpg',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/self_org.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-7611326_1280.jpg',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-charlie.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg'
 ];
+
+// LocalStorage keys for persisting state
+const STORAGE_KEYS = {
+  generatedImage: 'charlieandlola_generated_image',
+  uploadedImages: 'charlieandlola_uploaded_images',
+  selectedStyle: 'charlieandlola_selected_style',
+  customPrompt: 'charlieandlola_custom_prompt'
+};
 
 interface ImagenClientProps {
   translations: Translations;
@@ -140,14 +148,6 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   
   // Use the credit hook only if user is authenticated
   const { credits, isLoading: creditsLoading, refreshCredits } = useUserCredits();
-
-  // LocalStorage keys for persisting state
-  const STORAGE_KEYS = {
-    generatedImage: 'charlieandlola_generated_image',
-    uploadedImages: 'charlieandlola_uploaded_images',
-    selectedStyle: 'charlieandlola_selected_style',
-    customPrompt: 'charlieandlola_custom_prompt'
-  };
 
   // Load persisted state on component mount
   useEffect(() => {
@@ -240,8 +240,8 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
       label: t.styles.options.charlie_lola?.label || 'Charlie & Lola Style',
       desc: t.styles.options.charlie_lola?.description || 'Transform into beloved children\'s book characters',
       tags: t.styles.options.charlie_lola?.tags || ['Cartoon', 'Children\'s Book', 'Whimsical'],
-      preview: '/imgs/template/tennis.png',
-      referenceImage: '/imgs/template/tennis.png',
+      preview: 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/tennis.png',
+      referenceImage: 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/tennis.png',
       prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character.'
     }
   ];
@@ -832,7 +832,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                       <div className="relative w-full h-full flex items-center justify-center">
                         <div className="relative w-full h-full">
                           <img
-                            src={styleOptions.find(s => s.value === selectedStyle)?.referenceImage || '/imgs/template/self.jpeg'}
+                            src={styleOptions.find(s => s.value === selectedStyle)?.referenceImage || 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/self.jpeg'}
                             alt={`${styleOptions.find(s => s.value === selectedStyle)?.label || 'Celebrity Selfie'} reference example - AI generation template for Charlie and Lola AI Charlie-and-Lola-Edit model`}
                             className="w-full h-full object-cover rounded-lg opacity-50"
                             loading="lazy"
