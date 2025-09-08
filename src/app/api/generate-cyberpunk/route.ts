@@ -3,7 +3,7 @@ import { getUuid } from "@/lib/hash";
 import { newStorage } from "@/lib/storage";
 import { systemCreditManager, CreditUsageType } from "@/services/system-credits";
 import { getUserUuid } from "@/services/user";
-import { decreaseCredits, CreditsTransType } from "@/services/credit";
+import { decreaseCredits, CreditsTransType, CreditsAmount, getUserCredits } from "@/services/credit";
 import { geminiApiPool } from "@/lib/gemini-api-pool";
 
 export async function POST(request: Request) {
@@ -51,6 +51,14 @@ export async function POST(request: Request) {
     // Get user info
     const userUuid = await getUserUuid();
     const isRegisteredUser = !!userUuid;
+    
+    // Check credits for registered users
+    if (isRegisteredUser) {
+      const userCredits = await getUserCredits(userUuid);
+      if (userCredits.left_credits < CreditsAmount.ImageGeneration) {
+        return respErr(`Insufficient credits. You need ${CreditsAmount.ImageGeneration} credits but only have ${userCredits.left_credits}. Please recharge to continue.`, 'INSUFFICIENT_CREDITS');
+      }
+    }
     
     // Check if we have available API keys
     if (!geminiApiPool.hasAvailableKeys()) {
@@ -203,7 +211,7 @@ export async function POST(request: Request) {
     }
 
     // For free generation, no credits consumed unless user wants to download
-    const requiredCredits = 1; // Cost for generation
+    const requiredCredits = CreditsAmount.ImageGeneration; // Cost for generation
     
     // Free generation for all users - return preview/watermarked image
     // For registered users downloading, consume credits and return full image
