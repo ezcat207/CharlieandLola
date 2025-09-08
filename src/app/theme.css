@@ -1,107 +1,99 @@
+/* src/app/theme.css */
+
 :root {
-  /* Charlie and Lola Light Theme - Warm, playful colors inspired by children's book illustrations */
-  --background: oklch(0.98 0.02 85); /* Warm cream background */
-  --foreground: oklch(0.15 0.03 45); /* Dark brown text */
-  --card: oklch(0.96 0.03 80); /* Light banana cream */
-  --card-foreground: oklch(0.15 0.03 45);
-  --popover: oklch(0.98 0.02 85);
-  --popover-foreground: oklch(0.15 0.03 45);
-  --primary: oklch(0.75 0.15 85); /* Golden banana yellow */
-  --primary-foreground: oklch(0.15 0.03 45);
-  --secondary: oklch(0.65 0.12 120); /* Soft banana green */
-  --secondary-foreground: oklch(0.98 0.02 85);
-  --muted: oklch(0.92 0.04 90); /* Muted banana */
-  --muted-foreground: oklch(0.45 0.05 50);
-  --accent: oklch(0.82 0.14 95); /* Bright banana highlight */
-  --accent-foreground: oklch(0.15 0.03 45);
-  --destructive: oklch(0.62 0.24 25.77);
+  /* Charlie and Lola Theme */
+  --background: oklch(1 0 0);                /* Pure white */
+  --foreground: oklch(0.17 0 0);             /* Dark gray/black */
+  --card: oklch(0.98 0.01 90);             /* Light gray */
+  --card-foreground: oklch(0.17 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.17 0 0);
+  --primary: oklch(0.9 0.15 85);            /* Lemon Yellow */
+  --primary-foreground: oklch(0.17 0 0);
+  --secondary: oklch(0.8 0.08 200);         /* Sky Blue */
+  --secondary-foreground: oklch(0.17 0 0);
+  --muted: oklch(0.95 0.02 90);            /* Lighter gray */
+  --muted-foreground: oklch(0.4 0.02 50);
+  --accent: oklch(0.8 0.15 60);             /* Coral Orange */
+  --accent-foreground: oklch(0.17 0 0);
+  --destructive: oklch(0.7 0.2 25);           /* Tomato Red */
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.88 0.05 85); /* Soft banana border */
-  --input: oklch(0.95 0.03 85);
-  --ring: oklch(0.75 0.15 85);
-  --chart-1: oklch(0.75 0.15 85); /* Golden yellow */
-  --chart-2: oklch(0.65 0.12 120); /* Banana green */
-  --chart-3: oklch(0.70 0.14 65); /* Warm orange */
-  --chart-4: oklch(0.55 0.10 140); /* Deep green */
-  --chart-5: oklch(0.45 0.08 40); /* Rich brown */
-  --sidebar: oklch(0.96 0.03 80);
-  --sidebar-foreground: oklch(0.15 0.03 45);
-  --sidebar-primary: oklch(0.75 0.15 85);
-  --sidebar-primary-foreground: oklch(0.15 0.03 45);
-  --sidebar-accent: oklch(0.82 0.14 95);
-  --sidebar-accent-foreground: oklch(0.15 0.03 45);
-  --sidebar-border: oklch(0.88 0.05 85);
-  --sidebar-ring: oklch(0.75 0.15 85);
-  --font-sans: Inter, system-ui, sans-serif;
+  --border: oklch(0.17 0 0);                /* Black border */
+  --input: oklch(0.98 0.01 90);
+  --ring: oklch(0.9 0.15 85 / 0.5);         /* Ring with primary color */
+  
+  --cl-yellow: oklch(0.9 0.15 85);
+  --cl-orange: oklch(0.8 0.15 60);
+  --cl-blue: oklch(0.8 0.08 200);
+  --cl-pink: oklch(0.8 0.1 340);
+  --cl-green: oklch(0.85 0.15 140);
+  --cl-red: oklch(0.7 0.2 25);
+  --cl-brown: oklch(0.6 0.1 60);
+
+  --chart-1: var(--cl-yellow);
+  --chart-2: var(--cl-blue);
+  --chart-3: var(--cl-orange);
+  --chart-4: var(--cl-green);
+  --chart-5: var(--cl-pink);
+
+  --sidebar: oklch(0.98 0.01 90);
+  --sidebar-foreground: oklch(0.17 0 0);
+  --sidebar-primary: var(--cl-yellow);
+  --sidebar-primary-foreground: oklch(0.17 0 0);
+  --sidebar-accent: var(--cl-orange);
+  --sidebar-accent-foreground: oklch(0.17 0 0);
+  --sidebar-border: oklch(0.17 0 0);
+  --sidebar-ring: oklch(0.9 0.15 85 / 0.5);
+
+  --font-sans: 'Comic Sans MS', 'Patrick Hand', cursive, system-ui, sans-serif; /* More playful font */
   --font-serif: Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --radius: 0.8rem;
-  --shadow-2xs: 0px 1px 2px oklch(0.15 0.03 45 / 0.05);
-  --shadow-xs: 0px 1px 3px oklch(0.15 0.03 45 / 0.1);
-  --shadow-sm: 0px 1px 2px oklch(0.15 0.03 45 / 0.05),
-    0px 2px 4px oklch(0.15 0.03 45 / 0.1);
-  --shadow: 0px 1px 3px oklch(0.15 0.03 45 / 0.1),
-    0px 2px 6px oklch(0.15 0.03 45 / 0.15);
-  --shadow-md: 0px 4px 6px oklch(0.15 0.03 45 / 0.1),
-    0px 2px 4px oklch(0.15 0.03 45 / 0.06);
-  --shadow-lg: 0px 10px 15px oklch(0.15 0.03 45 / 0.1),
-    0px 4px 6px oklch(0.15 0.03 45 / 0.05);
-  --shadow-xl: 0px 20px 25px oklch(0.15 0.03 45 / 0.1),
-    0px 8px 10px oklch(0.15 0.03 45 / 0.04);
-  --shadow-2xl: 0px 25px 50px oklch(0.15 0.03 45 / 0.25);
+  --radius: 0.5rem;
+  --shadow-2xs: 0px 1px 2px oklch(0.17 0 0 / 0.05);
+  --shadow-xs: 0px 1px 3px oklch(0.17 0 0 / 0.1);
+  --shadow-sm: 0px 1px 2px oklch(0.17 0 0 / 0.05),
+    0px 2px 4px oklch(0.17 0 0 / 0.1);
+  --shadow: 0px 1px 3px oklch(0.17 0 0 / 0.1),
+    0px 2px 6px oklch(0.17 0 0 / 0.15);
+  --shadow-md: 0px 4px 6px oklch(0.17 0 0 / 0.1),
+    0px 2px 4px oklch(0.17 0 0 / 0.06);
+  --shadow-lg: 0px 10px 15px oklch(0.17 0 0 / 0.1),
+    0px 4px 6px oklch(0.17 0 0 / 0.05);
+  --shadow-xl: 0px 20px 25px oklch(0.17 0 0 / 0.1),
+    0px 8px 10px oklch(0.17 0 0 / 0.04);
+  --shadow-2xl: 0px 25px 50px oklch(0.17 0 0 / 0.25);
 }
 
 .dark {
-  /* Charlie and Lola Dark Theme - Rich dark tones with whimsical cartoon accents */
-  --background: oklch(0.12 0.02 45); /* Dark chocolate brown */
-  --foreground: oklch(0.92 0.05 85); /* Warm light cream */
-  --card: oklch(0.18 0.04 50) / 0.8; /* Dark warm card */
-  --card-foreground: oklch(0.92 0.05 85);
-  --popover: oklch(0.12 0.02 45) / 0.95;
-  --popover-foreground: oklch(0.92 0.05 85);
-  --primary: oklch(0.80 0.18 90); /* Bright banana gold */
-  --primary-foreground: oklch(0.12 0.02 45);
-  --secondary: oklch(0.55 0.15 130); /* Deeper banana green */
-  --secondary-foreground: oklch(0.92 0.05 85);
-  --muted: oklch(0.25 0.04 55); /* Muted dark banana */
-  --muted-foreground: oklch(0.70 0.08 80);
-  --accent: oklch(0.75 0.16 95) / 0.8; /* Glowing banana highlight */
-  --accent-foreground: oklch(0.12 0.02 45);
-  --destructive: oklch(0.62 0.24 25.77);
+  /* Charlie and Lola Dark Theme - Keeping it bright and playful */
+  --background: oklch(0.17 0 0);             /* Dark gray/black */
+  --foreground: oklch(1 0 0);                /* Pure white */
+  --card: oklch(0.25 0.01 90);            /* Darker gray */
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.17 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.9 0.15 85);            /* Lemon Yellow */
+  --primary-foreground: oklch(0.17 0 0);
+  --secondary: oklch(0.8 0.08 200);         /* Sky Blue */
+  --secondary-foreground: oklch(0.17 0 0);
+  --muted: oklch(0.3 0.02 90);             /* Darker gray */
+  --muted-foreground: oklch(0.8 0.02 90);
+  --accent: oklch(0.8 0.15 60);             /* Coral Orange */
+  --accent-foreground: oklch(0.17 0 0);
+  --destructive: oklch(0.7 0.2 25);           /* Tomato Red */
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.30 0.06 60) / 0.6; /* Subtle warm border */
-  --input: oklch(0.22 0.04 50) / 0.8;
-  --ring: oklch(0.80 0.18 90) / 0.8;
-  --chart-1: oklch(0.80 0.18 90); /* Bright banana gold */
-  --chart-2: oklch(0.55 0.15 130); /* Banana green */
-  --chart-3: oklch(0.70 0.14 65); /* Warm orange */
-  --chart-4: oklch(0.45 0.12 140); /* Deep forest green */
-  --chart-5: oklch(0.35 0.08 40); /* Rich earth brown */
-  --sidebar: oklch(0.18 0.04 50) / 0.9;
-  --sidebar-foreground: oklch(0.92 0.05 85);
-  --sidebar-primary: oklch(0.80 0.18 90);
-  --sidebar-primary-foreground: oklch(0.12 0.02 45);
-  --sidebar-accent: oklch(0.75 0.16 95) / 0.8;
-  --sidebar-accent-foreground: oklch(0.12 0.02 45);
-  --sidebar-border: oklch(0.30 0.06 60) / 0.6;
-  --sidebar-ring: oklch(0.80 0.18 90) / 0.8;
-  --font-sans: Inter, system-ui, sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --radius: 0.8rem;
-  --shadow-2xs: 0px 1px 2px oklch(0 0 0 / 0.1);
-  --shadow-xs: 0px 1px 3px oklch(0 0 0 / 0.15);
-  --shadow-sm: 0px 1px 2px oklch(0 0 0 / 0.1),
-    0px 2px 4px oklch(0 0 0 / 0.15);
-  --shadow: 0px 1px 3px oklch(0 0 0 / 0.15),
-    0px 2px 6px oklch(0 0 0 / 0.2);
-  --shadow-md: 0px 4px 6px oklch(0 0 0 / 0.15),
-    0px 2px 4px oklch(0 0 0 / 0.1);
-  --shadow-lg: 0px 10px 15px oklch(0 0 0 / 0.15),
-    0px 4px 6px oklch(0 0 0 / 0.1);
-  --shadow-xl: 0px 20px 25px oklch(0 0 0 / 0.15),
-    0px 8px 10px oklch(0 0 0 / 0.1);
-  --shadow-2xl: 0px 25px 50px oklch(0 0 0 / 0.3);
+  --border: oklch(1 0 0);                   /* White border */
+  --input: oklch(0.25 0.01 90);
+  --ring: oklch(0.9 0.15 85 / 0.5);
+
+  --sidebar: oklch(0.25 0.01 90);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: var(--cl-yellow);
+  --sidebar-primary-foreground: oklch(0.17 0 0);
+  --sidebar-accent: var(--cl-orange);
+  --sidebar-accent-foreground: oklch(0.17 0 0);
+  --sidebar-border: oklch(1 0 0);
+  --sidebar-ring: oklch(0.9 0.15 85 / 0.5);
 }
 
 @theme inline {
@@ -142,9 +134,9 @@
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 
   --shadow-2xs: var(--shadow-2xs);
@@ -158,82 +150,41 @@
 }
 
 /* Charlie and Lola Theme Enhancements */
-:root {
-  /* Light theme gradients and effects */
-  --banana-bg: linear-gradient(135deg, oklch(0.98 0.02 85) 0%, oklch(0.96 0.04 90) 50%, oklch(0.98 0.02 85) 100%);
-  --banana-card: linear-gradient(135deg, oklch(0.96 0.03 80) 0%, oklch(0.94 0.04 85) 100%);
-  --banana-glow: 0 0 15px oklch(0.75 0.15 85 / 0.2), 0 0 30px oklch(0.75 0.15 85 / 0.1);
-  --banana-border: 1px solid oklch(0.88 0.05 85);
+body {
+  background: var(--background);
 }
 
-.dark {
-  /* Dark theme gradients and effects */
-  --banana-bg: linear-gradient(135deg, oklch(0.12 0.02 45) 0%, oklch(0.15 0.04 50) 50%, oklch(0.12 0.02 45) 100%);
-  --banana-card: linear-gradient(135deg, oklch(0.18 0.04 50 / 0.8) 0%, oklch(0.22 0.05 55 / 0.7) 100%);
-  --banana-glow: 0 0 20px oklch(0.80 0.18 90 / 0.3), 0 0 40px oklch(0.80 0.18 90 / 0.15);
-  --banana-border: 1px solid oklch(0.30 0.06 60 / 0.6);
-}
-
-/* Enhanced card styles with warm gradients */
 [data-slot="card"] {
-  background: var(--banana-card);
-  backdrop-filter: blur(8px);
-  border: var(--banana-border);
-  transition: all 0.3s ease;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
 }
 
-.dark [data-slot="card"] {
-  box-shadow: var(--banana-glow);
-}
-
-/* Enhanced button styles with banana golden theme */
 [data-slot="button"][data-variant="default"] {
-  background: linear-gradient(135deg, oklch(0.75 0.15 85) 0%, oklch(0.70 0.12 88) 100%);
-  border: 1px solid oklch(0.75 0.15 85 / 0.6);
-  transition: all 0.3s ease;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: 2px solid var(--foreground);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0px var(--foreground);
+  transition: all 0.2s ease;
 }
 
 [data-slot="button"][data-variant="default"]:hover {
-  background: linear-gradient(135deg, oklch(0.78 0.16 85) 0%, oklch(0.73 0.13 88) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px oklch(0.75 0.15 85 / 0.25);
+  background: var(--cl-red);
+  color: white;
+  box-shadow: 2px 2px 0px var(--foreground);
+  transform: translate(2px, 2px);
 }
 
-.dark [data-slot="button"][data-variant="default"] {
-  background: linear-gradient(135deg, oklch(0.80 0.18 90) 0%, oklch(0.75 0.16 92) 100%);
-  box-shadow: 0 0 10px oklch(0.80 0.18 90 / 0.3);
-}
-
-.dark [data-slot="button"][data-variant="default"]:hover {
-  box-shadow: 0 0 20px oklch(0.80 0.18 90 / 0.5), 0 4px 15px oklch(0.80 0.18 90 / 0.2);
-}
-
-/* Enhanced input styles with warm tones */
 [data-slot="input"] {
-  background: oklch(0.95 0.03 85);
-  border: 1px solid oklch(0.88 0.05 85);
-  color: oklch(0.15 0.03 45);
+  background: var(--input);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
 }
 
 [data-slot="input"]:focus {
-  border-color: oklch(0.75 0.15 85);
-  box-shadow: 0 0 0 3px oklch(0.75 0.15 85 / 0.1);
-}
-
-.dark [data-slot="input"] {
-  background: oklch(0.22 0.04 50 / 0.8);
-  backdrop-filter: blur(5px);
-  border: 1px solid oklch(0.30 0.06 60 / 0.6);
-  color: oklch(0.92 0.05 85);
-}
-
-.dark [data-slot="input"]:focus {
-  border-color: oklch(0.80 0.18 90);
-  box-shadow: 0 0 0 3px oklch(0.80 0.18 90 / 0.2);
-}
-
-/* Body background with nano banana gradients */
-body {
-  background: var(--banana-bg);
-  min-height: 100vh;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary);
 }

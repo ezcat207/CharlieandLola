@@ -197,16 +197,6 @@
           "label": "Charlie & Lola Style",
           "description": "Transform into beloved children's book characters",
           "tags": "[\"Cartoon\", \"Children's Book\", \"Whimsical\"]"
-        },
-        "commercial_figure": {
-          "label": "Charlie & Lola Figure",
-          "description": "Create your own Charlie & Lola character figure",
-          "tags": "[\"Figure\", \"Collectible\", \"3D\"]"
-        },
-        "celebrity_selfie": {
-          "label": "Charlie & Lola Portrait",
-          "description": "Portrait style in Charlie & Lola theme",
-          "tags": "[\"Portrait\", \"Artistic\", \"Stylized\"]"
         }
       }
     },

@@ -21,8 +21,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme={process.env.NEXT_PUBLIC_DEFAULT_THEME || "dark"}
-      forcedTheme="dark"
+      defaultTheme={process.env.NEXT_PUBLIC_DEFAULT_THEME || "light"}
       enableSystem
       disableTransitionOnChange
     >

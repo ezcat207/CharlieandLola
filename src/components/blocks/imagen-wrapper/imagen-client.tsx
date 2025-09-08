@@ -42,12 +42,7 @@ interface Translations {
   styles: {
     title: string;
     options: {
-      commercial_figure: {
-        label: string;
-        description: string;
-        tags: string[];
-      };
-      celebrity_selfie: {
+      charlie_lola: {
         label: string;
         description: string;
         tags: string[];
@@ -215,27 +210,9 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
       label: t.styles.options.charlie_lola?.label || 'Charlie & Lola Style', 
       desc: t.styles.options.charlie_lola?.description || 'Transform into beloved children\'s book characters',
       tags: t.styles.options.charlie_lola?.tags || ['Cartoon', 'Children\'s Book', 'Whimsical'],
-      preview: '/imgs/template/charlie-and-lola-trend-1.jpg',
-      referenceImage: '/imgs/template/selfie-charlie.png',
+      preview: '/imgs/template/russia-2633850_1920.jpg',
+      referenceImage: '/imgs/template/combined_russia.png',
       prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character.'
-    },
-    { 
-      value: 'commercial-figure', 
-      label: t.styles.options.commercial_figure.label, 
-      desc: t.styles.options.commercial_figure.description,
-      tags: t.styles.options.commercial_figure.tags,
-      preview: '/imgs/template/charlie-and-lola-trend-blue-dress.jpeg',
-      referenceImage: '/imgs/template/charlie-and-lola-trend-fur-coat.jpeg',
-      prompt: 'Create a Charlie & Lola style figure of the character from the uploaded image. Transform them into a collectible figure with the distinctive Charlie and Lola art style - thin sketchy lines, flat bright colors, childlike proportions. The figure should capture the whimsical, hand-drawn charm of the original illustrations while maintaining the subject\'s key features and outfit in a simplified, cartoon form.'
-    },
-    { 
-      value: 'celebrity-selfie', 
-      label: t.styles.options.celebrity_selfie.label, 
-      desc: t.styles.options.celebrity_selfie.description,
-      tags: t.styles.options.celebrity_selfie.tags,
-      preview: '/imgs/template/charlie-and-lola-trend-pink-outfit.jpeg',
-      referenceImage: '/imgs/template/charlie-and-lola-trend-yellow-outfit.jpeg',
-      prompt: 'Create a Charlie & Lola style portrait of the subject from the uploaded image. Transform them into the distinctive children\'s book art style with thin sketchy outlines, flat pastel colors, and childlike proportions. Keep their original facial features, hairstyle, and clothing style but reinterpret them with the whimsical, hand-drawn charm characteristic of Charlie and Lola illustrations. The result should look like they stepped out of a Lauren Child storybook.'
     }
   ];
 
@@ -486,18 +463,18 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       
       {/* Gradient overlay with nano banana theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/30 via-transparent to-green-900/30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-900/30 via-transparent to-pink-900/30" />
 
       <div className="container relative z-10 py-16">
         {/* Hero Header Section */}
         <header className="text-center mb-16">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-yellow-500/20 backdrop-blur-sm rounded-full border border-yellow-400/30" role="banner">
-            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" aria-hidden="true"></div>
-            <span className="text-yellow-300 text-sm font-medium">{t.badge.text}</span>
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-pink-500/20 backdrop-blur-sm rounded-full border border-pink-400/30" role="banner">
+            <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" aria-hidden="true"></div>
+            <span className="text-pink-300 text-sm font-medium">{t.badge.text}</span>
           </div>
           
-          <h1 className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-orange-400 to-green-400 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 bg-clip-text text-transparent leading-tight">
             {t.title.main}
             <br />
             <span className="text-3xl lg:text-4xl">{t.title.subtitle}</span>
@@ -510,19 +487,19 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
           {/* Key Features */}
           <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12" aria-label="Key Features">
             <article className="text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-2">{t.features.guaranteed.title}</h3>
+              <h3 className="text-2xl font-bold text-pink-400 mb-2">{t.features.guaranteed.title}</h3>
               <p className="text-gray-400 text-sm">{t.features.guaranteed.subtitle}</p>
             </article>
             <article className="text-center">
-              <h3 className="text-2xl font-bold text-green-400 mb-2">{t.features.no_lottery.title}</h3>
+              <h3 className="text-2xl font-bold text-pink-400 mb-2">{t.features.no_lottery.title}</h3>
               <p className="text-gray-400 text-sm">{t.features.no_lottery.subtitle}</p>
             </article>
             <article className="text-center">
-              <h3 className="text-2xl font-bold text-orange-400 mb-2">{t.features.one_sentence.title}</h3>
+              <h3 className="text-2xl font-bold text-pink-400 mb-2">{t.features.one_sentence.title}</h3>
               <p className="text-gray-400 text-sm">{t.features.one_sentence.subtitle}</p>
             </article>
             <article className="text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-2">{t.features.instant.title}</h3>
+              <h3 className="text-2xl font-bold text-pink-400 mb-2">{t.features.instant.title}</h3>
               <p className="text-gray-400 text-sm">{t.features.instant.subtitle}</p>
             </article>
           </section>
@@ -532,7 +509,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
           <nav className="flex flex-col sm:flex-row gap-4 justify-center mb-16" role="navigation" aria-label="Main Actions">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl shadow-yellow-500/25"
+              className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl shadow-pink-500/25"
               onClick={() => fileInputRef.current?.click()}
               aria-label="Start using NanoBanana AI editor"
             >
@@ -541,7 +518,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
             <Button 
               variant="outline" 
               size="lg"
-              className="border-yellow-400/50 text-yellow-300 hover:bg-yellow-500/20 px-8 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm"
+              className="border-pink-400/50 text-pink-300 hover:bg-pink-500/20 px-8 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm"
               onClick={() => window.open('/showcase', '_blank')}
               aria-label="View example gallery"
             >
@@ -574,7 +551,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
             <Card className="bg-slate-800/60 backdrop-blur-md border-slate-700/50 shadow-xl">
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center">
+                  <div className="w-6 h-6 bg-pink-500 rounded flex items-center justify-center">
                     <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                     </svg>
@@ -589,8 +566,8 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                     "relative min-h-[400px] rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer",
                     uploadedImages.length > 0 ? "flex" : "flex items-center justify-center",
                     dragActive 
-                      ? "border-yellow-400 bg-yellow-500/10" 
-                      : "border-gray-600 hover:border-yellow-400 hover:bg-yellow-500/5"
+                      ? "border-pink-400 bg-pink-500/10" 
+                      : "border-gray-600 hover:border-pink-400 hover:bg-pink-500/5"
                   )}
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -619,7 +596,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                         {uploadedImages.map((image, index) => (
                           <div 
                             key={index} 
-                            className="relative border-2 border-orange-400 rounded-lg p-2 bg-slate-700/50 min-h-[120px] flex flex-col"
+                            className="relative border-2 border-pink-400 rounded-lg p-2 bg-slate-700/50 min-h-[120px] flex flex-col"
                           >
                             <div className="flex-1 relative group">
                               <img
@@ -649,10 +626,10 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                         
                         {uploadedImages.length < 5 && (
                           <div 
-                            className="border-2 border-dashed border-yellow-500/60 rounded-lg flex flex-col items-center justify-center min-h-[120px] hover:border-yellow-400 transition-colors cursor-pointer bg-slate-800/30"
+                            className="border-2 border-dashed border-pink-500/60 rounded-lg flex flex-col items-center justify-center min-h-[120px] hover:border-pink-400 transition-colors cursor-pointer bg-slate-800/30"
                             onClick={() => fileInputRef.current?.click()}
                           >
-                            <div className="text-center text-yellow-400">
+                            <div className="text-center text-pink-400">
                               <div className="text-3xl mb-2">+</div>
                               <div className="text-sm font-medium">{t.upload.add_image}</div>
                               <div className="text-xs text-gray-400 mt-1">
@@ -677,7 +654,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                     </div>
                   ) : (
                     <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-pink-500 to-pink-600 rounded-full flex items-center justify-center">
                         <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
@@ -702,8 +679,8 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                       className={cn(
                         "w-full relative overflow-hidden rounded-lg border transition-all duration-200 text-left group",
                         selectedStyle === style.value
-                          ? "border-yellow-500 bg-yellow-500/10"
-                          : "border-gray-600 hover:border-yellow-400/50 hover:bg-yellow-500/5"
+                          ? "border-pink-500 bg-pink-500/10"
+                          : "border-gray-600 hover:border-pink-400/50 hover:bg-pink-500/5"
                       )}
                     >
                       <div className="flex gap-4 p-4">
@@ -728,7 +705,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                                 className={cn(
                                   "px-2 py-1 text-xs rounded-md font-medium",
                                   selectedStyle === style.value
-                                    ? "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
+                                    ? "bg-pink-500/20 text-pink-300 border border-pink-500/30"
                                     : "bg-gray-700/50 text-gray-300 border border-gray-600/50"
                                 )}
                               >
@@ -739,7 +716,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                         </div>
                         
                         {selectedStyle === style.value && (
-                          <div className="flex-shrink-0 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                          <div className="flex-shrink-0 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-lg">
                             <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
@@ -759,7 +736,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
               className={cn(
                 "w-full py-4 text-lg font-semibold rounded-xl transition-all duration-300",
                 uploadedImages.length > 0 && !isGenerating
-                  ? "bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 shadow-2xl shadow-yellow-500/25"
+                  ? "bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 shadow-2xl shadow-pink-500/25"
                   : "bg-gray-600 cursor-not-allowed"
               )}
             >
@@ -778,7 +755,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
               ) : (
                 <div className="flex items-center gap-2">
                   {t.buttons.generate}
-                  <span className="text-yellow-400 font-medium">
+                  <span className="text-pink-400 font-medium">
                     ({modelOptions.find(m => m.value === selectedModel)?.credits || 10} credits)
                   </span>
                 </div>
@@ -817,7 +794,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                         <Button
                           onClick={downloadImage}
                           size="sm"
-                          className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                          className="bg-pink-600 hover:bg-pink-700 text-white"
                         >
                           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -866,7 +843,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                     <textarea
                       value={customPrompt || styleOptions.find(s => s.value === selectedStyle)?.prompt || ''}
                       onChange={(e) => setCustomPrompt(e.target.value)}
-                      className="w-full p-3 bg-slate-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none resize-none"
+                      className="w-full p-3 bg-slate-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-pink-400 focus:outline-none resize-none"
                       rows={6}
                     />
                     <p className="text-xs text-gray-400 mt-1">

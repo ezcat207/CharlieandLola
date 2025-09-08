@@ -46,7 +46,10 @@ export function db() {
     console.log('Database URL validation successful');
   } catch (error) {
     console.error('Database URL validation failed:', error);
-    throw new Error(`Invalid DATABASE_URL format: ${error.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Invalid DATABASE_URL format: ${error.message}`);
+    }
+    throw new Error(`Invalid DATABASE_URL format: Unknown error`);
   }
 
   // In Cloudflare Workers, create new connection each time
