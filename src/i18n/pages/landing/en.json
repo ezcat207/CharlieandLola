@@ -1,0 +1,489 @@
+{
+  "template": "cyberpunk-ai-generator",
+  "theme": "dark",
+  "header": {
+    "brand": {
+      "title": "Charlie and Lola Style Converter",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "Charlie and Lola Style Converter"
+      },
+      "url": "/"
+    },
+    "nav": {
+      "items": [
+        {
+          "title": "Features",
+          "url": "/#features",
+          "icon": "RiSparkling2Line"
+        },
+        {
+          "title": "Gallery",
+          "url": "/#showcase",
+          "icon": "RiGalleryLine"
+        },
+        {
+          "title": "Styles",
+          "url": "/#styles",
+          "icon": "RiPaletteLine"
+        },
+        {
+          "title": "Pricing",
+          "url": "/pricing",
+          "icon": "RiMoneyDollarCircleLine"
+        }
+      ]
+    },
+    "buttons": [
+      {
+        "title": "Try Charlie & Lola Style",
+        "url": "/#generator",
+        "target": "_self",
+        "variant": "default",
+        "icon": "RiFlashlightFill"
+      }
+    ],
+    "show_sign": true,
+    "show_theme": false,
+    "show_locale": false
+  },
+  "hero": {
+    "title": "Transform Photos Into Charlie and Lola Style Characters",
+    "highlight_text": "Charlie & Lola Style",
+    "description": "Revolutionary AI-powered character transformation using Gemini 2.5 Flash Image Preview. Turn any photo into adorable Charlie and Lola cartoon characters!<br/>Perfect for creating personalized children's book illustrations, gifts, and magical transformations.",
+    "announcement": {
+      "label": "MAGICAL",
+      "title": "🎨 Official Charlie and Lola Art Style",
+      "url": "/#generator"
+    },
+    "tip": "✨ Authentic Charlie and Lola cartoon magic",
+    "buttons": [
+      {
+        "title": "Create Charlie & Lola Art Now",
+        "icon": "RiRobot2Line",
+        "url": "/#generator",
+        "target": "_self",
+        "variant": "default"
+      },
+      {
+        "title": "View Examples",
+        "icon": "RiGalleryLine",
+        "url": "/#showcase",
+        "target": "_self",
+        "variant": "outline"
+      }
+    ],
+    "show_happy_users": true,
+    "show_badge": true
+  },
+  "branding": {
+    "title": "What Makes Our Charlie & Lola Converter Special",
+    "items": [
+      {
+        "title": "Authentic Charlie & Lola Style",
+        "image": {
+          "src": "/imgs/logos/flux.svg",
+          "alt": "Charlie and Lola Art Style"
+        }
+      },
+      {
+        "title": "Magical Transformations",
+        "image": {
+          "src": "/imgs/logos/speed.svg",
+          "alt": "Magic Art"
+        }
+      },
+      {
+        "title": "Simple Photo Upload",
+        "image": {
+          "src": "/imgs/logos/hd.svg",
+          "alt": "Easy Upload"
+        }
+      },
+      {
+        "title": "Adorable Character Results",
+        "image": {
+          "src": "/imgs/logos/quality.svg",
+          "alt": "Cute Characters"
+        }
+      }
+    ]
+  },
+  "introduce": {
+    "name": "introduce",
+    "title": "What is Charlie and Lola Style Converter",
+    "label": "About",
+    "description": "Magical AI-powered character transformation that brings beloved children's book art to life. Transform any photo into adorable Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology.",
+    "image": {
+      "src": "/imgs/template/consistent.jpeg"
+    },
+    "items": [
+      {
+        "title": "Character Magic",
+        "description": "Transform any person into a charming Charlie and Lola character while preserving their unique features, clothing, and personality in delightful cartoon form.",
+        "icon": "RiUploadLine"
+      },
+      {
+        "title": "Simple Transformation",
+        "description": "Just upload a photo and watch the magic happen. No complex editing skills needed - our AI automatically applies the beloved Charlie and Lola art style.",
+        "icon": "RiCameraLine"
+      },
+      {
+        "title": "Family Portraits",
+        "description": "Transform family photos, children's pictures, or any portrait into heartwarming Charlie and Lola style illustrations perfect for gifts and keepsakes.",
+        "icon": "RiTimeLine"
+      }
+    ]
+  },
+  "benefit": {
+    "name": "benefit",
+    "title": "Why Choose Charlie and Lola Style Converter",
+    "label": "Benefits",
+    "description": "Experience the magic of beloved children's book art with cutting-edge Gemini 2.5 Flash Image Preview technology - bringing Charlie and Lola's world to life.",
+    "items": [
+      {
+        "title": "Authentic Charlie & Lola Art Style",
+        "description": "Our AI perfectly captures the distinctive thin sketchy outlines, flat colors, childlike proportions, and playful hand-drawn charm of the official Charlie and Lola books.",
+        "icon": "RiCpuLine",
+        "image": {
+          "src": "/imgs/template/toy.jpeg"
+        }
+      },
+      {
+        "title": "Perfect Children's Gifts",
+        "description": "Create personalized storybook illustrations, custom children's book pages, or magical character portraits. Perfect for birthdays, nursery decor, and special occasions.",
+        "icon": "RiPaletteLine",
+        "image": {
+          "src": "/imgs/template/self.jpeg"
+        }
+      },
+      {
+        "title": "Heartwarming Character Art",
+        "description": "Transform family photos into whimsical character illustrations that capture the joy and innocence of childhood in the beloved Charlie and Lola style.",
+        "icon": "RiUserLine",
+        "image": {
+          "src": "/imgs/template/self.jpeg"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "name": "usage",
+    "title": "How to Create Charlie & Lola Characters",
+    "description": "Transform photos into magical storybook characters in three simple steps:",
+    "image": {
+      "src": "/imgs/template/consistent.jpeg"
+    },
+    "image_position": "left",
+    "text_align": "center",
+    "items": [
+      {
+        "title": "Upload Your Photo",
+        "description": "Upload any photo - family pictures, children's portraits, or selfies. Our AI works best with clear photos showing faces and full bodies for the most magical results.",
+        "image": {
+          "src": "/imgs/template/self_org.png"
+        }
+      },
+      {
+        "title": "Let the Magic Begin",
+        "description": "Our advanced AI automatically applies the Charlie and Lola transformation. Watch as your photo becomes a delightful cartoon character with the series' signature art style.",
+        "image": {
+          "src": "/imgs/template/consistent.jpeg"
+        }
+      },
+      {
+        "title": "Download Your Character",
+        "description": "Receive your beautiful Charlie and Lola style character in moments. Perfect for printing, sharing, or creating custom storybooks and keepsakes.",
+        "image": {
+          "src": "/imgs/template/self.jpeg"
+        }
+      }
+    ]
+  },
+  "feature": {
+    "name": "features",
+    "title": "What Can You Create with Charlie & Lola Style?",
+    "description": "Endless magical possibilities to bring the beloved children's book world to life through character transformation.",
+    "items": [
+      {
+        "title": "Authentic Charlie & Lola Art Style",
+        "description": "Experience the genuine charm of Lauren Child's beloved illustrations with thin sketchy lines, bright flat colors, and whimsical character proportions.",
+        "icon": "RiCpuLine"
+      },
+      {
+        "title": "Personalized Storybook Art",
+        "description": "Create custom children's book illustrations featuring your family. Perfect for bedtime stories, personalized gifts, and magical keepsakes.",
+        "icon": "RiMagicLine"
+      },
+      {
+        "title": "Nursery & Room Decor",
+        "description": "Transform family photos into beautiful wall art for children's rooms. Create a magical atmosphere with custom Charlie and Lola style portraits.",
+        "icon": "RiHdLine"
+      },
+      {
+        "title": "Educational & Fun Content",
+        "description": "Create engaging educational materials, reward charts, or fun character cards featuring your children in the beloved Charlie and Lola style.",
+        "icon": "RiPaletteLine"
+      },
+      {
+        "title": "Special Occasion Memories",
+        "description": "Commemorate birthdays, holidays, or milestones by transforming special moment photos into timeless Charlie and Lola character art.",
+        "icon": "RiSettings4Line"
+      },
+      {
+        "title": "Gift Creation & Sharing",
+        "description": "Create unique presents like custom greeting cards, photo books, or digital artwork that brings joy to children and parents alike.",
+        "icon": "RiShareLine"
+      }
+    ]
+  },
+  "stats": {
+    "name": "stats",
+    "label": "Stats",
+    "title": "Families Love Charlie & Lola Style Magic",
+    "description": "for bringing beloved characters to life in family photos.",
+    "icon": "RiHeartLine",
+    "items": [
+      {
+        "title": "Characters Created",
+        "label": "50K+",
+        "description": "Magical Transformations"
+      },
+      {
+        "title": "Happy Families",
+        "label": "5K+",
+        "description": "Parents & Children"
+      },
+      {
+        "title": "Art Style Authenticity",
+        "label": "100%",
+        "description": "Charlie & Lola Magic"
+      }
+    ]
+  },
+  "testimonial": {
+    "name": "testimonial",
+    "label": "Reviews",
+    "title": "What Families Say About Charlie & Lola Magic",
+    "description": "Hear from parents and children who love their magical character transformations.",
+    "icon": "RiStarLine",
+    "items": [
+      {
+        "title": "Emma Johnson",
+        "label": "Parent & Teacher",
+        "description": "My daughter absolutely loves seeing herself as a Charlie and Lola character! We've created a whole storybook with her adventures. The art style is so authentic and brings such joy to our family time.",
+        "image": {
+          "src": "/imgs/users/1.png"
+        }
+      },
+      {
+        "title": "David Thompson",
+        "label": "Pediatric Nurse & Father",
+        "description": "I use these Charlie and Lola character portraits to make my young patients smile during visits. The children light up when they see themselves as cartoon characters - it's truly magical!",
+        "image": {
+          "src": "/imgs/users/2.png"
+        }
+      },
+      {
+        "title": "Sarah Williams",
+        "label": "Children's Book Author",
+        "description": "As someone who works in children's literature, I'm amazed by how perfectly this captures Lauren Child's distinctive art style. It's like having a personal illustrator for family photos!",
+        "image": {
+          "src": "/imgs/users/3.png"
+        }
+      },
+      {
+        "title": "Michael Chen",
+        "label": "Grandparent",
+        "description": "My grandchildren were thrilled to see themselves as Charlie and Lola characters! We printed them as wall art for their bedrooms. Such a wonderful way to make family photos special.",
+        "image": {
+          "src": "/imgs/users/4.png"
+        }
+      },
+      {
+        "title": "Lisa Rodriguez",
+        "label": "Elementary School Teacher",
+        "description": "I create custom reward charts and classroom decorations using my students as Charlie and Lola characters. They love seeing themselves in the beloved book style - it motivates them so much!",
+        "image": {
+          "src": "/imgs/users/5.png"
+        }
+      },
+      {
+        "title": "Jennifer Park",
+        "label": "Party Planner",
+        "description": "I use these character transformations for children's birthday parties and special events. Parents love the personalized Charlie and Lola themed decorations - it's become my signature service!",
+        "image": {
+          "src": "/imgs/users/6.png"
+        }
+      }
+    ]
+  },
+  "faq": {
+    "name": "faq",
+    "label": "FAQ",
+    "title": "Frequently Asked Questions",
+    "description": "Everything you need to know about our Charlie and Lola style character transformation service.",
+    "items": [
+      {
+        "title": "What is Charlie and Lola Style Converter?",
+        "description": "Charlie and Lola Style Converter is a magical AI transformation service that turns any photo into charming characters inspired by Lauren Child's beloved children's books. Using advanced Gemini 2.5 Flash Image Preview technology, we perfectly capture the series' distinctive art style."
+      },
+      {
+        "title": "How is this different from other character generators?",
+        "description": "We specialize exclusively in the authentic Charlie and Lola art style, capturing Lauren Child's distinctive thin sketchy outlines, flat colors, and whimsical character proportions. Our AI is trained specifically for this beloved children's book aesthetic."
+      },
+      {
+        "title": "What can I create with this service?",
+        "description": "Transform family photos, children's portraits, special occasion pictures, or any photo into delightful Charlie and Lola style characters. Perfect for custom storybooks, nursery decor, educational materials, gifts, and magical keepsakes."
+      },
+      {
+        "title": "How long does the transformation take?",
+        "description": "Character transformations typically complete within 30-60 seconds using our advanced Gemini 2.5 Flash Image Preview technology. Simply upload your photo and watch the Charlie and Lola magic happen!"
+      },
+      {
+        "title": "How authentic is the Charlie and Lola style?",
+        "description": "Our AI has been specifically trained to capture Lauren Child's distinctive illustration style from the beloved Charlie and Lola books, including the signature sketchy lines, flat colors, childlike proportions, and whimsical charm that makes these characters so special."
+      },
+      {
+        "title": "Can I use the character images I create?",
+        "description": "Yes! The Charlie and Lola style character images you create are yours to use for personal purposes, gifts, family keepsakes, educational materials, and non-commercial projects. Perfect for printing, sharing, and creating magical memories."
+      }
+    ]
+  },
+  "cta": {
+    "name": "cta",
+    "title": "Ready to Create Magical Charlie & Lola Characters?",
+    "description": "Join thousands of families creating beautiful character art with authentic Charlie and Lola style magic.",
+    "buttons": [
+      {
+        "title": "Create Charlie & Lola Art Now",
+        "url": "/#generator",
+        "target": "_self",
+        "icon": "RiRobot2Line"
+      },
+      {
+        "title": "View Pricing",
+        "url": "/pricing",
+        "target": "_self",
+        "variant": "outline"
+      }
+    ]
+  },
+  "footer": {
+    "name": "footer",
+    "brand": {
+      "title": "Charlie and Lola Style Converter",
+      "description": "Magical AI-powered character transformation service. Transform any photo into beloved Charlie and Lola style characters using advanced Gemini technology. Perfect for families and children.",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "Charlie and Lola Style Converter"
+      },
+      "url": "/"
+    },
+    "copyright": "© 2025 • Charlie and Lola Style Converter. All rights reserved.",
+    "nav": {
+      "items": [
+        {
+          "title": "About",
+          "children": [
+            {
+              "title": "Features",
+              "url": "/#feature",
+              "target": "_self"
+            },
+            {
+              "title": "Showcases",
+              "url": "/#showcase",
+              "target": "_self"
+            },
+            {
+              "title": "Pricing",
+              "url": "/#pricing",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "Resources",
+          "children": [
+            {
+              "title": "Documents",
+              "url": "/#docs",
+              "target": "_blank"
+            },
+            {
+              "title": "Components",
+              "url": "https://cyberpunk-ai.com/components",
+              "target": "_blank"
+            },
+            {
+              "title": "Templates",
+              "url": "https://cyberpunk-ai.com/templates",
+              "target": "_blank"
+            }
+          ]
+        },
+        {
+          "title": "Friends",
+          "children": [
+            {
+              "title": "ThinkAny",
+              "url": "https://thinkany.ai",
+              "target": "_blank"
+            },
+            {
+              "title": "HeyBeauty",
+              "url": "https://heybeauty.ai",
+              "target": "_blank"
+            },
+            {
+              "title": "Pagen",
+              "url": "https://pagen.so",
+              "target": "_blank"
+            }
+          ]
+        }
+      ]
+    },
+    "social": {
+      "items": [
+        {
+          "title": "X",
+          "icon": "RiTwitterXFill",
+          "url": "https://x.com/charlieandlola",
+          "target": "_blank"
+        },
+        {
+          "title": "Github",
+          "icon": "RiGithubFill",
+          "url": "https://github.com/charlieandlola",
+          "target": "_blank"
+        },
+        {
+          "title": "Discord",
+          "icon": "RiDiscordFill",
+          "url": "https://discord.gg/charlieandlola",
+          "target": "_blank"
+        },
+        {
+          "title": "Email",
+          "icon": "RiMailLine",
+          "url": "mailto:support@charlieandlola.net",
+          "target": "_self"
+        }
+      ]
+    },
+    "agreement": {
+      "items": [
+        {
+          "title": "Privacy Policy",
+          "url": "/privacy-policy"
+        },
+        {
+          "title": "Terms of Service",
+          "url": "/terms-of-service"
+        }
+      ]
+    }
+  }
+}

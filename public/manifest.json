@@ -1,0 +1,74 @@
+{
+  "name": "Nano Banana AI Image Editor",
+  "short_name": "Nano Banana",
+  "description": "Revolutionary AI-powered image editing that understands you. Edit your images into anything you want with just one sentence. 100% guaranteed Google Nano-Banana-Edit model.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#9333ea",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "photo", "utilities"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/imgs/template/toy.jpeg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "label": "3D Figure Generation Example"
+    },
+    {
+      "src": "/imgs/template/self.jpeg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "label": "Celebrity Selfie Generation Example"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Try Nano Banana",
+      "short_name": "Edit",
+      "description": "Start editing images with Nano Banana AI",
+      "url": "/?utm_source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "View Gallery",
+      "short_name": "Gallery",
+      "description": "Browse user creations",
+      "url": "/showcase?utm_source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ]
+}

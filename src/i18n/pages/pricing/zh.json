@@ -1,0 +1,271 @@
+{
+  "pricing": {
+    "name": "pricing",
+    "label": "定价",
+    "title": "定价",
+    "description": "选择最适合您的方案",
+    "groups": [
+      {
+        "name": "monthly",
+        "title": "月付",
+        "is_featured": true
+      },
+      {
+        "name": "yearly",
+        "title": "年付"
+      }
+    ],
+    "items": [
+      {
+        "title": "免费版",
+        "description": "个人使用的基本功能",
+        "features_title": "包含功能",
+        "features": [
+          "每月 10 积分",
+          "基础 AI 模型访问",
+          "标准清晰度输出",
+          "社区支持",
+          "不允许商用",
+          "带水印图片",
+          "分辨率有限"
+        ],
+        "interval": "month",
+        "amount": 0,
+        "currency": "USD",
+        "price": "$0",
+        "unit": "",
+        "is_featured": false,
+        "tip": "",
+        "button": {
+          "title": "免费开始",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "free",
+        "product_name": "Nano Banana 免费方案",
+        "credits": 10,
+        "valid_months": 1,
+        "group": "monthly"
+      },
+      {
+        "title": "高级版",
+        "description": "跳过排队，获得优先访问权限 - $0.99/月",
+        "features_title": "包含功能",
+        "features": [
+          "无限制查理和罗拉风格生成",
+          "跳过排队 - 无等待时间",
+          "优先处理",
+          "高分辨率下载",
+          "无水印",
+          "邮件支持",
+          "允许商业使用"
+        ],
+        "interval": "month",
+        "amount": 99,
+        "currency": "USD",
+        "price": "$0.99",
+        "unit": "/月",
+        "is_featured": true,
+        "tip": "无需排队",
+        "button": {
+          "title": "跳过排队",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "premium-monthly",
+        "product_name": "查理和罗拉高级版月付",
+        "credits": 1000,
+        "valid_months": 1,
+        "group": "monthly"
+      },
+      {
+        "title": "专业版",
+        "label": "热门",
+        "description": "专业人士的高级功能 - $10.99/月",
+        "features_title": "包含功能",
+        "features": [
+          "每月 500 积分",
+          "高级 AI 模型访问",
+          "高清输出",
+          "优先支持",
+          "无水印图片",
+          "自定义品牌",
+          "终身更新"
+        ],
+        "interval": "month",
+        "amount": 1099,
+        "currency": "USD",
+        "price": "$10.99",
+        "unit": "/月",
+        "is_featured": true,
+        "tip": "",
+        "button": {
+          "title": "开始使用",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "pro-monthly",
+        "product_name": "Nano Banana 专业版月付",
+        "credits": 500,
+        "valid_months": 1,
+        "group": "monthly"
+      },
+      {
+        "title": "极速版",
+        "description": "重度用户和创作者的完美选择 - $34.9/月",
+        "features_title": "包含功能",
+        "features": [
+          "每月 2000 积分",
+          "优先处理队列",
+          "自定义风格训练",
+          "高清输出",
+          "商业许可证",
+          "优先客户支持",
+          "高级风格预设"
+        ],
+        "interval": "month",
+        "amount": 3490,
+        "currency": "USD",
+        "price": "$34.9",
+        "unit": "/月",
+        "is_featured": false,
+        "tip": "",
+        "button": {
+          "title": "开始使用",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "ultra-monthly",
+        "product_name": "Nano Banana 极速版月付",
+        "credits": 2000,
+        "valid_months": 1,
+        "group": "monthly"
+      },
+      {
+        "title": "免费版",
+        "description": "个人使用的基本功能",
+        "features_title": "包含功能",
+        "features": [
+          "每月 10 积分",
+          "基础 AI 模型访问",
+          "标准清晰度输出",
+          "社区支持",
+          "不允许商用",
+          "带水印图片",
+          "分辨率有限"
+        ],
+        "interval": "year",
+        "amount": 0,
+        "currency": "USD",
+        "price": "$0",
+        "unit": "",
+        "is_featured": false,
+        "tip": "",
+        "button": {
+          "title": "免费开始",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "free-yearly",
+        "product_name": "Nano Banana 免费方案",
+        "credits": 120,
+        "valid_months": 12,
+        "group": "yearly"
+      },
+      {
+        "title": "高级版",
+        "description": "跳过排队，获得优先访问权限 - $9.99/年",
+        "features_title": "包含功能",
+        "features": [
+          "无限制查理和罗拉风格生成",
+          "跳过排队 - 无等待时间",
+          "优先处理",
+          "高分辨率下载",
+          "无水印",
+          "邮件支持",
+          "允许商业使用"
+        ],
+        "interval": "year",
+        "amount": 999,
+        "currency": "USD",
+        "price": "$9.99",
+        "unit": "/年",
+        "is_featured": true,
+        "tip": "最佳价值 - 无需排队",
+        "button": {
+          "title": "跳过排队",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "premium-yearly",
+        "product_name": "查理和罗拉高级版年付",
+        "credits": 1200,
+        "valid_months": 12,
+        "group": "yearly"
+      },
+      {
+        "title": "专业版",
+        "label": "热门",
+        "description": "专业人士的高级功能 - $10.99/月",
+        "features_title": "包含功能",
+        "features": [
+          "每月 500 积分",
+          "高级 AI 模型访问",
+          "高清输出",
+          "优先支持",
+          "无水印图片",
+          "自定义品牌",
+          "终身更新"
+        ],
+        "interval": "year",
+        "amount": 10550,
+        "currency": "USD",
+        "price": "$105.5",
+        "unit": "/年",
+        "is_featured": true,
+        "tip": "",
+        "button": {
+          "title": "开始使用",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "pro-yearly",
+        "product_name": "Nano Banana 专业版年付",
+        "credits": 6000,
+        "valid_months": 12,
+        "group": "yearly"
+      },
+      {
+        "title": "极速版",
+        "description": "重度用户和创作者的完美选择 - $34.9/月",
+        "features_title": "包含功能",
+        "features": [
+          "每月 2000 积分",
+          "优先处理队列",
+          "自定义风格训练",
+          "高清输出",
+          "商业许可证",
+          "优先客户支持",
+          "高级风格预设"
+        ],
+        "interval": "year",
+        "amount": 33504,
+        "currency": "USD",
+        "price": "$335.04",
+        "unit": "/年",
+        "is_featured": false,
+        "tip": "",
+        "button": {
+          "title": "开始使用",
+          "url": "/#pricing",
+          "icon": "RiFlashlightFill"
+        },
+        "product_id": "ultra-yearly",
+        "product_name": "Nano Banana 极速版年付",
+        "credits": 24000,
+        "valid_months": 12,
+        "group": "yearly"
+      }
+    ]
+  }
+}

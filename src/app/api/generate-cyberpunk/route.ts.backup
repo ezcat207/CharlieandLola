@@ -1,0 +1,392 @@
+import { respData, respErr } from "@/lib/resp";
+import { getUuid } from "@/lib/hash";
+import { newStorage } from "@/lib/storage";
+import { systemCreditManager, CreditUsageType } from "@/services/system-credits";
+import { getUserUuid } from "@/services/user";
+import { decreaseCredits, CreditsTransType } from "@/services/credit";
+
+export async function POST(request: Request) {
+  try {
+    const formData = await request.formData();
+    const image = formData.get('image') as File | null;
+    const style = formData.get('style') as string || 'cyberpunk';
+    const mode = formData.get('mode') as string || 'text2image'; // 'text2image' or 'image2image'
+    const customPrompt = formData.get('customPrompt') as string || '';
+    const aspectRatio = formData.get('aspectRatio') as string || '16:9';
+    const outputFormat = formData.get('outputFormat') as string || 'jpeg';
+    const model = formData.get('model') as string || 'pro';
+
+    // Validate parameters
+    const validAspectRatios = ['16:9', '21:9', '4:3', '1:1', '3:4', '9:16'];
+    const validOutputFormats = ['jpeg', 'png'];
+    const validModels = ['pro', 'max']; // These are our internal model names
+    const validStyles = ['classic', 'neon-noir', 'tech-ninja'];
+
+    if (!validAspectRatios.includes(aspectRatio)) {
+      return respErr(`Invalid aspect ratio: ${aspectRatio}. Valid options: ${validAspectRatios.join(', ')}`);
+    }
+
+    if (!validOutputFormats.includes(outputFormat)) {
+      return respErr(`Invalid output format: ${outputFormat}. Valid options: ${validOutputFormats.join(', ')}`);
+    }
+
+    if (!validModels.includes(model)) {
+      return respErr(`Invalid model: ${model}. Valid options: ${validModels.join(', ')}`);
+    }
+
+    if (!validStyles.includes(style)) {
+      return respErr(`Invalid style: ${style}. Valid options: ${validStyles.join(', ')}`);
+    }
+
+    // Get user info for credit management
+    const userUuid = await getUserUuid();
+    
+    // Determine required credits based on model
+    const requiredCredits = model === 'max' ? 20 : 10; // Max model costs 20 credits, Pro model costs 10 credits
+
+    // Check for Kie.ai API key
+    const kieApiKey = process.env.KIEAI_API_KEY;
+    if (!kieApiKey) {
+      console.error("Kie.ai API key is not configured");
+      return respErr("Kie.ai API key is not configured. Please set KIEAI_API_KEY in your environment variables.");
+    }
+
+    // 检查系统积分是否充足 (你从 Kie.ai 购买的积分池)
+    const systemHasCredits = await systemCreditManager.checkSystemCredits(requiredCredits);
+    if (!systemHasCredits) {
+      console.error("System credit pool insufficient, attempting auto-recharge...");
+      
+      // 尝试自动补充积分
+      const recharged = await systemCreditManager.autoRechargeCredits();
+      if (!recharged) {
+        return respErr("System temporarily unavailable. Please try again later.");
+      }
+    }
+
+    // 如果有用户，检查用户积分 (用户从你这里购买的积分)
+    if (userUuid) {
+      try {
+        await decreaseCredits({
+          user_uuid: userUuid,
+          trans_type: CreditsTransType.Ping,
+          credits: requiredCredits
+        });
+      } catch (error) {
+        return respErr("Insufficient credits. Please recharge your account.");
+      }
+    }
+
+    let base64Image: string | null = null;
+    let mimeType: string | null = null;
+
+    // Process image if provided (for image2image mode)
+    if (image) {
+      const bytes = await image.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      
+      // Validate image size (Kie.ai might have size limits)
+      if (buffer.length > 10 * 1024 * 1024) { // 10MB limit
+        return respErr("Image too large. Please use an image smaller than 10MB.");
+      }
+      
+      base64Image = buffer.toString('base64');
+      mimeType = image.type;
+    }
+
+    // Character figure prompt variations optimized for nano-banana-edit
+    const cyberpunkPrompts = {
+      classic: `turn this photo into a character figure. Behind it, place a box with the character's image printed on it, and a computer showing the Blender modeling process on its screen. In front of the box, add a round plastic base with the character figure standing on it. set the scene indoors if possible. Apply cyberpunk aesthetic with neon lighting, futuristic elements, and high-tech atmosphere.`,
+      
+      neonNoir: `turn this photo into a character figure. Behind it, place a box with the character's image printed on it, and a computer showing the Blender modeling process on its screen. In front of the box, add a round plastic base with the character figure standing on it. set the scene indoors if possible. Use neon noir cyberpunk style with dramatic lighting, electric colors, and chrome surfaces.`,
+      
+      techNinja: `turn this photo into a character figure. Behind it, place a box with the character's image printed on it, and a computer showing the Blender modeling process on its screen. In front of the box, add a round plastic base with the character figure standing on it. set the scene indoors if possible. Apply tech ninja cyberpunk aesthetic with sleek, minimalist cyber-enhancements and blue-gray color palette.`
+    };
+
+    // Select prompt based on style parameter or default to classic
+    const selectedStyle = style === 'neon-noir' ? 'neonNoir' : 
+                         style === 'tech-ninja' ? 'techNinja' : 'classic';
+    
+    let finalPrompt: string;
+    let requestBody: any;
+
+    // Determine the prompt and request body based on mode
+    if (customPrompt) {
+      // Custom prompt provided - use it directly
+      finalPrompt = customPrompt;
+    } else {
+      // Use predefined cyberpunk prompts
+      const cyberpunkPrompt = cyberpunkPrompts[selectedStyle];
+      
+      if (mode === 'image2image' && base64Image) {
+        // Image-to-image: Use shorter, transformation-focused prompt
+        finalPrompt = `Transform into cyberpunk style: ${cyberpunkPrompt}`;
+      } else {
+        // Text-to-image: Use detailed generation prompt
+        finalPrompt = `${cyberpunkPrompt} High-quality cyberpunk artwork, professional digital art, detailed and cinematic.`;
+      }
+    }
+
+    // Build request body based on mode and model (nano-banana-edit always uses the same model)
+    requestBody = {
+      prompt: finalPrompt,
+      aspectRatio: aspectRatio,
+      enableTranslation: true, // Enable translation by default
+      outputFormat: outputFormat,
+      promptUpsampling: model === 'max' // Enable upsampling for Max model
+    };
+
+    // Handle image for image2image mode
+    if (mode === 'image2image' && base64Image && mimeType) {
+      // Check if storage is properly configured
+      const hasStorageConfig = process.env.STORAGE_ENDPOINT && 
+                              process.env.STORAGE_ACCESS_KEY && 
+                              process.env.STORAGE_SECRET_KEY && 
+                              process.env.STORAGE_BUCKET;
+      
+      if (hasStorageConfig) {
+        try {
+          const storage = newStorage();
+          const batch = getUuid();
+          const filename = `input_${batch}.${mimeType.split('/')[1]}`;
+          const key = `input/${filename}`; // Changed from temp/ to input/
+          const body = Buffer.from(base64Image, 'base64');
+
+          const uploadResult = await storage.uploadFile({
+            body,
+            key,
+            contentType: mimeType,
+            disposition: "inline",
+          });
+
+          if (uploadResult.url) {
+            requestBody.inputImage = uploadResult.url;
+            console.log("Using uploaded image URL for transformation");
+          } else {
+            throw new Error("Failed to get URL from upload result");
+          }
+        } catch (uploadError) {
+          console.error("Storage upload failed:", uploadError);
+          return respErr("Failed to upload image for transformation. Please check storage configuration.");
+        }
+      } else {
+        // Storage not configured - return helpful error message
+        return respErr("Image-to-image transformation requires storage configuration. Please configure STORAGE_ENDPOINT, STORAGE_ACCESS_KEY, STORAGE_SECRET_KEY, and STORAGE_BUCKET in your environment variables, or use text-to-image mode instead.");
+      }
+    }
+
+    // Log detailed request information for debugging
+    console.log("=== Kie.ai API Request Details ===");
+    console.log("Mode:", mode);
+    console.log("Model:", model);
+    console.log("Aspect Ratio:", aspectRatio);
+    console.log("Output Format:", outputFormat);
+    console.log("Style:", style);
+    console.log("Custom Prompt:", customPrompt ? "Yes" : "No");
+    console.log("Required Credits:", requiredCredits);
+    console.log("User UUID:", userUuid || "Not logged in");
+    console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+    console.log("================================");
+
+    // Call Kie.ai nano-banana-edit model API
+    const kieResponse = await fetch('https://api.kie.ai/api/v1/playground/createTask', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${kieApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/nano-banana-edit',
+        callBackUrl: 'https://your-domain.com/api/callback',
+        input: {
+          "prompt": finalPrompt,
+          "image_urls": requestBody.inputImage ? [requestBody.inputImage] : [
+            "https://file.aiquickdraw.com/custom-page/akr/section-images/1756223420389w8xa2jfe.png"
+          ],
+          "num_images": "1"
+        }
+      }),
+    });
+
+    if (!kieResponse.ok) {
+      const errorText = await kieResponse.text();
+      console.error("Kie.ai API error response:", {
+        status: kieResponse.status,
+        statusText: kieResponse.statusText,
+        body: errorText
+      });
+      return respErr(`Failed to generate image: ${kieResponse.status} - ${errorText}`);
+    }
+
+    const kieResult = await kieResponse.json();
+    
+    console.log("Kie.ai API response:", JSON.stringify(kieResult, null, 2));
+    
+    if (kieResult.code !== 200) {
+      console.error("Kie.ai error response:", kieResult);
+      return respErr(kieResult.msg || "Failed to initiate image generation");
+    }
+    
+    if (!kieResult.data?.taskId) {
+      console.error("No taskId in response:", kieResult);
+      return respErr("No task ID received from Kie.ai");
+    }
+
+    // Nano-banana-edit returns a taskId - try different polling approaches
+    const taskId = kieResult.data.taskId;
+    const recordId = kieResult.data.recordId;
+    let attempts = 0;
+    const maxAttempts = 60; // 60 attempts with 3s intervals = 180s timeout
+
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+
+      try {
+        // Try multiple possible status endpoints
+        let statusResult = null;
+        let statusResponse = null;
+
+        // First try playground-specific endpoints
+        try {
+          statusResponse = await fetch(`https://api.kie.ai/api/v1/playground/getTask/${taskId}`, {
+            headers: {
+              'Authorization': `Bearer ${kieApiKey}`,
+            },
+          });
+          if (statusResponse.ok) {
+            statusResult = await statusResponse.json();
+          }
+        } catch (e) {
+          console.log("First endpoint failed, trying alternative...");
+        }
+
+        // If first attempt failed, try alternative endpoint
+        if (!statusResult || statusResult.code !== 200) {
+          try {
+            statusResponse = await fetch(`https://api.kie.ai/api/v1/playground/status/${recordId || taskId}`, {
+              headers: {
+                'Authorization': `Bearer ${kieApiKey}`,
+              },
+            });
+            if (statusResponse.ok) {
+              statusResult = await statusResponse.json();
+            }
+          } catch (e) {
+            console.log("Second endpoint failed, trying third...");
+          }
+        }
+
+        // If still no result, try the flux-style endpoint as fallback
+        if (!statusResult || statusResult.code !== 200) {
+          try {
+            statusResponse = await fetch(`https://api.kie.ai/api/v1/flux/kontext/record-info?taskId=${taskId}`, {
+              headers: {
+                'Authorization': `Bearer ${kieApiKey}`,
+              },
+            });
+            if (statusResponse.ok) {
+              statusResult = await statusResponse.json();
+            }
+          } catch (e) {
+            console.log("All status endpoints failed");
+          }
+        }
+
+        if (statusResult && statusResult.code === 200) {
+          // Handle both nano-banana-edit and flux response formats
+          const status = statusResult.data?.status || statusResult.data?.successFlag;
+          const output = statusResult.data?.output;
+          const imageUrl = output?.image_urls?.[0] || 
+                          statusResult.data?.response?.resultImageUrl ||
+                          statusResult.data?.imageUrl;
+            
+          if ((status === 'COMPLETED' || status === 1) && imageUrl) { // SUCCESS
+                const batch = getUuid();
+                const filename = `${style}_${batch}.${outputFormat}`; // Use style parameter for naming
+                
+                // 记录系统积分消耗 (成功生成后才扣费)
+                if (userUuid) {
+                  await systemCreditManager.consumeSystemCredits({
+                    credits: requiredCredits,
+                    userUuid: userUuid,
+                    usageType: CreditUsageType.IMAGE_GENERATION,
+                    description: `Character figure generation with nano-banana-edit - ${mode} mode - ${style} style`
+                  });
+                }
+
+                // Download and store the generated image to output folder
+                let finalImageUrl = imageUrl; // Default to Kie.ai URL
+                let storedFilename = filename;
+
+                // Check if storage is configured for storing generated images
+                const hasStorageConfig = process.env.STORAGE_ENDPOINT && 
+                                        process.env.STORAGE_ACCESS_KEY && 
+                                        process.env.STORAGE_SECRET_KEY && 
+                                        process.env.STORAGE_BUCKET;
+
+                if (hasStorageConfig) {
+                  try {
+                    const storage = newStorage();
+                    const key = `output/${filename}`; // Store in output folder
+
+                    console.log(`Downloading and storing generated image to: ${key}`);
+
+                    const storedImage = await storage.downloadAndUpload({
+                      url: imageUrl,
+                      key: key,
+                      contentType: `image/${outputFormat}`,
+                      disposition: "inline"
+                    });
+
+                    finalImageUrl = storedImage.url;
+                    storedFilename = storedImage.filename || filename;
+                    console.log(`Successfully stored generated image: ${finalImageUrl}`);
+                  } catch (storageError) {
+                    console.error("Failed to store generated image:", storageError);
+                    // Continue with Kie.ai URL if storage fails
+                    console.log("Using Kie.ai URL as fallback");
+                  }
+                } else {
+                  console.log("Storage not configured, using Kie.ai URL directly");
+                }
+                
+                return respData({
+                  imageUrl: finalImageUrl,
+                  filename: storedFilename,
+                  message: "Character figure transformation complete with nano-banana-edit model",
+                  provider: "kie.ai",
+                  model: "google/nano-banana-edit",
+                  taskId,
+                  creditsUsed: requiredCredits,
+                  aspectRatio,
+                  outputFormat,
+                  style: style, // Include style in response
+                  storedLocally: hasStorageConfig && finalImageUrl !== imageUrl,
+                });
+              }
+          } else if (status === 'FAILED' || status === 2 || status === 3) { // FAILED states
+            const errorMsg = statusResult.data?.error || 
+                           statusResult.data?.errorMessage || 
+                           "Character figure generation failed";
+            return respErr(errorMsg);
+          }
+          // If status is PROCESSING/GENERATING (0 or similar), continue polling
+        }
+      } catch (pollError) {
+        console.error("Polling error:", pollError);
+      }
+
+      attempts++;
+    }
+
+    // Timeout reached
+    return respErr("Character figure generation timed out. Please try again.");
+
+  } catch (error) {
+    console.error("Error in cyberpunk generation:", error);
+    return respErr("Failed to process character figure generation");
+  }
+}
+
+export async function GET() {
+  return respData({ message: "Cyberpunk Image Generator API" });
+}

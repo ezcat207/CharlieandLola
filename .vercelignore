@@ -1,0 +1,52 @@
+# Development files
+*.md
+*.mdx
+README.md
+CLAUDE.md
+SETUP.md
+
+# Documentation
+docs/
+content/docs/
+
+# Development tools
+.vscode/
+.idea/
+.cursorrules
+
+# Cache and logs
+.next/cache/
+*.log
+debug/
+
+# Lock files
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# Test files
+test/
+__tests__/
+coverage/
+.nyc_output/
+
+# Build artifacts
+*.tsbuildinfo
+*.sourcemap
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Examples
+examples/
+
+# Dockerfile and docker files
+Dockerfile
+.dockerignore
+
+# Wrangler config for Cloudflare
+wrangler.toml.example
+
+# Bundle analyzer
+.next/analyze/
