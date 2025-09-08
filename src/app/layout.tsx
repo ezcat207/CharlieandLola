@@ -30,7 +30,14 @@ export default async function RootLayout({
         
         {/* Preconnect for critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.kie.ai" crossOrigin="anonymous" />
+        
+        {/* Google Fonts - Inter */}
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" 
+          rel="stylesheet" 
+        />
         
         {/* Bing Webmaster Tools verification */}
         <meta name="msvalidate.01" content="EF14BA988A6933B400193F58A798FF2A" />

@@ -45,7 +45,7 @@
   --sidebar-border: oklch(0.17 0 0);
   --sidebar-ring: oklch(0.9 0.15 85 / 0.5);
 
-  --font-sans: 'Comic Sans MS', 'Patrick Hand', cursive, system-ui, sans-serif; /* More playful font */
+  --font-sans: Inter, system-ui, sans-serif; /* Clean, modern font */
   --font-serif: Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 0.5rem;

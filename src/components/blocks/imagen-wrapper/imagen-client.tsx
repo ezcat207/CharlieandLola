@@ -392,6 +392,13 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
           return;
         }
         throw new Error(result.msg || 'Failed to generate image');
+      } else if (result.code === -1) {
+        // Handle error responses (including insufficient credits)
+        if (result.data === 'INSUFFICIENT_CREDITS' || result.message?.includes('Insufficient credits')) {
+          toast.error(result.message || 'Insufficient credits to generate image');
+          return;
+        }
+        throw new Error(result.message || 'Generation failed');
       } else {
         console.error('Unexpected API response:', result);
         throw new Error('Unexpected response from server');
@@ -399,9 +406,11 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
     } catch (error: any) {
       console.error('Error generating image:', error);
       
-      // Handle queue-related errors specifically
+      // Handle specific error types
       if (error.message?.includes('queue') || error.message?.includes('busy') || error.message?.includes('capacity')) {
         toast.warning("🚧 Service is at capacity. You're in the queue. Upgrade to premium ($0.99) for priority access!");
+      } else if (error.message?.includes('Insufficient credits')) {
+        toast.error(error.message);
       } else {
         toast.error(t.messages.errors.generation_failed);
       }

@@ -60,11 +60,11 @@ export async function generateMetadata({
       locale: locale,
       url: canonicalUrl,
       title: isZh 
-        ? '查理和罗拉 - 最强AI角色手办生成器'
-        : 'Charlie and Lola - Best AI Character Generator',
+        ? '查理和罗拉 - 免费AI角色手办生成器，无需注册登录'
+        : 'Charlie and Lola - Free AI Character Generator, No Sign-up Required',
       description: isZh
-        ? '100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成AI角色手办'
-        : '100% guaranteed Google Charlie-and-Lola-Edit model with pre-built templates for AI character figure generation',
+        ? '无需注册登录即可免费生成！100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成AI角色手办'
+        : 'No sign-up required! Generate instantly for free. 100% guaranteed Google Charlie-and-Lola-Edit model with pre-built templates for AI character figure generation',
       siteName: 'CharlieandLola.net',
       images: [
         {
@@ -78,11 +78,11 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: isZh 
-        ? '查理和罗拉 - 最强AI角色手办生成器'
-        : 'Charlie and Lola - Best AI Character Generator',
+        ? '查理和罗拉 - 免费AI角色手办生成器，无需注册登录'
+        : 'Charlie and Lola - Free AI Character Generator, No Sign-up Required',
       description: isZh
-        ? '100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成'
-        : '100% guaranteed Google Charlie-and-Lola-Edit model with pre-built templates',
+        ? '无需注册登录即可免费生成！100%保证使用最先进的Google Charlie-and-Lola-Edit模型'
+        : 'No sign-up required! Generate instantly for free. Google Charlie-and-Lola-Edit model',
       images: ['https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg'],
     },
     alternates: {
@@ -132,8 +132,8 @@ export default async function LandingPage({
       "alternateName": isZh ? "查理罗拉角色魔法" : "Charlie Lola Character Magic",
       "url": `${baseUrl}${locale === 'en' ? '' : `/${locale}`}`,
       "description": isZh 
-        ? "使用先进的Gemini 2.5 Flash Image Preview技术，将任何照片转换为迷人的查理和罗拉风格角色。完美的儿童绘本风格，创作个性化纪念品和特殊礼物。"
-        : "Transform any photo into charming Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology. Perfect children's book style for creating personalized keepsakes and special gifts.",
+        ? "无需注册登录即可免费使用！使用先进的Gemini 2.5 Flash Image Preview技术，将任何照片转换为迷人的查理和罗拉风格角色。完美的儿童绘本风格，创作个性化纪念品和特殊礼物。"
+        : "No sign-up required! Free to use instantly! Transform any photo into charming Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology. Perfect children's book style for creating personalized keepsakes and special gifts.",
       "applicationCategory": ["AI Tool", "Character Converter", "Children's Art"],
       "operatingSystem": "Web Browser",
       "browserRequirements": "Requires JavaScript, Modern Web Browser",
@@ -152,22 +152,22 @@ export default async function LandingPage({
         "description": isZh ? "专业AI图像生成技术提供商" : "Professional AI image generation technology provider"
       },
       "featureList": isZh ? [
+        "无需注册登录，立即免费使用",
         "最先进的Google Charlie-and-Lola-Edit模型",
         "100%保证真实模型，无需抽卡",
         "预制热门模版一键生成",
         "3D角色手办制作",
         "明星合影生成",
         "专业教程博客指导",
-        "免费使用无限制",
         "实时生成高质量图片"
       ] : [
+        "No sign-up required - Use instantly for free",
         "Advanced Google Charlie-and-Lola-Edit model",
         "100% guaranteed authentic model, no lottery",
         "Pre-built popular templates for one-click generation",
         "3D character figure creation",
         "Celebrity selfie generation",
         "Professional tutorial blog guidance",
-        "Free unlimited usage",
         "Real-time high-quality image generation"
       ],
       "screenshot": `https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg`,

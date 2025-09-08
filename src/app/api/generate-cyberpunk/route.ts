@@ -143,7 +143,7 @@ export async function POST(request: Request) {
       // Check if it's a quota/limit error
       if (error.message?.includes('quota') || error.message?.includes('limit') || error.status === 429) {
         geminiApiPool.markKeyAsUnavailable(geminiApiKey, 'Quota exceeded');
-        return respErr("Service is currently busy. Please try again later or upgrade to premium for priority access.", 'QUEUE_REQUIRED');
+        return respErr("Too many users online! VIP users get priority access. You're in queue, please wait a moment or upgrade to VIP for instant access.", 'QUEUE_REQUIRED');
       }
       
       geminiApiPool.markKeyAsUnavailable(geminiApiKey, error.message || 'Unknown error');
