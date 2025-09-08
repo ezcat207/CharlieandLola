@@ -115,7 +115,7 @@
     "label": "About",
     "description": "Magical AI-powered character transformation that brings beloved children's book art to life. Transform any photo into adorable Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology.",
     "image": {
-      "src": "/imgs/template/consistent.jpeg"
+      "src": "/imgs/template/charlie-lola-2025-09-08T06-20-39.jpg"
     },
     "items": [
       {
@@ -146,7 +146,7 @@
         "description": "Our AI perfectly captures the distinctive thin sketchy outlines, flat colors, childlike proportions, and playful hand-drawn charm of the official Charlie and Lola books.",
         "icon": "RiCpuLine",
         "image": {
-          "src": "/imgs/template/toy.jpeg"
+          "src": "/imgs/template/toy_org.jpg"
         }
       },
       {
@@ -154,7 +154,7 @@
         "description": "Create personalized storybook illustrations, custom children's book pages, or magical character portraits. Perfect for birthdays, nursery decor, and special occasions.",
         "icon": "RiPaletteLine",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "/imgs/template/selfie-7611326_1280.jpg"
         }
       },
       {
@@ -162,7 +162,7 @@
         "description": "Transform family photos into whimsical character illustrations that capture the joy and innocence of childhood in the beloved Charlie and Lola style.",
         "icon": "RiUserLine",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "/imgs/template/selfie-7611326_1280.jpg"
         }
       }
     ]
@@ -172,7 +172,7 @@
     "title": "How to Create Charlie & Lola Characters",
     "description": "Transform photos into magical storybook characters in three simple steps:",
     "image": {
-      "src": "/imgs/template/consistent.jpeg"
+      "src": "/imgs/template/consistent.jpg"
     },
     "image_position": "left",
     "text_align": "center",

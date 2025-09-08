@@ -189,7 +189,7 @@ async function stripeCheckout({
     ],
     allow_promotion_codes: true,
     metadata: {
-      project: process.env.NEXT_PUBLIC_PROJECT_NAME || "",
+      project: process.env.NEXT_PUBLIC_PROJECT_NAME || "Charlie & Lola AI",
       product_name: order.product_name || "",
       order_no: order.order_no,
       user_email: order.user_email,
@@ -267,7 +267,7 @@ async function creemCheckout({
       },
       successUrl: success_url,
       metadata: {
-        project: process.env.NEXT_PUBLIC_PROJECT_NAME || "",
+        project: process.env.NEXT_PUBLIC_PROJECT_NAME || "Charlie & Lola AI",
         product_name: order.product_name || "",
         order_no: order.order_no,
         user_email: order.user_email,

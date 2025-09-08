@@ -60,12 +60,12 @@ export async function generateMetadata({
       locale: locale,
       url: canonicalUrl,
       title: isZh 
-        ? 'NanoBanana - 最强AI角色手办生成器'
-        : 'NanoBanana - Best AI Character Generator',
+        ? '查理和罗拉 - 最强AI角色手办生成器'
+        : 'Charlie and Lola - Best AI Character Generator',
       description: isZh
-        ? '100%保证使用最先进的Google Nano-Banana-Edit模型，预制多种热门模版一键快速生成AI角色手办'
-        : '100% guaranteed Google Nano-Banana-Edit model with pre-built templates for AI character figure generation',
-      siteName: 'NanoBanana.best',
+        ? '100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成AI角色手办'
+        : '100% guaranteed Google Charlie-and-Lola-Edit model with pre-built templates for AI character figure generation',
+      siteName: 'CharlieandLola.net',
       images: [
         {
           url: '/imgs/template/toy_org.jpg',
@@ -78,11 +78,11 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: isZh 
-        ? 'NanoBanana - 最强AI角色手办生成器'
-        : 'NanoBanana - Best AI Character Generator',
+        ? '查理和罗拉 - 最强AI角色手办生成器'
+        : 'Charlie and Lola - Best AI Character Generator',
       description: isZh
-        ? '100%保证使用最先进的Google Nano-Banana-Edit模型，预制多种热门模版一键快速生成'
-        : '100% guaranteed Google Nano-Banana-Edit model with pre-built templates',
+        ? '100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成'
+        : '100% guaranteed Google Charlie-and-Lola-Edit model with pre-built templates',
       images: ['/imgs/template/toy_org.jpg'],
     },
     alternates: {
@@ -102,8 +102,8 @@ export async function generateMetadata({
     category: isZh ? 'AI工具' : 'AI Tools',
     classification: isZh ? 'AI图像生成器' : 'AI Image Generator',
     other: {
-      'application-name': 'NanoBanana AI Editor',
-      'apple-mobile-web-app-title': 'NanoBanana',
+      'application-name': 'Charlie and Lola AI Editor',
+      'apple-mobile-web-app-title': 'Charlie and Lola',
       'format-detection': 'telephone=no',
       'theme-color': '#d4af37',
       'color-scheme': 'dark light',
@@ -152,7 +152,7 @@ export default async function LandingPage({
         "description": isZh ? "专业AI图像生成技术提供商" : "Professional AI image generation technology provider"
       },
       "featureList": isZh ? [
-        "最先进的Google Nano-Banana-Edit模型",
+        "最先进的Google Charlie-and-Lola-Edit模型",
         "100%保证真实模型，无需抽卡",
         "预制热门模版一键生成",
         "3D角色手办制作",
@@ -161,7 +161,7 @@ export default async function LandingPage({
         "免费使用无限制",
         "实时生成高质量图片"
       ] : [
-        "Advanced Google Nano-Banana-Edit model",
+        "Advanced Google Charlie-and-Lola-Edit model",
         "100% guaranteed authentic model, no lottery",
         "Pre-built popular templates for one-click generation",
         "3D character figure creation",
@@ -184,15 +184,15 @@ export default async function LandingPage({
       "mainEntity": isZh ? [
         {
           "@type": "Question",
-          "name": "什么是Nano-Banana-Edit模型？",
+          "name": "什么是Charlie-and-Lola-Edit模型？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Nano-Banana-Edit是Google最新发布的AI图像编辑模型，专门用于高质量角色图像生成和编辑，100%保证使用真实模型，无需抽卡。"
+            "text": "Charlie-and-Lola-Edit是Google最新发布的AI图像编辑模型，专门用于高质量角色图像生成和编辑，100%保证使用真实模型，无需抽卡。"
           }
         },
         {
           "@type": "Question", 
-          "name": "如何使用NanoBanana生成角色手办？",
+          "name": "如何使用Charlie and Lola生成角色手办？",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "只需上传您的图片，选择预制的角色手办模板，点击生成按钮即可一键创建专业3D角色手办效果图片。"
@@ -201,15 +201,15 @@ export default async function LandingPage({
       ] : [
         {
           "@type": "Question",
-          "name": "What is the Nano-Banana-Edit model?",
+          "name": "What is the Charlie-and-Lola-Edit model?",
           "acceptedAnswer": {
             "@type": "Answer", 
-            "text": "Nano-Banana-Edit is Google's latest AI image editing model, specifically designed for high-quality character image generation and editing, 100% guaranteed authentic model with no lottery system."
+            "text": "Charlie-and-Lola-Edit is Google's latest AI image editing model, specifically designed for high-quality character image generation and editing, 100% guaranteed authentic model with no lottery system."
           }
         },
         {
           "@type": "Question",
-          "name": "How to generate character figures with NanoBanana?",
+          "name": "How to generate character figures with Charlie and Lola?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Simply upload your image, select from pre-built character figure templates, and click generate to create professional 3D character figure images with one click."
