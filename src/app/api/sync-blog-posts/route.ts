@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAllBlogPosts, generateUuid } from '@/lib/blog-parser';
 import { insertPost, findPostBySlug, updatePost } from '@/models/post';
+import fs from 'fs';
+import path from 'path';
 
 export async function POST() {
   try {
@@ -29,7 +31,7 @@ export async function POST() {
             updated_at: new Date(),
             author_name: post.author,
             author_avatar_url: post.authorAvatar,
-            cover_url: post.coverImage,
+            cover_url: post.coverImage && fs.existsSync(path.join(process.cwd(), 'public', post.coverImage)) ? post.coverImage : null,
           };
           
           const updatedPost = await updatePost(existingPost.uuid, updateData);
@@ -64,7 +66,7 @@ export async function POST() {
           locale: post.locale,
           author_name: post.author,
           author_avatar_url: post.authorAvatar,
-          cover_url: post.coverImage,
+          cover_url: post.coverImage && fs.existsSync(path.join(process.cwd(), 'public', post.coverImage)) ? post.coverImage : null,
           category_uuid: null, // Can be set later if needed
         };
         
