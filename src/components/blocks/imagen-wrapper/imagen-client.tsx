@@ -462,7 +462,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       
-      {/* Gradient overlay with nano banana theme */}
+      {/* Gradient overlay with Charlie and Lola AI theme */}
       <div className="absolute inset-0 bg-gradient-to-br from-pink-900/30 via-transparent to-pink-900/30" />
 
         <div className="container relative z-10 py-16">
@@ -600,7 +600,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                               <div className="flex-1 relative group">
                                 <img
                                   src={image}
-                                  alt={`${formatMessage(t.upload.image_label, { number: index + 1 })} - User uploaded image for AI character generation using NanoBanana editor`}
+                                  alt={`${formatMessage(t.upload.image_label, { number: index + 1 })} - User uploaded image for AI character generation using Charlie and Lola AI editor`}
                                   className="w-full h-full object-cover rounded-md"
                                   loading="lazy"
                                   decoding="async"
@@ -686,7 +686,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                           <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
                             <img
                               src={style.preview}
-                              alt={`${style.label} AI generation style preview - Example of ${style.desc} using NanoBanana Nano-Banana-Edit model`}
+                              alt={`${style.label} AI generation style preview - Example of ${style.desc} using Charlie and Lola AI Charlie-and-Lola-Edit model`}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                               loading="lazy"
                               decoding="async"
@@ -769,7 +769,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                       <div className="relative w-full h-full">
                         <img
                           src={generatedImage}
-                          alt={`AI-generated ${styleOptions.find(s => s.value === selectedStyle)?.label || 'character image'} created with NanoBanana Nano-Banana-Edit model - High-quality AI image generation result`}
+                          alt={`AI-generated ${styleOptions.find(s => s.value === selectedStyle)?.label || 'character image'} created with Charlie and Lola AI Charlie-and-Lola-Edit model - High-quality AI image generation result`}
                           className="w-full h-full object-cover rounded-lg"
                           loading="lazy"
                           decoding="async"
@@ -802,7 +802,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                         <div className="relative w-full h-full">
                           <img
                             src={styleOptions.find(s => s.value === selectedStyle)?.referenceImage || '/imgs/template/self.jpeg'}
-                            alt={`${styleOptions.find(s => s.value === selectedStyle)?.label || 'Celebrity Selfie'} reference example - AI generation template for NanoBanana Nano-Banana-Edit model`}
+                            alt={`${styleOptions.find(s => s.value === selectedStyle)?.label || 'Celebrity Selfie'} reference example - AI generation template for Charlie and Lola AI Charlie-and-Lola-Edit model`}
                             className="w-full h-full object-cover rounded-lg opacity-50"
                             loading="lazy"
                             decoding="async"

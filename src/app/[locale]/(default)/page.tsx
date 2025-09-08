@@ -39,8 +39,8 @@ export async function generateMetadata({
       ? '使用先进的Gemini 2.5 Flash Image Preview技术，将任何照片转换为迷人的查理和罗拉风格角色。完美的儿童绘本风格，适合创作私人定制的纪念书和纪念品。'
       : 'Transform any photo into charming Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology. Perfect children\'s book style for creating personalized storybooks and keepsakes.',
     keywords: isZh
-      ? '查理和罗拉, 角色转换器, 儿童绘本风格, AI照片转换, 家庭写真, 角色艺术, 儿童插图, 卡通变身, 照片魔法, Gemini AI'
-      : 'Charlie and Lola, Character Converter, Children\'s Book Style, AI Photo Transformation, Family Portraits, Character Art, Children\'s Illustration, Cartoon Transformation, Photo Magic, Gemini AI',
+      ? '查理和罗拉, 角色转换器, 儿童绘本风格, AI照片转换, 家庭写真, 角色艺术, 儿童插图, 卡通变身, 照片魔法, Gemini AI, 个性化查理和罗拉肖像, 定制查理和罗拉插画, 查理和罗拉托儿所装饰, 暖心角色艺术, 家庭照片转卡通查理和罗拉, 独特儿童礼物, 定制故事书插画, 情感家庭肖像, 纪念品角色艺术'
+      : 'Charlie and Lola, Character Converter, Children\'s Book Style, AI Photo Transformation, Family Portraits, Character Art, Children\'s Illustration, Cartoon Transformation, Photo Magic, Gemini AI, Personalized Charlie and Lola portraits, Custom Charlie and Lola illustrations, Nursery decor Charlie and Lola, Heartwarming character art, Family photo to cartoon Charlie and Lola, Unique children\'s gifts, Custom storybook illustrations, Sentimental family portraits, Keepsake character art',
     authors: [{ name: 'Charlie and Lola Style Team' }],
     creator: 'CharlieandLola.net',
     publisher: 'CharlieandLola.net',

@@ -26,19 +26,19 @@ export async function generateMetadata({
 
   return {
     title: isZh 
-      ? 'Nano Banana 教程博客 - AI图像编辑技巧与指南'
-      : 'Nano Banana Tutorial Blog - AI Image Editing Tips & Guides',
+      ? 'Charlie and Lola AI 教程博客 - AI图像编辑技巧与指南'
+      : 'Charlie and Lola AI Tutorial Blog - AI Image Editing Tips & Guides',
     description: isZh
-      ? '学习如何使用Nano Banana AI图像编辑器。100%保证使用Google Nano-Banana-Edit模型的专业教程、技巧和创意灵感。掌握AI图像编辑的最佳实践。'
-      : 'Learn how to use Nano Banana AI image editor. Professional tutorials, tips, and creative inspiration using our 100% guaranteed Google Nano-Banana-Edit model. Master AI image editing best practices.',
+      ? '学习如何使用Charlie and Lola AI AI图像编辑器。100%保证使用Google Charlie-and-Lola-Edit模型的专业教程、技巧和创意灵感。掌握AI图像编辑的最佳实践。'
+      : 'Learn how to use Charlie and Lola AI AI image editor. Professional tutorials, tips, and creative inspiration using our 100% guaranteed Google Charlie-and-Lola-Edit model. Master AI image editing best practices.',
     keywords: isZh
-      ? 'Nano Banana 教程, AI图像编辑技巧, 图像编辑指南, AI编辑教程, Nano Banana 使用方法'
-      : 'Nano Banana tutorials, AI image editing tips, image editing guide, AI editing tutorials, Nano Banana how to use',
+      ? 'Charlie and Lola AI 教程, AI图像编辑技巧, 图像编辑指南, AI编辑教程, Charlie and Lola AI 使用方法'
+      : 'Charlie and Lola AI tutorials, AI image editing tips, image editing guide, AI editing tutorials, Charlie and Lola AI how to use',
     openGraph: {
-      title: isZh ? 'Nano Banana 教程博客' : 'Nano Banana Tutorial Blog',
+      title: isZh ? 'Charlie and Lola AI 教程博客' : 'Charlie and Lola AI Tutorial Blog',
       description: isZh
-        ? '专业的Nano Banana AI图像编辑教程和技巧分享'
-        : 'Professional Nano Banana AI image editing tutorials and tips',
+        ? '专业的Charlie and Lola AI AI图像编辑教程和技巧分享'
+        : 'Professional Charlie and Lola AI AI image editing tutorials and tips',
       url: canonicalUrl,
       type: 'website',
     },
