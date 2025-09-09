@@ -36,8 +36,14 @@ export default function CreditsDisplay({
     used_credits: 0
   });
   const [loading, setLoading] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
   const { user, setShowSignModal } = useAppContext();
   const router = useRouter();
+
+  // Handle hydration
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const fetchCredits = async () => {
     if (!user) {
@@ -89,20 +95,14 @@ export default function CreditsDisplay({
     router.push("/pricing");
   };
 
-  if (!user) {
+  // Prevent hydration mismatch by showing loading state until hydrated
+  if (!isHydrated || !user) {
     return (
       <Card className={`p-4 ${className}`}>
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Sign in to view credits
-          </div>
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={() => setShowSignModal(true)}
-          >
-            Sign In
-          </Button>
+        <div className="flex items-center space-x-3 animate-pulse">
+          <div className="w-5 h-5 bg-muted rounded"></div>
+          <div className="w-24 h-4 bg-muted rounded"></div>
+          {showBuyButton && <div className="w-20 h-8 bg-muted rounded ml-auto"></div>}
         </div>
       </Card>
     );

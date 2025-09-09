@@ -485,7 +485,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   };
 
   return (
-    <div className="dark">
+    <div>
       <section className="min-h-screen relative overflow-hidden bg-background text-foreground">
         {/* Dynamic Background Images */}
         <div className="absolute inset-0 transition-all duration-2000 ease-in-out">
