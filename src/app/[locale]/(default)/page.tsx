@@ -33,14 +33,14 @@ export async function generateMetadata({
   
   return {
     title: isZh 
-      ? '查理和罗拉风格转换器 - 将照片转换为可爱卡通角色 | AI魔法变身'
-      : 'Charlie and Lola Character Maker - Join the #CharlieAndLola Trend | Free AI Generator',
+      ? '🔥 免费查理和罗拉角色生成器 - 比ChatGPT提示词更好 | 加入#CharlieAndLola热门趋势'
+      : '🔥 FREE Charlie & Lola Character Maker - Better Than ChatGPT Prompts | Join #CharlieAndLola Trend',
     description: isZh
-      ? '使用先进的Gemini 2.5 Flash Image Preview技术，将任何照片转换为迷人的查理和罗拉风格角色。完美的儿童绘本风格，适合创作私人定制的纪念书和纪念品。'
-      : 'The hottest Charlie and Lola character maker powering the viral #CharlieAndLola trend! Better than any Charlie and Lola ChatGPT prompt - create trending content instantly with our free AI generator.',
+      ? '⚡ 比ChatGPT提示词快10倍！免费查理和罗拉角色生成器，10秒创建病毒式内容。加入200万创作者的#CharlieAndLola热门趋势，无需注册立即开始！'
+      : '⚡ 10x faster than ChatGPT prompts! FREE Charlie and Lola character maker creates viral content in 10 seconds. Join 2M+ creators in the #CharlieAndLola trend. No sign-up required - start trending now!',
     keywords: isZh
-      ? '查理和罗拉, 角色转换器, 儿童绘本风格, AI照片转换, 家庭写真, 角色艺术, 儿童插图, 卡通变身, 照片魔法, Gemini AI, 个性化查理和罗拉肖像, 定制查理和罗拉插画, 查理和罗拉托儿所装饰, 暖心角色艺术, 家庭照片转卡通查理和罗拉, 独特儿童礼物, 定制故事书插画, 情感家庭肖像, 纪念品角色艺术'
-      : 'Charlie and Lola character maker, #CharlieAndLola, Charlie and Lola trend, Charlie and Lola ChatGPT prompt, viral TikTok trend, AI character generator, Charlie and Lola AI, trending social media content, character transformation, cartoon maker, #CharlieAndLola trend, Charlie and Lola viral, TikTok Charlie and Lola, Instagram Charlie and Lola, social media trends, character art generator, viral content creator',
+      ? '查理和罗拉角色生成器, #CharlieAndLola, 查理和罗拉趋势, 查理和罗拉ChatGPT提示词, TikTok热门趋势, 抖音查理和罗拉, 小红书查理和罗拉, 社交媒体趋势, 病毒式内容创作, AI角色生成器, 卡通角色制作, 免费在线工具, 查理和罗拉风格, 角色转换器'
+      : 'Charlie and Lola character maker, Charlie and Lola trend, Charlie and Lola ChatGPT prompt, #CharlieAndLola, viral TikTok trend, Charlie and Lola AI generator, better than ChatGPT, free character maker, viral content creator, TikTok Charlie and Lola, Instagram trends, social media viral, character transformation, cartoon generator, trending AI tool, Charlie and Lola viral content',
     authors: [{ name: 'Charlie and Lola Style Team' }],
     creator: 'CharlieandLola.net',
     publisher: 'CharlieandLola.net',
@@ -60,11 +60,11 @@ export async function generateMetadata({
       locale: locale,
       url: canonicalUrl,
       title: isZh 
-        ? '查理和罗拉 - 免费AI角色手办生成器，无需注册登录'
-        : 'Charlie and Lola Character Maker - Join the Viral #CharlieAndLola Trend | Free Generator',
+        ? '🔥 免费查理和罗拉生成器 - 比ChatGPT快10倍 | #CharlieAndLola热门趋势'
+        : '🔥 FREE Charlie & Lola Generator - 10x Faster Than ChatGPT | #CharlieAndLola Trend',
       description: isZh
-        ? '无需注册登录即可免费生成！100%保证使用最先进的Google Charlie-and-Lola-Edit模型，预制多种热门模版一键快速生成AI角色手办'
-        : 'The hottest Charlie and Lola character maker! Join the viral #CharlieAndLola trend. Better than ChatGPT prompts - create trending content instantly, no sign-up required!',
+        ? '⚡ 2M+创作者选择我们！10秒创建病毒式#CharlieAndLola内容，比ChatGPT提示词快10倍。无需注册，立即加入热门趋势！'
+        : '⚡ 2M+ creators choose us! Create viral #CharlieAndLola content in 10 seconds - 10x faster than ChatGPT prompts. No sign-up required, start trending now!',
       siteName: 'CharlieandLola.net',
       images: [
         {
@@ -78,11 +78,11 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: isZh 
-        ? '查理和罗拉 - 免费AI角色手办生成器，无需注册登录'
-        : 'Charlie and Lola Character Maker - Join #CharlieAndLola Trend | Free AI Generator',
+        ? '🔥 免费查理和罗拉生成器 - 比ChatGPT快10倍！'
+        : '🔥 FREE Charlie & Lola Generator - 10x Faster Than ChatGPT!',
       description: isZh
-        ? '无需注册登录即可免费生成！100%保证使用最先进的Google Charlie-and-Lola-Edit模型'
-        : 'Join the viral #CharlieAndLola trend! Better than ChatGPT prompts - create trending content instantly with our free character maker',
+        ? '⚡ 加入2M+创作者！10秒创建病毒式#CharlieAndLola内容，无需注册立即开始！'
+        : '⚡ Join 2M+ creators! Create viral #CharlieAndLola content in 10 seconds - no sign-up required!',
       images: ['https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg'],
     },
     alternates: {

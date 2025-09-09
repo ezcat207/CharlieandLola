@@ -48,25 +48,25 @@
     "show_locale": false
   },
   "hero": {
-    "title": "No Sign Up & Free Charlie & Lola Character Maker - Join the #CharlieAndLola Trend",
-    "highlight_text": "Charlie & Lola Character Maker",
-    "description": "Transform your photos into charming Charlie and Lola characters with our AI generator. Join the viral Charlie and Lola trend on TikTok! Perfect Charlie and Lola ChatGPT prompt alternative - create unique cartoon art with hand-drawn charm and flat colors.<br/>No registration required - Start creating #CharlieAndLola magic instantly!",
+    "title": "🔥 FREE Charlie & Lola Character Maker - Go Viral with #CharlieAndLola Trend",
+    "highlight_text": "Go Viral with #CharlieAndLola",
+    "description": "⚡ **Better than ChatGPT prompts!** Create perfect Charlie and Lola characters in seconds. Join the **TikTok viral trend** that's getting millions of views! <br/>✨ **Professional results, zero learning curve** - Upload your photo → Get viral-ready content instantly! <br/>🚀 **No sign-up, completely free** - Start trending now!",
     "announcement": {
-      "label": "TRENDING",
-      "title": "🔥 #CharlieAndLola Viral Character Maker",
+      "label": "🔥 VIRAL TREND",
+      "title": "Join 2M+ Creators Making #CharlieAndLola Content",
       "url": "/#generator"
     },
-    "tip": "✨ Join the Charlie and Lola trend - Best character maker online",
+    "tip": "💎 The ONLY tool you need for Charlie and Lola trend success",
     "buttons": [
       {
-        "title": "Start Charlie & Lola Character Maker",
+        "title": "🚀 Create Viral Charlie & Lola Content Now",
         "icon": "RiRobot2Line",
         "url": "/#generator",
         "target": "_self",
         "variant": "default"
       },
       {
-        "title": "View #CharlieAndLola Trend Examples",
+        "title": "👀 See Viral #CharlieAndLola Examples",
         "icon": "RiGalleryLine",
         "url": "/#showcase",
         "target": "_self",
@@ -77,69 +77,69 @@
     "show_badge": true
   },
   "branding": {
-    "title": "What Makes Our Charlie & Lola Converter Special",
+    "title": "Why Choose Our Tool Over ChatGPT Prompts?",
     "items": [
       {
-        "title": "No Sign-up Required",
+        "title": "⚡ Skip Complex Prompts",
         "image": {
           "src": "/imgs/logos/flux.svg",
-          "alt": "Instant Access"
+          "alt": "No ChatGPT Prompt Engineering Required"
         }
       },
       {
-        "title": "Best AI Model Guaranteed",
+        "title": "🎯 Perfect Style Every Time",
         "image": {
           "src": "/imgs/logos/speed.svg",
-          "alt": "Premium AI Technology"
+          "alt": "Consistent Charlie & Lola Style"
         }
       },
       {
-        "title": "Authentic Cartoon Style",
+        "title": "🔥 Viral-Ready Results",
         "image": {
           "src": "/imgs/logos/hd.svg",
-          "alt": "Charlie and Lola Art Style"
+          "alt": "TikTok & Social Media Optimized"
         }
       },
       {
-        "title": "Instant & Viral Ready",
+        "title": "💎 100% Free Forever",
         "image": {
           "src": "/imgs/logos/quality.svg",
-          "alt": "Social Media Ready"
+          "alt": "No ChatGPT Plus Required"
         }
       }
     ]
   },
   "introduce": {
     "name": "introduce",
-    "title": "What is Charlie and Lola Character Maker - The Ultimate #CharlieAndLola Trend Tool",
-    "label": "About",
-    "description": "The hottest Charlie and Lola character maker powering the viral #CharlieAndLola trend! Better than any Charlie and Lola ChatGPT prompt - transform any photo into adorable Charlie and Lola style characters using advanced AI technology. Join millions creating the Charlie and Lola trend content!",
+    "title": "Why Millions Choose This Over ChatGPT for #CharlieAndLola Trend",
+    "label": "Why We're Better",
+    "description": "🚀 **ChatGPT prompts take hours to perfect. We take 10 seconds.** <br/>📈 **Join 2M+ creators who ditched complex prompts** for our one-click Charlie and Lola character maker. <br/>⚡ **No prompt engineering, no trial-and-error** - just instant viral-ready content that gets views and engagement!",
     "image": {
       "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/car.png"
     },
     "items": [
       {
-        "title": "#CharlieAndLola Trend Magic",
-        "description": "Transform any person into a charming Charlie and Lola character for the viral trend. This Charlie and Lola character maker preserves unique features while creating perfect #CharlieAndLola content.",
+        "title": "🎯 Instant Viral Content Creation",
+        "description": "While others spend hours perfecting ChatGPT prompts, you get perfect Charlie and Lola characters in 10 seconds. Upload → Generate → Go Viral. It's that simple!",
         "icon": "RiUploadLine"
       },
       {
-        "title": "Better than ChatGPT Prompts",
-        "description": "Skip complex Charlie and Lola ChatGPT prompt engineering! Our dedicated character maker instantly applies the beloved Charlie and Lola art style with one click.",
+        "title": "⚡ No More ChatGPT Frustration",
+        "description": "Forget \"try this prompt\", \"adjust parameters\", \"regenerate 20 times\". Our AI knows exactly how to create authentic Charlie and Lola style - first try, every time.",
         "icon": "RiCameraLine"
       },
       {
-        "title": "Viral Trend Ready",
-        "description": "Create trending Charlie and Lola content perfect for TikTok, Instagram, and social media. Join the #CharlieAndLola phenomenon with professional-quality results.",
+        "title": "🔥 Built for Viral Success",
+        "description": "Our Charlie and Lola characters are optimized for maximum engagement. While ChatGPT users get inconsistent results, our tool guarantees viral-ready content every single time.",
         "icon": "RiTimeLine"
       }
     ]
   },
   "benefit": {
     "name": "benefit", 
-    "title": "Why Our Charlie & Lola Character Maker Dominates the Trend",
-    "label": "Advantages",
-    "description": "The #1 Charlie and Lola character maker powering the viral trend! Better than any Charlie and Lola ChatGPT prompt - guaranteed authentic results that make your #CharlieAndLola content go viral.",
+    "title": "From 0 to Viral: How We Beat ChatGPT at Charlie & Lola Creation",
+    "label": "Success Stories",
+    "description": "🚀 **2M+ creators ditched ChatGPT prompts for our tool.** See why we're the #1 choice for #CharlieAndLola trend success. <br/>⚡ **10x faster than prompt engineering** - Get perfect results while others are still tweaking prompts!",
     "items": [
       {
         "title": "Authentic #CharlieAndLola Character Maker",
