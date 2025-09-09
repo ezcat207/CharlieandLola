@@ -1,0 +1,81 @@
+{
+  "title": {
+    "main": "无需注册免费使用 Charlie & Lola AI 魔法",
+    "subtitle": "角色制作器"
+  },
+  "description": "将您的照片转换成迷人的查理和罗拉角色！跟上病毒式TikTok趋势，创造独特的卡通艺术。无需注册登录 - 立即开始创造魔法变身！",
+  "badge": {
+    "text": "100%保证"
+  },
+  "features": {
+    "guaranteed": {
+      "title": "100%保证",
+      "subtitle": "正版模型"
+    },
+    "no_lottery": {
+      "title": "无抽奖系统",
+      "subtitle": "即时结果"
+    },
+    "one_sentence": {
+      "title": "一键生成",
+      "subtitle": "简单易用"
+    },
+    "instant": {
+      "title": "瞬间生成",
+      "subtitle": "快速处理"
+    }
+  },
+  "buttons": {
+    "try_now": "立即试用 Charlie & Lola AI",
+    "browse_gallery": "查看示例",
+    "generate": "生成角色",
+    "login_required": "生成（登录获取高清版）",
+    "generating": "正在创建您的角色...",
+    "download": "下载",
+    "share": "分享"
+  },
+  "upload": {
+    "title": "上传您的照片",
+    "count": "{count}/5",
+    "drop_text": "拖拽图片到这里",
+    "browse_text": "或点击选择文件",
+    "add_image": "添加图片",
+    "clear_all": "清空所有 ({count})",
+    "max_images_error": "最多支持5张图片",
+    "image_label": "图片 {number}"
+  },
+  "styles": {
+    "title": "Charlie & Lola 风格选项",
+    "options": {
+      "charlie_lola": {
+        "label": "Charlie & Lola 风格",
+        "description": "转换成深受喜爱的儿童读物角色",
+        "tags": "[\"卡通\", \"儿童读物\", \"童趣\"]"
+      }
+    }
+  },
+  "preview": {
+    "title": "预览您的角色",
+    "placeholder": "生成的角色将在这里显示",
+    "upload_prompt": "上传照片开始创作"
+  },
+  "prompt": {
+    "title": "自定义风格",
+    "current_style": "当前风格提示词：",
+    "customize_hint": "您可以自定义上面的提示词来微调角色生成效果",
+    "reset_button": "重置为默认"
+  },
+  "messages": {
+    "success": {
+      "generated": "角色生成成功！",
+      "downloaded": "图片下载成功！",
+      "url_copied": "分享链接已复制到剪贴板！"
+    },
+    "errors": {
+      "login_required": "请登录以下载高分辨率图片",
+      "insufficient_credits": "您的积分不足。此模型需要 {credits} 积分。",
+      "generation_failed": "角色生成失败，请重试。",
+      "download_failed": "图片下载失败，请重试。"
+    }
+  }
+}

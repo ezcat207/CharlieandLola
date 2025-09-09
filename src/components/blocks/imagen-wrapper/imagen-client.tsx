@@ -9,6 +9,7 @@ import { useUserCredits } from '@/hooks/useUserCredits';
 import CreditDisplay from '@/components/blocks/credits-display';
 import { toast } from 'sonner';
 import { convertToCdnUrl } from '@/lib/cdn-url';
+import { useTheme } from '@/contexts/theme-context';
 
 // Type for the translations prop
 interface Translations {
@@ -101,6 +102,8 @@ interface ImagenClientProps {
 }
 
 export default function ImagenClient({ translations: t }: ImagenClientProps) {
+  // Use theme context
+  const { actualTheme } = useTheme();
   const [uploadedImages, setUploadedImages] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(STORAGE_KEYS.uploadedImages);
@@ -124,20 +127,9 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(STORAGE_KEYS.selectedStyle);
-      if (saved) return saved;
-    }
-    return 'charlie-lola';
-  });
-  const [customPrompt, setCustomPrompt] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(STORAGE_KEYS.customPrompt);
-      if (saved) return saved;
-    }
-    return '';
-  });
+  const [selectedStyle, setSelectedStyle] = useState<string>('charlie-lola');
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState<string>('');
   const [currentBgImage, setCurrentBgImage] = useState(0);
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [outputFormat, setOutputFormat] = useState('jpeg');
@@ -150,8 +142,11 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   // Use the credit hook only if user is authenticated
   const { credits, isLoading: creditsLoading, refreshCredits } = useUserCredits();
 
-  // Load persisted state on component mount
+  // Handle hydration and load persisted state
   useEffect(() => {
+    // Mark as hydrated first
+    setIsHydrated(true);
+    
     if (typeof window !== 'undefined') {
       // Restore generated image
       const savedGeneratedImage = localStorage.getItem(STORAGE_KEYS.generatedImage);
@@ -487,25 +482,6 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   return (
     <div>
       <section className="min-h-screen relative overflow-hidden bg-background text-foreground">
-        {/* Dynamic Background Images */}
-        <div className="absolute inset-0 transition-all duration-2000 ease-in-out">
-          {galleryImages.map((image, index) => (
-            <div
-              key={index}
-              className={cn(
-                "absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-2000",
-                index === currentBgImage ? "opacity-10" : "opacity-0"
-              )}
-              style={{ backgroundImage: `url(${image})` }}
-            />
-          ))}
-        </div>
-
-      {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      
-      {/* Gradient overlay with Charlie and Lola AI theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-900/30 via-transparent to-pink-900/30" />
 
         <div className="container relative z-10 py-16">
           {/* Hero Header Section */}
@@ -719,9 +695,12 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                         onClick={() => setSelectedStyle(style.value)}
                         className={cn(
                           "w-full relative overflow-hidden rounded-lg border-2 transition-all duration-200 text-left group",
-                          selectedStyle === style.value
-                            ? "border-cl-yellow bg-cl-yellow/10"
-                            : "border-border hover:border-cl-yellow/50 hover:bg-cl-yellow/5"
+                          // Use consistent styling until hydrated to prevent mismatch
+                          !isHydrated 
+                            ? "border-border hover:border-cl-yellow/50 hover:bg-cl-yellow/5"
+                            : selectedStyle === style.value
+                              ? "border-cl-yellow bg-cl-yellow/10"
+                              : "border-border hover:border-cl-yellow/50 hover:bg-cl-yellow/5"
                         )}
                       >
                         <div className="flex gap-4 p-4">
@@ -745,9 +724,12 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                                   key={tag}
                                   className={cn(
                                     "px-2 py-1 text-xs rounded-md font-medium",
-                                    selectedStyle === style.value
-                                      ? "bg-cl-yellow/20 text-cl-yellow border border-cl-yellow/30"
-                                      : "bg-muted text-muted-foreground border border-border"
+                                    // Use consistent styling until hydrated to prevent mismatch
+                                    !isHydrated 
+                                      ? "bg-muted text-muted-foreground border border-border"
+                                      : selectedStyle === style.value
+                                        ? "bg-cl-yellow/20 text-cl-yellow border border-cl-yellow/30"
+                                        : "bg-muted text-muted-foreground border border-border"
                                   )}
                                 >
                                   {tag}
@@ -756,7 +738,7 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                             </div>
                           </div>
                           
-                          {selectedStyle === style.value && (
+                          {isHydrated && selectedStyle === style.value && (
                             <div className="flex-shrink-0 w-6 h-6 bg-cl-yellow rounded-full flex items-center justify-center shadow-lg">
                               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

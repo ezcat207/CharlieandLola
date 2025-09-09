@@ -3,6 +3,7 @@ import "@/app/globals.css";
 import { getLocale, setRequestLocale } from "next-intl/server";
 import { locales } from "@/i18n/locale";
 import { cn } from "@/lib/utils";
+import ClientProviders from "./providers";
 
 export default async function RootLayout({
   children,
@@ -97,7 +98,11 @@ export default async function RootLayout({
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:locale:alternate" content="zh_CN" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ClientProviders>
+          {children}
+        </ClientProviders>
+      </body>
     </html>
   );
 }

@@ -30,7 +30,7 @@ export function LocaleSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="h-9 px-3 gap-2 bg-slate-800/60 border-slate-600/50 text-gray-300 hover:bg-slate-700/60 hover:text-gray-200"
+          className="h-9 px-3 gap-2 bg-background/80 border-border/50 text-foreground hover:bg-background hover:text-foreground transition-all duration-200 backdrop-blur-sm"
         >
           <Globe className="h-4 w-4" />
           <span className="font-medium">
@@ -39,20 +39,20 @@ export function LocaleSwitcher() {
           <ChevronDown className="h-4 w-4 transition-transform duration-200" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[140px] bg-slate-800 border-slate-600">
+      <DropdownMenuContent align="end" className="min-w-[140px] bg-background border-border">
         {locales.map((loc) => (
           <DropdownMenuItem
             key={loc}
             onClick={() => handleLocaleChange(loc)}
             className={`
               flex items-center gap-2 px-3 py-2 cursor-pointer
-              ${locale === loc ? 'bg-slate-700 text-white' : 'text-gray-300 hover:bg-slate-700/50'}
+              ${locale === loc ? 'bg-primary/10 text-foreground' : 'text-muted-foreground hover:bg-muted/50'}
               transition-colors duration-150
             `}
           >
             <div className="flex items-center gap-2 flex-1">
               {locale === loc && (
-                <Check className="h-4 w-4 text-green-400" />
+                <Check className="h-4 w-4 text-primary" />
               )}
               <span className={`font-medium ${locale !== loc ? 'ml-6' : ''}`}>
                 {localeNames[loc] || loc}
