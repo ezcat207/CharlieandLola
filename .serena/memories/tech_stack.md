@@ -1,52 +1,59 @@
 # Technology Stack
 
 ## Frontend Framework
-- **Next.js 15** with App Router and TypeScript
-- **React 19** with strict mode disabled
-- **Tailwind CSS v4** for styling
-- **Shadcn/ui** components library
+- **Next.js 15**: App Router with TypeScript
+- **React 19**: Latest React version with modern hooks
+- **TypeScript**: Strict mode enabled for type safety
 
-## Backend & API
-- **Next.js API Routes** for backend functionality
-- **NextAuth.js v5 beta** for authentication
-- **Drizzle ORM** for database operations
-- **PostgreSQL** as primary database
+## Styling & UI
+- **Tailwind CSS**: Utility-first CSS framework with custom theme
+- **Shadcn UI**: Reusable component library built on Radix UI
+- **Framer Motion**: Animations and transitions
+- **Lucide React**: Icon library
+- **Class Variance Authority**: Dynamic className handling
 
-## AI & Image Generation
-- **Custom AI SDK** (`src/aisdk/`) with video generation capabilities
-- **OpenAI API** for image generation (required)
-- **Kie.ai Flux** for enhanced cyberpunk generation
-- **Multiple AI providers**: OpenAI, DeepSeek, Replicate, OpenRouter
+## Database & ORM
+- **PostgreSQL**: Primary database
+- **Drizzle ORM**: Type-safe database toolkit with migrations
+- **Drizzle Kit**: Database migration and studio tools
 
 ## Authentication
-- Google OAuth
-- GitHub OAuth  
-- Google One Tap login
-- JWT-based session management
+- **NextAuth.js 5.0**: Multi-provider authentication
+  - Google OAuth
+  - GitHub OAuth  
+  - Google One Tap
+- **JWT**: Session management
 
-## Payments & Billing
-- **Stripe** integration with subscription support
-- **Creem** payment provider (alternative)
-- Credit-based usage system
+## Payment Processing
+- **Stripe**: Subscription and payment management
+- **Credit System**: Custom implementation for usage tracking
 
-## Storage & CDN
-- **AWS S3-compatible storage** for image uploads
-- Required for image-to-image transformations
+## AI & Image Processing
+- **Google Gemini**: Image generation via @google/genai
+- **Multiple AI SDKs**: Support for various providers
+  - OpenAI SDK
+  - Replicate SDK
+  - DeepSeek SDK
 
 ## Internationalization
-- **next-intl** for i18n
-- English and Chinese language support
-- Locale-based routing (`[locale]/`)
+- **next-intl**: Route-based localization
+- **Support**: English and Chinese languages
 
 ## Development Tools
-- **TypeScript** with strict mode
-- **ESLint** via next lint
-- **Tailwind PostCSS** 
-- **Fumadocs** for documentation
-- **Bundle Analyzer** for performance
+- **pnpm**: Package manager
+- **ESLint**: Code linting
+- **Prettier**: Code formatting (implied by package structure)
+- **Cross-env**: Environment variable handling
 
-## Deployment
-- **Vercel** (primary deployment target)
-- **Cloudflare** (alternative via cloudflare branch)
-- **Docker** support included
-- Standalone output mode
+## Deployment & Infrastructure  
+- **Vercel**: Primary deployment platform
+- **Cloudflare**: Alternative deployment option
+- **Docker**: Containerization support
+- **Storage**: Configurable cloud storage for images
+
+## Additional Libraries
+- **Zod**: Schema validation
+- **React Hook Form**: Form management
+- **Sonner**: Toast notifications
+- **Recharts**: Data visualization
+- **Canvas Confetti**: UI effects

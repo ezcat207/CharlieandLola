@@ -42,7 +42,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "free",
-        "product_name": "Nano Banana Free Plan",
+        "product_name": "Charlie&LolaAI Free Plan",
         "credits": 10,
         "valid_months": 1,
         "group": "monthly"
@@ -52,7 +52,7 @@
         "description": "Skip the queue and get priority access - $0.99/month",
         "features_title": "Includes",
         "features": [
-          "Unlimited Charlie and Lola generations",
+          "100 credits per month",
           "Skip the queue - no waiting time",
           "Priority processing",
           "High resolution downloads",
@@ -105,7 +105,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "pro-monthly",
-        "product_name": "Nano Banana Pro Monthly",
+        "product_name": "Charlie&LolaAI Pro Monthly",
         "credits": 500,
         "valid_months": 1,
         "group": "monthly"
@@ -136,7 +136,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "ultra-monthly",
-        "product_name": "Nano Banana Ultra Monthly",
+        "product_name": "Charlie&LolaAI Ultra Monthly",
         "credits": 2000,
         "valid_months": 1,
         "group": "monthly"
@@ -167,7 +167,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "free-yearly",
-        "product_name": "Nano Banana Free Plan",
+        "product_name": "Charlie&LolaAI Free Plan",
         "credits": 120,
         "valid_months": 12,
         "group": "yearly"
@@ -177,7 +177,7 @@
         "description": "Skip the queue and get priority access - $9.99/year",
         "features_title": "Includes",
         "features": [
-          "Unlimited Charlie and Lola generations",
+          "100 credits per month",
           "Skip the queue - no waiting time",
           "Priority processing",
           "High resolution downloads",
@@ -230,7 +230,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "pro-yearly",
-        "product_name": "Nano Banana Pro Yearly",
+        "product_name": "Charlie&LolaAI Pro Yearly",
         "credits": 6000,
         "valid_months": 12,
         "group": "yearly"
@@ -261,7 +261,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "ultra-yearly",
-        "product_name": "Nano Banana Ultra Yearly",
+        "product_name": "Charlie&LolaAI Ultra Yearly",
         "credits": 24000,
         "valid_months": 12,
         "group": "yearly"

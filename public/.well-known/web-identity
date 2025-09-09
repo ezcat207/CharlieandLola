@@ -1,0 +1,4 @@
+{
+  "provider_urls": ["https://accounts.google.com"],
+  "assertion_endpoint": "/api/auth/callback/google-one-tap"
+}

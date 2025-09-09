@@ -1,7 +1,7 @@
 {
-  "name": "Nano Banana AI Image Editor",
-  "short_name": "Nano Banana",
-  "description": "Revolutionary AI-powered image editing that understands you. Edit your images into anything you want with just one sentence. 100% guaranteed Google Nano-Banana-Edit model.",
+  "name": "Charlie and Lola AI Image Editor",
+  "short_name": "Charlie and Lola",
+  "description": "Revolutionary AI-powered image editing that understands you. Edit your images into anything you want with just one sentence. 100% guaranteed Google Charlie-and-Lola-Edit model.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1e293b",
@@ -33,13 +33,13 @@
   ],
   "screenshots": [
     {
-      "src": "/imgs/template/toy.jpeg",
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg",
       "sizes": "1200x630",
       "type": "image/jpeg",
       "label": "3D Figure Generation Example"
     },
     {
-      "src": "/imgs/template/self.jpeg",
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-7611326_1280.jpg",
       "sizes": "1200x630",
       "type": "image/jpeg",
       "label": "Celebrity Selfie Generation Example"
@@ -47,9 +47,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Try Nano Banana",
+      "name": "Try Charlie and Lola",
       "short_name": "Edit",
-      "description": "Start editing images with Nano Banana AI",
+      "description": "Start editing images with Charlie and Lola AI",
       "url": "/?utm_source=pwa_shortcut",
       "icons": [
         {

@@ -173,6 +173,8 @@ export const authOptions: NextAuthConfig = {
   pages: {
     signIn: "/auth/signin",
   },
+  trustHost: true,
+  useSecureCookies: process.env.NODE_ENV === "production",
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       const isAllowedToSignIn = true;
@@ -186,11 +188,16 @@ export const authOptions: NextAuthConfig = {
       }
     },
     async redirect({ url, baseUrl }) {
+      // Ensure HTTPS in production
+      const secureBaseUrl = process.env.NODE_ENV === "production" 
+        ? baseUrl.replace(/^http:/, 'https:') 
+        : baseUrl;
+      
       // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith("/")) return `${secureBaseUrl}${url}`;
       // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+      else if (new URL(url).origin === secureBaseUrl) return url;
+      return secureBaseUrl;
     },
     async session({ session, token, user }) {
       if (token && token.user && token.user) {

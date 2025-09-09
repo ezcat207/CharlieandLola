@@ -29,6 +29,29 @@ export function db() {
     throw new Error("DATABASE_URL is not set");
   }
 
+  // Debug log to see what URL we're working with
+  console.log('Database URL before encoding check:', databaseUrl);
+  
+  // Apply URL encoding for the specific password issue we're seeing
+  if (databaseUrl.includes(':P/9rsjkUHq68KJ8@')) {
+    databaseUrl = databaseUrl.replace(':P/9rsjkUHq68KJ8@', ':P%2F9rsjkUHq68KJ8@');
+    console.log('Applied URL encoding for database password special character');
+  }
+  
+  console.log('Database URL after encoding check:', databaseUrl);
+  
+  // Validate URL is now properly formatted
+  try {
+    new URL(databaseUrl);
+    console.log('Database URL validation successful');
+  } catch (error) {
+    console.error('Database URL validation failed:', error);
+    if (error instanceof Error) {
+      throw new Error(`Invalid DATABASE_URL format: ${error.message}`);
+    }
+    throw new Error(`Invalid DATABASE_URL format: Unknown error`);
+  }
+
   // In Cloudflare Workers, create new connection each time
   if (isCloudflareWorker) {
     console.log("in Cloudflare Workers environment");

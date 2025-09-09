@@ -36,20 +36,35 @@ class SystemCreditManager {
    * Consume system credits after successful operation
    */
   async consumeSystemCredits(usage: SystemCreditUsage): Promise<void> {
-    // In a real implementation, you would:
-    // - Log the usage to a database table
-    // - Update the system credit balance
-    // - Track usage metrics for analytics
-    
-    console.log(`System credits consumed: ${usage.credits} for ${usage.usageType}`, {
-      userUuid: usage.userUuid,
-      description: usage.description,
-      timestamp: new Date().toISOString()
-    });
+    // Only deduct credits if user is specified
+    if (!usage.userUuid) {
+      console.log(`System credits consumed (guest user): ${usage.credits} for ${usage.usageType}`, {
+        description: usage.description,
+        timestamp: new Date().toISOString()
+      });
+      return;
+    }
 
-    // You could store this in a database table like:
-    // INSERT INTO system_credit_usage (credits, user_uuid, usage_type, description, created_at)
-    // VALUES (usage.credits, usage.userUuid, usage.usageType, usage.description, NOW())
+    // Import credit functions
+    const { decreaseCredits, CreditsTransType } = await import("./credit");
+    
+    try {
+      // Actually deduct credits from user account
+      await decreaseCredits({
+        user_uuid: usage.userUuid,
+        trans_type: CreditsTransType.ImageGeneration,
+        credits: usage.credits
+      });
+      
+      console.log(`User credits consumed: ${usage.credits} for ${usage.usageType}`, {
+        userUuid: usage.userUuid,
+        description: usage.description,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Failed to consume user credits:", error);
+      throw new Error(`Insufficient credits or credit deduction failed: ${error}`);
+    }
   }
 
   /**

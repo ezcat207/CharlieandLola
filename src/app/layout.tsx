@@ -3,6 +3,7 @@ import "@/app/globals.css";
 import { getLocale, setRequestLocale } from "next-intl/server";
 import { locales } from "@/i18n/locale";
 import { cn } from "@/lib/utils";
+import ClientProviders from "./providers";
 
 export default async function RootLayout({
   children,
@@ -30,7 +31,14 @@ export default async function RootLayout({
         
         {/* Preconnect for critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.kie.ai" crossOrigin="anonymous" />
+        
+        {/* Google Fonts - Inter */}
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" 
+          rel="stylesheet" 
+        />
         
         {/* Bing Webmaster Tools verification */}
         <meta name="msvalidate.01" content="EF14BA988A6933B400193F58A798FF2A" />
@@ -39,7 +47,7 @@ export default async function RootLayout({
         <meta name="format-detection" content="telephone=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="NanoBanana" />
+        <meta name="apple-mobile-web-app-title" content="Charlie and Lola AI" />
         
         {/* PWA manifest */}
         <link rel="manifest" href="/manifest.json" />
@@ -90,7 +98,11 @@ export default async function RootLayout({
         <meta property="og:locale:alternate" content="en_US" />
         <meta property="og:locale:alternate" content="zh_CN" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ClientProviders>
+          {children}
+        </ClientProviders>
+      </body>
     </html>
   );
 }

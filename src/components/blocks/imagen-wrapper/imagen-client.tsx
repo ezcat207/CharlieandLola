@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 import { useUserCredits } from '@/hooks/useUserCredits';
 import CreditDisplay from '@/components/blocks/credits-display';
 import { toast } from 'sonner';
+import { convertToCdnUrl } from '@/lib/cdn-url';
+import { useTheme } from '@/contexts/theme-context';
 
 // Type for the translations prop
 interface Translations {
@@ -42,12 +44,7 @@ interface Translations {
   styles: {
     title: string;
     options: {
-      commercial_figure: {
-        label: string;
-        description: string;
-        tags: string[];
-      };
-      celebrity_selfie: {
+      charlie_lola: {
         label: string;
         description: string;
         tags: string[];
@@ -82,27 +79,56 @@ interface Translations {
 
 // Gallery images for Charlie and Lola style examples
 const galleryImages = [
-  '/imgs/template/charlie-and-lola-trend-1.jpg',
-  '/imgs/template/charlie-and-lola-trend-blue-dress.jpeg',
-  '/imgs/template/charlie-and-lola-trend-denim-dress.jpeg',
-  '/imgs/template/charlie-and-lola-trend-fur-coat.jpeg',
-  '/imgs/template/charlie-and-lola-trend-pink-outfit.jpeg',
-  '/imgs/template/charlie-and-lola-trend-white-blouse.jpeg',
-  '/imgs/template/charlie-and-lola-trend-yellow-outfit.jpeg',
-  '/imgs/template/how-to-make-the-charlie-and-lola-trend.jpeg',
-  '/imgs/template/selfie-charlie.png'
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/charlie-lola-2025-09-08T06-20-39.jpg',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/combined_russia.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/combined.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/russia-2633850_1920.jpg',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/self_org.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-7611326_1280.jpg',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-charlie.png',
+  'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/toy_org.jpg'
 ];
+
+// LocalStorage keys for persisting state
+const STORAGE_KEYS = {
+  generatedImage: 'charlieandlola_generated_image',
+  uploadedImages: 'charlieandlola_uploaded_images',
+  selectedStyle: 'charlieandlola_selected_style',
+  customPrompt: 'charlieandlola_custom_prompt'
+};
 
 interface ImagenClientProps {
   translations: Translations;
 }
 
 export default function ImagenClient({ translations: t }: ImagenClientProps) {
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  // Use theme context
+  const { actualTheme } = useTheme();
+  const [uploadedImages, setUploadedImages] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEYS.uploadedImages);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+          console.warn('Failed to parse saved uploaded images:', e);
+        }
+      }
+    }
+    return [];
+  });
+  const [generatedImage, setGeneratedImage] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(STORAGE_KEYS.generatedImage);
+      if (saved && saved !== 'null') return saved;
+    }
+    return null;
+  });
   const [isGenerating, setIsGenerating] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [selectedStyle, setSelectedStyle] = useState('celebrity-selfie');
+  const [selectedStyle, setSelectedStyle] = useState<string>('charlie-lola');
+  const [isHydrated, setIsHydrated] = useState(false);
   const [customPrompt, setCustomPrompt] = useState<string>('');
   const [currentBgImage, setCurrentBgImage] = useState(0);
   const [aspectRatio, setAspectRatio] = useState('16:9');
@@ -115,6 +141,81 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   
   // Use the credit hook only if user is authenticated
   const { credits, isLoading: creditsLoading, refreshCredits } = useUserCredits();
+
+  // Handle hydration and load persisted state
+  useEffect(() => {
+    // Mark as hydrated first
+    setIsHydrated(true);
+    
+    if (typeof window !== 'undefined') {
+      // Restore generated image
+      const savedGeneratedImage = localStorage.getItem(STORAGE_KEYS.generatedImage);
+      if (savedGeneratedImage && savedGeneratedImage !== 'null') {
+        setGeneratedImage(savedGeneratedImage);
+      }
+
+      // Restore uploaded images
+      const savedUploadedImages = localStorage.getItem(STORAGE_KEYS.uploadedImages);
+      if (savedUploadedImages) {
+        try {
+          const parsedImages = JSON.parse(savedUploadedImages);
+          if (Array.isArray(parsedImages)) {
+            setUploadedImages(parsedImages);
+          }
+        } catch (error) {
+          console.warn('Failed to parse saved uploaded images:', error);
+        }
+      }
+
+      // Restore selected style
+      const savedStyle = localStorage.getItem(STORAGE_KEYS.selectedStyle);
+      if (savedStyle) {
+        setSelectedStyle(savedStyle);
+      }
+
+      // Restore custom prompt
+      const savedPrompt = localStorage.getItem(STORAGE_KEYS.customPrompt);
+      if (savedPrompt) {
+        setCustomPrompt(savedPrompt);
+      }
+    }
+  }, []);
+
+  // Save generated image to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (generatedImage) {
+        localStorage.setItem(STORAGE_KEYS.generatedImage, generatedImage);
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.generatedImage);
+      }
+    }
+  }, [generatedImage]);
+
+  // Save uploaded images to localStorage whenever they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (uploadedImages.length > 0) {
+        localStorage.setItem(STORAGE_KEYS.uploadedImages, JSON.stringify(uploadedImages));
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.uploadedImages);
+      }
+    }
+  }, [uploadedImages]);
+
+  // Save selected style to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.selectedStyle, selectedStyle);
+    }
+  }, [selectedStyle]);
+
+  // Save custom prompt to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.customPrompt, customPrompt);
+    }
+  }, [customPrompt]);
 
   // Background image rotation effect
   useEffect(() => {
@@ -130,23 +231,14 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   }, [selectedStyle]);
 
   const styleOptions = [
-    { 
-      value: 'commercial-figure', 
-      label: t.styles.options.commercial_figure.label, 
-      desc: t.styles.options.commercial_figure.description,
-      tags: t.styles.options.commercial_figure.tags,
-      preview: '/imgs/template/toy_org.jpg',
-      referenceImage: '/imgs/template/toy.jpeg',
-      prompt: 'Create a 1/7 scale commercial image of the characters in the illustration in a realistic style and environment. Place the figure on the computer desk using a circular transparent acrylic base. There is no text. On the computer screen, display the modeling process of Brush graphics. Place a BANDAI style toy packaging box with original artwork printed on it next to the computer screen.'
-    },
-    { 
-      value: 'celebrity-selfie', 
-      label: t.styles.options.celebrity_selfie.label, 
-      desc: t.styles.options.celebrity_selfie.description,
-      tags: t.styles.options.celebrity_selfie.tags,
-      preview: '/imgs/template/self_org.png',
-      referenceImage: '/imgs/template/self.jpeg',
-      prompt: 'Create a realistic selfie photograph showing [your description] taking a selfie with the Trump President of the United States in the Oval Office of the White House. The scene should show:\\nBoth people positioned as if taking a selfie (one person holding phone/camera)\\nAuthentic Oval Office background with presidential desk, flags, and official decor\\nNatural lighting consistent with indoor White House photography\\nProfessional yet candid selfie composition'
+    {
+      value: 'charlie-lola',
+      label: t.styles.options.charlie_lola?.label || 'Charlie & Lola Style',
+      desc: t.styles.options.charlie_lola?.description || 'Transform into beloved children\'s book characters',
+      tags: t.styles.options.charlie_lola?.tags || ['Cartoon', 'Children\'s Book', 'Whimsical'],
+      preview: 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/tennis.png',
+      referenceImage: 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/tennis.png',
+      prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children\'s cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject\'s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character.'
     }
   ];
 
@@ -215,6 +307,13 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   const clearAllImages = () => {
     setUploadedImages([]);
     setGeneratedImage(null);
+    
+    // Also clear localStorage when user manually clears
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEYS.uploadedImages);
+      localStorage.removeItem(STORAGE_KEYS.generatedImage);
+      localStorage.removeItem(STORAGE_KEYS.customPrompt);
+    }
   };
 
   const generateImage = async () => {
@@ -288,6 +387,13 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
           return;
         }
         throw new Error(result.msg || 'Failed to generate image');
+      } else if (result.code === -1) {
+        // Handle error responses (including insufficient credits)
+        if (result.data === 'INSUFFICIENT_CREDITS' || result.message?.includes('Insufficient credits')) {
+          toast.error(result.message || 'Insufficient credits to generate image');
+          return;
+        }
+        throw new Error(result.message || 'Generation failed');
       } else {
         console.error('Unexpected API response:', result);
         throw new Error('Unexpected response from server');
@@ -295,9 +401,11 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
     } catch (error: any) {
       console.error('Error generating image:', error);
       
-      // Handle queue-related errors specifically
+      // Handle specific error types
       if (error.message?.includes('queue') || error.message?.includes('busy') || error.message?.includes('capacity')) {
         toast.warning("🚧 Service is at capacity. You're in the queue. Upgrade to premium ($0.99) for priority access!");
+      } else if (error.message?.includes('Insufficient credits')) {
+        toast.error(error.message);
       } else {
         toast.error(t.messages.errors.generation_failed);
       }
@@ -307,137 +415,61 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   };
 
   const downloadImage = async () => {
-    if (generatedImage) {
-      // Check if user needs to register to download
-      if (!session) {
-        toast.warning("Please sign in to download the full resolution image!");
-        return;
+    if (!generatedImage) {
+      toast.error("No image to download");
+      return;
+    }
+
+    // Require login to download
+    if (!session) {
+      toast.warning("Please sign in to download the full resolution image!");
+      return;
+    }
+    
+    try {
+      // Use the proxy API instead of direct fetch to avoid CORS issues
+      const proxyUrl = `/api/download-image?url=${encodeURIComponent(generatedImage)}`;
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      const filename = `charlie-lola-${timestamp}.jpg`;
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = proxyUrl;
+      link.download = filename;
+      link.style.display = 'none';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Check if mobile for appropriate success message
+      const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobileDevice) {
+        toast.success('Image downloaded. Check your Downloads folder or long-press to save to photos.');
+      } else {
+        toast.success(t.messages.success.downloaded);
       }
       
-      try {
-        const url = new URL(generatedImage);
-        const pathParts = url.pathname.split('.');
-        const actualExtension = pathParts.length > 1 ? pathParts.pop()?.toLowerCase() : 'jpg';
-        
-        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-        const filename = `imagen-${selectedStyle}-${timestamp}.${actualExtension}`;
-        
-        const response = await fetch(generatedImage, {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'omit',
-          headers: { 'Accept': 'image/*' }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const blob = await response.blob();
-        
-        // Check if running on mobile device
-        const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobileDevice) {
-          // Mobile-specific download: Try to save to photo gallery
-          try {
-            // Check if Web Share API is available for sharing to gallery
-            if (navigator.share && navigator.canShare) {
-              const file = new File([blob], filename, { type: blob.type });
-              const shareData = {
-                files: [file],
-                title: 'Generated Image',
-                text: 'Save this generated image to your photo gallery'
-              };
-              
-              if (navigator.canShare(shareData)) {
-                await navigator.share(shareData);
-                toast.success('Image ready to save to gallery');
-                return;
-              }
-            }
-            
-            // Fallback: Create a download link optimized for mobile
-            const objectUrl = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = objectUrl;
-            link.download = filename;
-            
-            // Add styles for mobile download prompt
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(objectUrl);
-            
-            // Show mobile-specific success message
-            toast.success('Image downloaded. Long-press the image and select "Save to Photos" to add to your gallery.');
-            
-          } catch (mobileError) {
-            console.error('Mobile download failed:', mobileError);
-            // Fallback to opening image in new tab for manual save
-            const objectUrl = window.URL.createObjectURL(blob);
-            window.open(objectUrl, '_blank');
-            toast.success('Image opened in new tab. Long-press to save to photos.');
-            window.URL.revokeObjectURL(objectUrl);
-          }
-        } else {
-          // Desktop download behavior (unchanged)
-          const objectUrl = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = objectUrl;
-          link.download = filename;
-          
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(objectUrl);
-          
-          toast.success(t.messages.success.downloaded);
-        }
-        
-      } catch (error) {
-        console.error('Download failed:', error);
-        
-        try {
-          const proxyUrl = `/api/download-image?url=${encodeURIComponent(generatedImage)}`;
-          const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-          const filename = `imagen-${selectedStyle}-${timestamp}.jpg`;
-          
-          const link = document.createElement('a');
-          link.href = proxyUrl;
-          link.download = filename;
-          
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          
-          // Check if mobile for appropriate success message
-          const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-          if (isMobileDevice) {
-            toast.success('Image downloaded. Check your Downloads folder or long-press to save to photos.');
-          } else {
-            toast.success(t.messages.success.downloaded);
-          }
-          
-        } catch (proxyError) {
-          console.error('Proxy download failed:', proxyError);
-          toast.error(t.messages.errors.download_failed);
-          window.open(generatedImage, '_blank');
-        }
-      }
+    } catch (error) {
+      console.error('Download failed:', error);
+      toast.error(t.messages.errors.download_failed);
+      
+      // Fallback: open in new tab for manual save
+      window.open(generatedImage, '_blank');
+      toast.info("Image opened in new tab. Right-click to save.");
     }
   };
 
   const shareImage = async () => {
     if (generatedImage) {
+      const cdnUrl = convertToCdnUrl(generatedImage);
       try {
-        await navigator.clipboard.writeText(generatedImage);
+        await navigator.clipboard.writeText(cdnUrl);
         toast.success(t.messages.success.url_copied);
       } catch (error) {
         console.error('Share failed:', error);
         const tempInput = document.createElement('input');
-        tempInput.value = generatedImage;
+        tempInput.value = cdnUrl;
         document.body.appendChild(tempInput);
         tempInput.select();
         document.execCommand('copy');
@@ -448,433 +480,412 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
   };
 
   return (
-    <section className="min-h-screen relative overflow-hidden">
-      {/* Dynamic Background Images */}
-      <div className="absolute inset-0 transition-all duration-2000 ease-in-out">
-        {galleryImages.map((image, index) => (
-          <div
-            key={index}
-            className={cn(
-              "absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-2000",
-              index === currentBgImage ? "opacity-100" : "opacity-0"
-            )}
-            style={{ backgroundImage: `url(${image})` }}
-          />
-        ))}
-      </div>
+    <div>
+      <section className="min-h-screen relative overflow-hidden bg-background text-foreground">
 
-      {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      
-      {/* Gradient overlay with nano banana theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/30 via-transparent to-green-900/30" />
+        <div className="container relative z-10 py-16">
+          {/* Hero Header Section */}
+          <header className="text-center mb-16">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-cl-yellow/20 rounded-full border-2 border-cl-outline" role="banner">
+              <div className="w-2 h-2 bg-cl-red rounded-full" aria-hidden="true"></div>
+              <span className="text-cl-outline text-sm font-medium">{t.badge.text}</span>
+            </div>
+            
+            <h1 className="text-5xl lg:text-7xl font-bold mb-6 text-foreground leading-tight">
+              {t.title.main}
+              <br />
+              <span className="text-3xl lg:text-4xl">{t.title.subtitle}</span>
+            </h1>
+            
+            <p className="text-xl text-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
+              {t.description}
+            </p>
 
-      <div className="container relative z-10 py-16">
-        {/* Hero Header Section */}
-        <header className="text-center mb-16">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-yellow-500/20 backdrop-blur-sm rounded-full border border-yellow-400/30" role="banner">
-            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" aria-hidden="true"></div>
-            <span className="text-yellow-300 text-sm font-medium">{t.badge.text}</span>
-          </div>
-          
-          <h1 className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-orange-400 to-green-400 bg-clip-text text-transparent leading-tight">
-            {t.title.main}
-            <br />
-            <span className="text-3xl lg:text-4xl">{t.title.subtitle}</span>
-          </h1>
-          
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-            {t.description}
-          </p>
+            {/* Key Features */}
+            <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12" aria-label="Key Features">
+              <article className="text-center">
+                <h3 className="text-2xl font-bold text-cl-orange mb-2">{t.features.guaranteed.title}</h3>
+                <p className="text-foreground text-sm">{t.features.guaranteed.subtitle}</p>
+              </article>
+              <article className="text-center">
+                <h3 className="text-2xl font-bold text-cl-green mb-2">{t.features.no_lottery.title}</h3>
+                <p className="text-foreground text-sm">{t.features.no_lottery.subtitle}</p>
+              </article>
+              <article className="text-center">
+                <h3 className="text-2xl font-bold text-cl-blue mb-2">{t.features.one_sentence.title}</h3>
+                <p className="text-foreground text-sm">{t.features.one_sentence.subtitle}</p>
+              </article>
+              <article className="text-center">
+                <h3 className="text-2xl font-bold text-cl-yellow mb-2">{t.features.instant.title}</h3>
+                <p className="text-foreground text-sm">{t.features.instant.subtitle}</p>
+              </article>
+            </section>
+          </header>
 
-          {/* Key Features */}
-          <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12" aria-label="Key Features">
-            <article className="text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-2">{t.features.guaranteed.title}</h3>
-              <p className="text-gray-400 text-sm">{t.features.guaranteed.subtitle}</p>
-            </article>
-            <article className="text-center">
-              <h3 className="text-2xl font-bold text-green-400 mb-2">{t.features.no_lottery.title}</h3>
-              <p className="text-gray-400 text-sm">{t.features.no_lottery.subtitle}</p>
-            </article>
-            <article className="text-center">
-              <h3 className="text-2xl font-bold text-orange-400 mb-2">{t.features.one_sentence.title}</h3>
-              <p className="text-gray-400 text-sm">{t.features.one_sentence.subtitle}</p>
-            </article>
-            <article className="text-center">
-              <h3 className="text-2xl font-bold text-yellow-400 mb-2">{t.features.instant.title}</h3>
-              <p className="text-gray-400 text-sm">{t.features.instant.subtitle}</p>
-            </article>
-          </section>
-        </header>
+            {/* CTA Buttons */}
+            <nav className="flex flex-col sm:flex-row gap-4 justify-center mb-16" role="navigation" aria-label="Main Actions">
+              <Button 
+                size="lg" 
+                variant="default"
+                onClick={() => fileInputRef.current?.click()}
+                aria-label="Start using NanoBanana AI editor"
+              >
+                {t.buttons.try_now}
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => window.open('/showcase', '_blank')}
+                aria-label="View example gallery"
+              >
+                {t.buttons.browse_gallery}
+              </Button>
+            </nav>
 
-          {/* CTA Buttons */}
-          <nav className="flex flex-col sm:flex-row gap-4 justify-center mb-16" role="navigation" aria-label="Main Actions">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl shadow-yellow-500/25"
-              onClick={() => fileInputRef.current?.click()}
-              aria-label="Start using NanoBanana AI editor"
-            >
-              {t.buttons.try_now}
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="border-yellow-400/50 text-yellow-300 hover:bg-yellow-500/20 px-8 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm"
-              onClick={() => window.open('/showcase', '_blank')}
-              aria-label="View example gallery"
-            >
-              {t.buttons.browse_gallery}
-            </Button>
-          </nav>
-
-        {/* Main Application Interface */}
-        <main className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto" role="main">
-          {/* Left Panel - Upload & Styles */}
-          <section className="space-y-6" aria-label="Image Upload and Style Selection">
-            {/* Credits Display - Only show for authenticated users */}
-            {session && (
-              <div className="flex justify-center">
-                <CreditDisplay className="w-full" />
-                {creditsLoading && (
-                  <div className="w-full p-4 rounded-lg border border-gray-600 bg-gray-800/50 backdrop-blur-sm">
-                    <div className="flex items-center space-x-3">
-                      <div className="animate-pulse flex space-x-2">
-                        <div className="h-4 w-4 bg-yellow-400 rounded-full"></div>
-                        <div className="h-4 w-24 bg-gray-600 rounded"></div>
+          {/* Main Application Interface */}
+          <main className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto" role="main">
+            {/* Left Panel - Upload & Styles */}
+            <section className="space-y-6" aria-label="Image Upload and Style Selection">
+              {/* Credits Display - Only show for authenticated users */}
+              {session && (
+                <div className="flex justify-center">
+                  <CreditDisplay className="w-full" />
+                  {creditsLoading && (
+                    <div className="w-full p-4 rounded-lg border border-border bg-card">
+                      <div className="flex items-center space-x-3">
+                        <div className="animate-pulse flex space-x-2">
+                          <div className="h-4 w-4 bg-cl-yellow rounded-full"></div>
+                          <div className="h-4 w-24 bg-muted rounded"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
-            
-            {/* Upload Section */}
-            <Card className="bg-slate-800/60 backdrop-blur-md border-slate-700/50 shadow-xl">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center">
-                    <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <h2 className="text-white font-medium">
-                    {t.upload.title} {formatMessage(t.upload.count, { count: uploadedImages.length })}
-                  </h2>
-                </div>
-                
-                <div
-                  className={cn(
-                    "relative min-h-[400px] rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer",
-                    uploadedImages.length > 0 ? "flex" : "flex items-center justify-center",
-                    dragActive 
-                      ? "border-yellow-400 bg-yellow-500/10" 
-                      : "border-gray-600 hover:border-yellow-400 hover:bg-yellow-500/5"
                   )}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setDragActive(true);
-                  }}
-                  onDragLeave={() => setDragActive(false)}
-                  onDrop={handleDrop}
-                  onClick={(e) => {
-                    if (uploadedImages.length === 0 || e.target === e.currentTarget) {
-                      fileInputRef.current?.click();
-                    }
-                  }}
-                >
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleFileInput}
-                    className="hidden"
-                  />
+                </div>
+              )}
+              
+              {/* Upload Section */}
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-6 h-6 bg-cl-yellow rounded flex items-center justify-center">
+                      <svg className="w-4 h-4 text-cl-outline" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <h2 className="text-foreground font-medium">
+                      {t.upload.title} {formatMessage(t.upload.count, { count: uploadedImages.length })}
+                    </h2>
+                  </div>
                   
-                  {uploadedImages.length > 0 ? (
-                    <div className="w-full h-full p-4">
-                      <div className="grid grid-cols-3 gap-4 h-full">
-                        {uploadedImages.map((image, index) => (
-                          <div 
-                            key={index} 
-                            className="relative border-2 border-orange-400 rounded-lg p-2 bg-slate-700/50 min-h-[120px] flex flex-col"
-                          >
-                            <div className="flex-1 relative group">
-                              <img
-                                src={image}
-                                alt={`${formatMessage(t.upload.image_label, { number: index + 1 })} - User uploaded image for AI character generation using NanoBanana editor`}
-                                className="w-full h-full object-cover rounded-md"
-                                loading="lazy"
-                                decoding="async"
-                              />
-                            </div>
-                            
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeImage(index);
-                              }}
-                              className="mt-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors mx-auto"
+                  <div
+                    className={cn(
+                      "relative min-h-[400px] rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer",
+                      uploadedImages.length > 0 ? "flex" : "flex items-center justify-center",
+                      dragActive 
+                        ? "border-cl-yellow bg-cl-yellow/10" 
+                        : "border-muted hover:border-cl-yellow hover:bg-cl-yellow/5"
+                    )}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragActive(true);
+                    }}
+                    onDragLeave={() => setDragActive(false)}
+                    onDrop={handleDrop}
+                    onClick={(e) => {
+                      if (uploadedImages.length === 0 || e.target === e.currentTarget) {
+                        fileInputRef.current?.click();
+                      }
+                    }}
+                  >
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileInput}
+                      className="hidden"
+                    />
+                    
+                    {uploadedImages.length > 0 ? (
+                      <div className="w-full h-full p-4">
+                        <div className="grid grid-cols-3 gap-4 h-full">
+                          {uploadedImages.map((image, index) => (
+                            <div 
+                              key={index} 
+                              className="relative border-2 border-cl-outline rounded-lg p-2 bg-card min-h-[120px] flex flex-col"
                             >
-                              ×
-                            </button>
-                            
-                            <div className="text-xs text-gray-400 text-center mt-1">
-                              {formatMessage(t.upload.image_label, { number: index + 1 })}
-                            </div>
-                          </div>
-                        ))}
-                        
-                        {uploadedImages.length < 5 && (
-                          <div 
-                            className="border-2 border-dashed border-yellow-500/60 rounded-lg flex flex-col items-center justify-center min-h-[120px] hover:border-yellow-400 transition-colors cursor-pointer bg-slate-800/30"
-                            onClick={() => fileInputRef.current?.click()}
-                          >
-                            <div className="text-center text-yellow-400">
-                              <div className="text-3xl mb-2">+</div>
-                              <div className="text-sm font-medium">{t.upload.add_image}</div>
-                              <div className="text-xs text-gray-400 mt-1">
-                                {formatMessage(t.upload.count, { count: uploadedImages.length })}
+                              <div className="flex-1 relative group">
+                                <img
+                                  src={image}
+                                  alt={`${formatMessage(t.upload.image_label, { number: index + 1 })} - User uploaded image for AI character generation using Charlie and Lola AI editor`}
+                                  className="w-full h-full object-cover rounded-md"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              </div>
+                              
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeImage(index);
+                                }}
+                                className="mt-2 w-6 h-6 bg-cl-red hover:bg-cl-red/80 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors mx-auto"
+                              >
+                                ×
+                              </button>
+                              
+                              <div className="text-xs text-muted-foreground text-center mt-1">
+                                {formatMessage(t.upload.image_label, { number: index + 1 })}
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="mt-4 flex justify-end">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            clearAllImages();
-                          }}
-                          className="px-4 py-2 bg-red-500/80 hover:bg-red-500 text-white text-sm rounded-md transition-colors"
-                        >
-                          {formatMessage(t.upload.clear_all, { count: uploadedImages.length })}
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                      </div>
-                      <p className="text-gray-300 font-medium mb-2">{t.upload.drop_text}</p>
-                      <p className="text-gray-500 text-sm">{t.upload.browse_text}</p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Style Selection */}
-            <Card className="bg-slate-800/60 backdrop-blur-md border-slate-700/50 shadow-xl">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">{t.styles.title}</h2>
-                <div className="space-y-4">
-                  {styleOptions.map((style) => (
-                    <button
-                      key={style.value}
-                      onClick={() => setSelectedStyle(style.value)}
-                      className={cn(
-                        "w-full relative overflow-hidden rounded-lg border transition-all duration-200 text-left group",
-                        selectedStyle === style.value
-                          ? "border-yellow-500 bg-yellow-500/10"
-                          : "border-gray-600 hover:border-yellow-400/50 hover:bg-yellow-500/5"
-                      )}
-                    >
-                      <div className="flex gap-4 p-4">
-                        <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-                          <img
-                            src={style.preview}
-                            alt={`${style.label} AI generation style preview - Example of ${style.desc} using NanoBanana Nano-Banana-Edit model`}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </div>
-                        
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-white text-lg mb-2">{style.label}</h3>
-                          <p className="text-sm text-gray-400 mb-3">{style.desc}</p>
+                          ))}
                           
-                          <div className="flex flex-wrap gap-1">
-                            {style.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className={cn(
-                                  "px-2 py-1 text-xs rounded-md font-medium",
-                                  selectedStyle === style.value
-                                    ? "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
-                                    : "bg-gray-700/50 text-gray-300 border border-gray-600/50"
-                                )}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
+                          {uploadedImages.length < 5 && (
+                            <div 
+                              className="border-2 border-dashed border-cl-yellow/60 rounded-lg flex flex-col items-center justify-center min-h-[120px] hover:border-cl-yellow transition-colors cursor-pointer bg-card"
+                              onClick={() => fileInputRef.current?.click()}
+                            >
+                              <div className="text-center text-cl-yellow">
+                                <div className="text-3xl mb-2">+</div>
+                                <div className="text-sm font-medium">{t.upload.add_image}</div>
+                                <div className="text-xs text-muted-foreground mt-1">
+                                  {formatMessage(t.upload.count, { count: uploadedImages.length })}
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                         
-                        {selectedStyle === style.value && (
-                          <div className="flex-shrink-0 w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          </div>
+                        <div className="mt-4 flex justify-end">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              clearAllImages();
+                            }}
+                            className="px-4 py-2 bg-cl-red hover:bg-cl-red/80 text-white text-sm rounded-md transition-colors"
+                          >
+                            {formatMessage(t.upload.clear_all, { count: uploadedImages.length })}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-cl-yellow to-cl-orange rounded-full flex items-center justify-center">
+                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                        </div>
+                        <p className="text-foreground font-medium mb-2">{t.upload.drop_text}</p>
+                        <p className="text-muted-foreground text-sm">{t.upload.browse_text}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Style Selection */}
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-semibold text-foreground mb-4">{t.styles.title}</h2>
+                  <div className="space-y-4">
+                    {styleOptions.map((style) => (
+                      <button
+                        key={style.value}
+                        onClick={() => setSelectedStyle(style.value)}
+                        className={cn(
+                          "w-full relative overflow-hidden rounded-lg border-2 transition-all duration-200 text-left group",
+                          // Use consistent styling until hydrated to prevent mismatch
+                          !isHydrated 
+                            ? "border-border hover:border-cl-yellow/50 hover:bg-cl-yellow/5"
+                            : selectedStyle === style.value
+                              ? "border-cl-yellow bg-cl-yellow/10"
+                              : "border-border hover:border-cl-yellow/50 hover:bg-cl-yellow/5"
                         )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                      >
+                        <div className="flex gap-4 p-4">
+                          <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
+                            <img
+                              src={style.preview}
+                              alt={`${style.label} AI generation style preview - Example of ${style.desc} using Charlie and Lola AI Charlie-and-Lola-Edit model`}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </div>
+                          
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-foreground text-lg mb-2">{style.label}</h3>
+                            <p className="text-sm text-muted-foreground mb-3">{style.desc}</p>
+                            
+                            <div className="flex flex-wrap gap-1">
+                              {style.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className={cn(
+                                    "px-2 py-1 text-xs rounded-md font-medium",
+                                    // Use consistent styling until hydrated to prevent mismatch
+                                    !isHydrated 
+                                      ? "bg-muted text-muted-foreground border border-border"
+                                      : selectedStyle === style.value
+                                        ? "bg-cl-yellow/20 text-cl-yellow border border-cl-yellow/30"
+                                        : "bg-muted text-muted-foreground border border-border"
+                                  )}
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          {isHydrated && selectedStyle === style.value && (
+                            <div className="flex-shrink-0 w-6 h-6 bg-cl-yellow rounded-full flex items-center justify-center shadow-lg">
+                              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* Generate Button */}
-            <Button
-              onClick={generateImage}
-              disabled={uploadedImages.length === 0 || isGenerating}
-              className={cn(
-                "w-full py-4 text-lg font-semibold rounded-xl transition-all duration-300",
-                uploadedImages.length > 0 && !isGenerating
-                  ? "bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 shadow-2xl shadow-yellow-500/25"
-                  : "bg-gray-600 cursor-not-allowed"
-              )}
-            >
-              {isGenerating ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  {t.buttons.generating}
-                </div>
-              ) : !session ? (
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                  {t.buttons.login_required}
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  {t.buttons.generate}
-                  <span className="text-yellow-400 font-medium">
-                    ({modelOptions.find(m => m.value === selectedModel)?.credits || 10} credits)
-                  </span>
-                </div>
-              )}
-            </Button>
-          </section>
+              {/* Generate Button */}
+              <Button
+                onClick={generateImage}
+                disabled={uploadedImages.length === 0 || isGenerating}
+                size="lg"
+                variant="default"
+              >
+                {isGenerating ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-border-white/30 border-t-white rounded-full animate-spin"></div>
+                    {t.buttons.generating}
+                  </div>
+                ) : !session ? (
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    {t.buttons.login_required}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    {t.buttons.generate}
+                    <span className="text-cl-blue font-medium">
+                      ({modelOptions.find(m => m.value === selectedModel)?.credits || 10} credits)
+                    </span>
+                  </div>
+                )}
+              </Button>
+            </section>
 
-          {/* Right Panel - Preview & Download */}
-          <section className="space-y-6" aria-label="Preview and Results">
-            <Card className="bg-slate-800/60 backdrop-blur-md border-slate-700/50 shadow-xl">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">{t.preview.title}</h2>
-                
-                <div className="min-h-[400px] rounded-xl border-2 border-dashed border-gray-600 flex items-center justify-center">
-                  {generatedImage ? (
-                    <div className="relative w-full h-full">
-                      <img
-                        src={generatedImage}
-                        alt={`AI-generated ${styleOptions.find(s => s.value === selectedStyle)?.label || 'character image'} created with NanoBanana Nano-Banana-Edit model - High-quality AI image generation result`}
-                        className="w-full h-full object-cover rounded-lg"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute top-4 right-4 flex gap-2">
-                        <Button
-                          onClick={shareImage}
-                          size="sm"
-                          variant="outline"
-                          className="bg-black/50 backdrop-blur-sm border-gray-600 text-gray-300 hover:bg-gray-700/50 hover:border-gray-500"
-                        >
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                          </svg>
-                          {t.buttons.share}
-                        </Button>
-                        <Button
-                          onClick={downloadImage}
-                          size="sm"
-                          className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                        >
-                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          {t.buttons.download}
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="relative w-full h-full flex items-center justify-center">
+            {/* Right Panel - Preview & Download */}
+            <section className="space-y-6" aria-label="Preview and Results">
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-semibold text-foreground mb-4">{t.preview.title}</h2>
+                  
+                  <div className="min-h-[400px] rounded-xl border-2 border-dashed border-border flex items-center justify-center">
+                    {generatedImage ? (
                       <div className="relative w-full h-full">
                         <img
-                          src={styleOptions.find(s => s.value === selectedStyle)?.referenceImage || '/imgs/template/self.jpeg'}
-                          alt={`${styleOptions.find(s => s.value === selectedStyle)?.label || 'Celebrity Selfie'} reference example - AI generation template for NanoBanana Nano-Banana-Edit model`}
-                          className="w-full h-full object-cover rounded-lg opacity-50"
+                          src={generatedImage}
+                          alt={`AI-generated ${styleOptions.find(s => s.value === selectedStyle)?.label || 'character image'} created with Charlie and Lola AI Charlie-and-Lola-Edit model - High-quality AI image generation result`}
+                          className="w-full h-full object-cover rounded-lg"
                           loading="lazy"
                           decoding="async"
                         />
-                        <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center">
-                          <div className="text-center text-white">
-                            <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 01-2 2z" />
-                              </svg>
+                        <div className="absolute top-4 right-4 flex gap-2">
+                          <Button
+                            onClick={shareImage}
+                            size="sm"
+                            variant="outline"
+                          >
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                            </svg>
+                            {t.buttons.share}
+                          </Button>
+                          <Button
+                            onClick={downloadImage}
+                            size="sm"
+                            variant="default"
+                          >
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            {t.buttons.download}
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <div className="relative w-full h-full">
+                          <img
+                            src={styleOptions.find(s => s.value === selectedStyle)?.referenceImage || 'https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/self.jpeg'}
+                            alt={`${styleOptions.find(s => s.value === selectedStyle)?.label || 'Celebrity Selfie'} reference example - AI generation template for Charlie and Lola AI Charlie-and-Lola-Edit model`}
+                            className="w-full h-full object-cover rounded-lg opacity-50"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <div className="absolute inset-0 bg-muted/50 rounded-lg flex items-center justify-center">
+                            <div className="text-center text-foreground">
+                              <div className="w-16 h-16 mx-auto mb-4 bg-muted/50 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                <svg className="w-8 h-8 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 01-2 2z" />
+                                </svg>
+                              </div>
+                              <p className="font-medium text-lg mb-2">{t.preview.placeholder}</p>
+                              <p className="text-sm text-muted-foreground">{t.preview.upload_prompt}</p>
                             </div>
-                            <p className="font-medium text-lg mb-2">{t.preview.placeholder}</p>
-                            <p className="text-sm text-gray-300">{t.preview.upload_prompt}</p>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* Prompt Editor */}
-            <Card className="bg-slate-800/60 backdrop-blur-md border-slate-700/50 shadow-xl">
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">{t.prompt.title}</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      {t.prompt.current_style}
-                    </label>
-                    <textarea
-                      value={customPrompt || styleOptions.find(s => s.value === selectedStyle)?.prompt || ''}
-                      onChange={(e) => setCustomPrompt(e.target.value)}
-                      className="w-full p-3 bg-slate-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none resize-none"
-                      rows={6}
-                    />
-                    <p className="text-xs text-gray-400 mt-1">
-                      {t.prompt.customize_hint}
-                    </p>
+              {/* Prompt Editor */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">{t.prompt.title}</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        {t.prompt.current_style}
+                      </label>
+                      <textarea
+                        value={customPrompt || styleOptions.find(s => s.value === selectedStyle)?.prompt || ''}
+                        onChange={(e) => setCustomPrompt(e.target.value)}
+                        className="w-full p-3 bg-input border-2 border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-cl-yellow focus:outline-none resize-none"
+                        rows={6}
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {t.prompt.customize_hint}
+                      </p>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => {
+                          setCustomPrompt(''); // Clear custom prompt to show default style prompt
+                        }}
+                        variant="outline"
+                      >
+                        {t.prompt.reset_button}
+                      </Button>
+                    </div>
                   </div>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={() => {
-                        const originalPrompt = selectedStyle === 'commercial-figure' 
-                          ? 'Create a 1/7 scale commercial image of the characters in the illustration in a realistic style and environment. Place the figure on the computer desk using a circular transparent acrylic base. There is no text. On the computer screen, display the modeling process of Brush graphics. Place a BANDAI style toy packaging box with original artwork printed on it next to the computer screen.'
-                          : 'Create a realistic selfie photograph showing [your description] taking a selfie with the Trump President of the United States in the Oval Office of the White House. The scene should show:\\nBoth people positioned as if taking a selfie (one person holding phone/camera)\\nAuthentic Oval Office background with presidential desk, flags, and official decor\\nNatural lighting consistent with indoor White House photography\\nProfessional yet candid selfie composition';
-                        setCustomPrompt(originalPrompt);
-                      }}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700/50"
-                    >
-                      {t.prompt.reset_button}
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </section>
-        </main>
-      </div>
-    </section>
+                </CardContent>
+              </Card>
+            </section>
+          </main>
+        </div>
+      </section>
+    </div>
   );
 }

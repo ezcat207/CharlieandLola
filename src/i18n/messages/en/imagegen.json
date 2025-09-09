@@ -1,0 +1,81 @@
+{
+  "title": {
+    "main": "Charlie & Lola Character Maker - Join the #CharlieAndLola Trend",
+    "subtitle": "AI Style Magic"
+  },
+  "description": "Transform your photos into charming Charlie and Lola characters with our AI generator. Join the viral Charlie and Lola trend on TikTok! Perfect Charlie and Lola ChatGPT prompt alternative - create unique cartoon art with hand-drawn charm and flat colors. No registration required - Start creating #CharlieAndLola magic instantly!",
+  "badge": {
+    "text": "TRENDING"
+  },
+  "features": {
+    "guaranteed": {
+      "title": "100% Guaranteed",
+      "subtitle": "Authentic Model"
+    },
+    "no_lottery": {
+      "title": "No Lottery",
+      "subtitle": "Instant Results"
+    },
+    "one_sentence": {
+      "title": "One Click",
+      "subtitle": "Easy Generation"
+    },
+    "instant": {
+      "title": "Instant",
+      "subtitle": "Fast Processing"
+    }
+  },
+  "buttons": {
+    "try_now": "Start Charlie & Lola Character Maker",
+    "browse_gallery": "View #CharlieAndLola Trend Examples",
+    "generate": "Generate Charlie & Lola",
+    "login_required": "Generate (Login for Full Quality)",
+    "generating": "Creating Your Character...",
+    "download": "Download",
+    "share": "Share"
+  },
+  "upload": {
+    "title": "Upload Your Photos",
+    "count": "{count}/5",
+    "drop_text": "Drag & drop your images here",
+    "browse_text": "or click to browse files",
+    "add_image": "Add Image",
+    "clear_all": "Clear All ({count})",
+    "max_images_error": "Maximum 5 images allowed",
+    "image_label": "Image {number}"
+  },
+  "styles": {
+    "title": "Charlie & Lola Style Options",
+    "options": {
+      "charlie_lola": {
+        "label": "Charlie & Lola Style",
+        "description": "Transform into beloved children's book characters",
+        "tags": "[\"Cartoon\", \"Children's Book\", \"Whimsical\"]"
+      }
+    }
+  },
+  "preview": {
+    "title": "Preview Your Character",
+    "placeholder": "Your generated character will appear here",
+    "upload_prompt": "Upload photos to get started"
+  },
+  "prompt": {
+    "title": "Customize Your Style",
+    "current_style": "Current Style Prompt:",
+    "customize_hint": "You can customize the prompt above to fine-tune your character generation",
+    "reset_button": "Reset to Default"
+  },
+  "messages": {
+    "success": {
+      "generated": "Character generated successfully!",
+      "downloaded": "Image downloaded successfully!",
+      "url_copied": "Share URL copied to clipboard!"
+    },
+    "errors": {
+      "login_required": "Please sign in to download full resolution images",
+      "insufficient_credits": "You don't have enough credits. This model requires {credits} credits.",
+      "generation_failed": "Failed to generate character. Please try again.",
+      "download_failed": "Failed to download image. Please try again."
+    }
+  }
+}

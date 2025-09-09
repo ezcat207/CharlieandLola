@@ -48,25 +48,25 @@
     "show_locale": false
   },
   "hero": {
-    "title": "Transform Photos Into Charlie and Lola Style Characters",
-    "highlight_text": "Charlie & Lola Style",
-    "description": "Revolutionary AI-powered character transformation using Gemini 2.5 Flash Image Preview. Turn any photo into adorable Charlie and Lola cartoon characters!<br/>Perfect for creating personalized children's book illustrations, gifts, and magical transformations.",
+    "title": "🔥 FREE Charlie & Lola Character Maker - Go Viral with #CharlieAndLola Trend",
+    "highlight_text": "Go Viral with #CharlieAndLola",
+    "description": "⚡ **Better than ChatGPT prompts!** Create perfect Charlie and Lola characters in seconds. Join the **TikTok viral trend** that's getting millions of views! <br/>✨ **Professional results, zero learning curve** - Upload your photo → Get viral-ready content instantly! <br/>🚀 **No sign-up, completely free** - Start trending now!",
     "announcement": {
-      "label": "MAGICAL",
-      "title": "🎨 Official Charlie and Lola Art Style",
+      "label": "🔥 VIRAL TREND",
+      "title": "Join 2M+ Creators Making #CharlieAndLola Content",
       "url": "/#generator"
     },
-    "tip": "✨ Authentic Charlie and Lola cartoon magic",
+    "tip": "💎 The ONLY tool you need for Charlie and Lola trend success",
     "buttons": [
       {
-        "title": "Create Charlie & Lola Art Now",
+        "title": "🚀 Create Viral Charlie & Lola Content Now",
         "icon": "RiRobot2Line",
         "url": "/#generator",
         "target": "_self",
         "variant": "default"
       },
       {
-        "title": "View Examples",
+        "title": "👀 See Viral #CharlieAndLola Examples",
         "icon": "RiGalleryLine",
         "url": "/#showcase",
         "target": "_self",
@@ -77,102 +77,102 @@
     "show_badge": true
   },
   "branding": {
-    "title": "What Makes Our Charlie & Lola Converter Special",
+    "title": "Why Choose Our Tool Over ChatGPT Prompts?",
     "items": [
       {
-        "title": "Authentic Charlie & Lola Style",
+        "title": "⚡ Skip Complex Prompts",
         "image": {
           "src": "/imgs/logos/flux.svg",
-          "alt": "Charlie and Lola Art Style"
+          "alt": "No ChatGPT Prompt Engineering Required"
         }
       },
       {
-        "title": "Magical Transformations",
+        "title": "🎯 Perfect Style Every Time",
         "image": {
           "src": "/imgs/logos/speed.svg",
-          "alt": "Magic Art"
+          "alt": "Consistent Charlie & Lola Style"
         }
       },
       {
-        "title": "Simple Photo Upload",
+        "title": "🔥 Viral-Ready Results",
         "image": {
           "src": "/imgs/logos/hd.svg",
-          "alt": "Easy Upload"
+          "alt": "TikTok & Social Media Optimized"
         }
       },
       {
-        "title": "Adorable Character Results",
+        "title": "💎 100% Free Forever",
         "image": {
           "src": "/imgs/logos/quality.svg",
-          "alt": "Cute Characters"
+          "alt": "No ChatGPT Plus Required"
         }
       }
     ]
   },
   "introduce": {
     "name": "introduce",
-    "title": "What is Charlie and Lola Style Converter",
-    "label": "About",
-    "description": "Magical AI-powered character transformation that brings beloved children's book art to life. Transform any photo into adorable Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology.",
+    "title": "Why Millions Choose This Over ChatGPT for #CharlieAndLola Trend",
+    "label": "Why We're Better",
+    "description": "🚀 **ChatGPT prompts take hours to perfect. We take 10 seconds.** <br/>📈 **Join 2M+ creators who ditched complex prompts** for our one-click Charlie and Lola character maker. <br/>⚡ **No prompt engineering, no trial-and-error** - just instant viral-ready content that gets views and engagement!",
     "image": {
-      "src": "/imgs/template/consistent.jpeg"
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/car.png"
     },
     "items": [
       {
-        "title": "Character Magic",
-        "description": "Transform any person into a charming Charlie and Lola character while preserving their unique features, clothing, and personality in delightful cartoon form.",
+        "title": "🎯 Instant Viral Content Creation",
+        "description": "While others spend hours perfecting ChatGPT prompts, you get perfect Charlie and Lola characters in 10 seconds. Upload → Generate → Go Viral. It's that simple!",
         "icon": "RiUploadLine"
       },
       {
-        "title": "Simple Transformation",
-        "description": "Just upload a photo and watch the magic happen. No complex editing skills needed - our AI automatically applies the beloved Charlie and Lola art style.",
+        "title": "⚡ No More ChatGPT Frustration",
+        "description": "Forget \"try this prompt\", \"adjust parameters\", \"regenerate 20 times\". Our AI knows exactly how to create authentic Charlie and Lola style - first try, every time.",
         "icon": "RiCameraLine"
       },
       {
-        "title": "Family Portraits",
-        "description": "Transform family photos, children's pictures, or any portrait into heartwarming Charlie and Lola style illustrations perfect for gifts and keepsakes.",
+        "title": "🔥 Built for Viral Success",
+        "description": "Our Charlie and Lola characters are optimized for maximum engagement. While ChatGPT users get inconsistent results, our tool guarantees viral-ready content every single time.",
         "icon": "RiTimeLine"
       }
     ]
   },
   "benefit": {
-    "name": "benefit",
-    "title": "Why Choose Charlie and Lola Style Converter",
-    "label": "Benefits",
-    "description": "Experience the magic of beloved children's book art with cutting-edge Gemini 2.5 Flash Image Preview technology - bringing Charlie and Lola's world to life.",
+    "name": "benefit", 
+    "title": "From 0 to Viral: How We Beat ChatGPT at Charlie & Lola Creation",
+    "label": "Success Stories",
+    "description": "🚀 **2M+ creators ditched ChatGPT prompts for our tool.** See why we're the #1 choice for #CharlieAndLola trend success. <br/>⚡ **10x faster than prompt engineering** - Get perfect results while others are still tweaking prompts!",
     "items": [
       {
-        "title": "Authentic Charlie & Lola Art Style",
-        "description": "Our AI perfectly captures the distinctive thin sketchy outlines, flat colors, childlike proportions, and playful hand-drawn charm of the official Charlie and Lola books.",
+        "title": "Authentic #CharlieAndLola Character Maker",
+        "description": "The only genuine Charlie and Lola character maker that creates authentic results. No complex Charlie and Lola ChatGPT prompt needed - instant professional character transformations for the trending #CharlieAndLola movement.",
         "icon": "RiCpuLine",
         "image": {
-          "src": "/imgs/template/toy.jpeg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/cloth.png"
         }
       },
       {
-        "title": "Perfect Children's Gifts",
-        "description": "Create personalized storybook illustrations, custom children's book pages, or magical character portraits. Perfect for birthdays, nursery decor, and special occasions.",
+        "title": "Viral Charlie and Lola Trend Content",
+        "description": "Create perfect content for the Charlie and Lola trend on TikTok, Instagram, and all social platforms. Our character maker produces trending #CharlieAndLola visuals that get maximum engagement.",
         "icon": "RiPaletteLine",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/tennis.png"
         }
       },
       {
-        "title": "Heartwarming Character Art",
-        "description": "Transform family photos into whimsical character illustrations that capture the joy and innocence of childhood in the beloved Charlie and Lola style.",
+        "title": "Superior to ChatGPT Prompts",
+        "description": "Why struggle with complex Charlie and Lola ChatGPT prompt engineering? Our dedicated character maker delivers perfect results instantly, making it the top choice for #CharlieAndLola creators.",
         "icon": "RiUserLine",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/street.png"
         }
       }
     ]
   },
   "usage": {
     "name": "usage",
-    "title": "How to Create Charlie & Lola Characters",
-    "description": "Transform photos into magical storybook characters in three simple steps:",
+    "title": "How to Join the Charlie and Lola Trend with Our Character Maker",
+    "description": "Create viral #CharlieAndLola content in three simple steps - no Charlie and Lola ChatGPT prompt required:",
     "image": {
-      "src": "/imgs/template/consistent.jpeg"
+      "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/consistent.jpg"
     },
     "image_position": "left",
     "text_align": "center",
@@ -181,21 +181,21 @@
         "title": "Upload Your Photo",
         "description": "Upload any photo - family pictures, children's portraits, or selfies. Our AI works best with clear photos showing faces and full bodies for the most magical results.",
         "image": {
-          "src": "/imgs/template/self_org.png"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/selfie-7611326_1280.jpg"
         }
       },
       {
         "title": "Let the Magic Begin",
         "description": "Our advanced AI automatically applies the Charlie and Lola transformation. Watch as your photo becomes a delightful cartoon character with the series' signature art style.",
         "image": {
-          "src": "/imgs/template/consistent.jpeg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/charlie-lola-2025-09-08T06-20-39.jpg"
         }
       },
       {
         "title": "Download Your Character",
         "description": "Receive your beautiful Charlie and Lola style character in moments. Perfect for printing, sharing, or creating custom storybooks and keepsakes.",
         "image": {
-          "src": "/imgs/template/self.jpeg"
+          "src": "https://pub-ea658a60b7dd4332a2c19d54d6d566c6.r2.dev/template/combined.png"
         }
       }
     ]
@@ -468,7 +468,7 @@
         {
           "title": "Email",
           "icon": "RiMailLine",
-          "url": "mailto:support@charlieandlola.net",
+          "url": "mailto:support@charlielola.com",
           "target": "_self"
         }
       ]

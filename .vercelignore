@@ -4,6 +4,8 @@
 README.md
 CLAUDE.md
 SETUP.md
+SEO.md
+tiktok_embed.md
 
 # Documentation
 docs/
@@ -13,11 +15,15 @@ content/docs/
 .vscode/
 .idea/
 .cursorrules
+.serena/
 
-# Cache and logs
+# Cache and logs - Force skip cache like Build1
 .next/cache/
+.next/standalone/
 *.log
 debug/
+*.tsbuildinfo
+.next/
 
 # Lock files
 yarn.lock
@@ -29,17 +35,21 @@ test/
 __tests__/
 coverage/
 .nyc_output/
+test-gemini.js
 
 # Build artifacts
 *.tsbuildinfo
 *.sourcemap
+.next/trace
 
 # Misc
 .DS_Store
 Thumbs.db
+.source/
 
-# Examples
+# Examples and preview files
 examples/
+preview.png
 
 # Dockerfile and docker files
 Dockerfile
@@ -50,3 +60,13 @@ wrangler.toml.example
 
 # Bundle analyzer
 .next/analyze/
+
+# Git files (large objects)
+.git/objects/pack/
+.git/lfs/
+
+# Environment files (keep only .env for production)
+.env.production
+
+# Template images (now served from R2)
+public/imgs/template/

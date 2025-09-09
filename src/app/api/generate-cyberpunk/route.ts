@@ -3,7 +3,7 @@ import { getUuid } from "@/lib/hash";
 import { newStorage } from "@/lib/storage";
 import { systemCreditManager, CreditUsageType } from "@/services/system-credits";
 import { getUserUuid } from "@/services/user";
-import { decreaseCredits, CreditsTransType } from "@/services/credit";
+import { decreaseCredits, CreditsTransType, CreditsAmount, getUserCredits } from "@/services/credit";
 import { geminiApiPool } from "@/lib/gemini-api-pool";
 
 export async function POST(request: Request) {
@@ -52,6 +52,14 @@ export async function POST(request: Request) {
     const userUuid = await getUserUuid();
     const isRegisteredUser = !!userUuid;
     
+    // Check credits for registered users
+    if (isRegisteredUser) {
+      const userCredits = await getUserCredits(userUuid);
+      if (userCredits.left_credits < CreditsAmount.ImageGeneration) {
+        return respErr(`Insufficient credits. You need ${CreditsAmount.ImageGeneration} credits but only have ${userCredits.left_credits}. Please recharge to continue.`, 'INSUFFICIENT_CREDITS');
+      }
+    }
+    
     // Check if we have available API keys
     if (!geminiApiPool.hasAvailableKeys()) {
       return respErr("Service is currently at capacity. Please try again later or upgrade to premium for priority access.", 'QUEUE_REQUIRED');
@@ -83,9 +91,7 @@ export async function POST(request: Request) {
     const mimeType = image.type;
 
     // Charlie and Lola style prompt
-    const charlieLolaPrompt = customPrompt.trim() || 
-      "Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children's cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject's original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: plain white or transparent to keep the focus on the character.";
-
+    const charlieLolaPrompt = customPrompt.trim() || "Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children's cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject's original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character. Negative Prompt: No realistic shading, no detailed rendering, no anime or manga style, no 3D modeling, no photographic textures!";
     console.log("=== Charlie and Lola API Request Details ===");
     console.log("Mode:", mode);
     console.log("Model:", model);
@@ -137,7 +143,7 @@ export async function POST(request: Request) {
       // Check if it's a quota/limit error
       if (error.message?.includes('quota') || error.message?.includes('limit') || error.status === 429) {
         geminiApiPool.markKeyAsUnavailable(geminiApiKey, 'Quota exceeded');
-        return respErr("Service is currently busy. Please try again later or upgrade to premium for priority access.", 'QUEUE_REQUIRED');
+        return respErr("Too many users online! VIP users get priority access. You're in queue, please wait a moment or upgrade to VIP for instant access.", 'QUEUE_REQUIRED');
       }
       
       geminiApiPool.markKeyAsUnavailable(geminiApiKey, error.message || 'Unknown error');
@@ -205,7 +211,7 @@ export async function POST(request: Request) {
     }
 
     // For free generation, no credits consumed unless user wants to download
-    const requiredCredits = 1; // Cost for generation
+    const requiredCredits = CreditsAmount.ImageGeneration; // Cost for generation
     
     // Free generation for all users - return preview/watermarked image
     // For registered users downloading, consume credits and return full image

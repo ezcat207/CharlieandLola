@@ -45,16 +45,11 @@ export default async function ImagenWrapper({ locale = 'en' }: ImagenWrapperProp
     styles: {
       title: t('styles.title'),
       options: {
-        commercial_figure: {
-          label: t('styles.options.commercial_figure.label'),
-          description: t('styles.options.commercial_figure.description'),
-          tags: JSON.parse(t.raw('styles.options.commercial_figure.tags')),
-        },
-        celebrity_selfie: {
-          label: t('styles.options.celebrity_selfie.label'),
-          description: t('styles.options.celebrity_selfie.description'),
-          tags: JSON.parse(t.raw('styles.options.celebrity_selfie.tags')),
-        },
+        charlie_lola: {
+          label: t('styles.options.charlie_lola.label'),
+          description: t('styles.options.charlie_lola.description'),
+          tags: JSON.parse(t.raw('styles.options.charlie_lola.tags')),
+        }
       },
     },
     preview: {

@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import HappyUsers from "./happy-users";
-import HeroBg from "./bg";
 import { Hero as HeroType } from "@/types/blocks/hero";
 import Icon from "@/components/icon";
 import { Link } from "@/i18n/navigation";
@@ -19,7 +18,6 @@ export default function Hero({ hero }: { hero: HeroType }) {
 
   return (
     <>
-      <HeroBg />
       <section className="py-24">
         <div className="container">
           {hero.show_badge && (

@@ -43,11 +43,16 @@ export function useUserCredits() {
       if (result.code === 0 && result.data) {
         setCredits(result.data);
       } else {
-        throw new Error(result.msg || 'Failed to fetch credits');
+        // For guest users, don't throw error, just log it
+        console.log('Credits fetch returned error:', result.msg || 'Failed to fetch credits');
+        setCredits(null);
+        setError(null); // Don't set error for guest users
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      // For authenticated users, we show the error
       console.error('Failed to fetch user credits:', err);
+      setError(null); // Don't set error - let components handle gracefully
+      setCredits(null);
     } finally {
       setIsLoading(false);
     }

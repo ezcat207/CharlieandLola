@@ -42,7 +42,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "free",
-        "product_name": "Nano Banana 免费方案",
+        "product_name": "Charlie&Lola AI 免费方案",
         "credits": 10,
         "valid_months": 1,
         "group": "monthly"
@@ -52,7 +52,7 @@
         "description": "跳过排队，获得优先访问权限 - $0.99/月",
         "features_title": "包含功能",
         "features": [
-          "无限制查理和罗拉风格生成",
+          "每月 100 积分",
           "跳过排队 - 无等待时间",
           "优先处理",
           "高分辨率下载",
@@ -105,7 +105,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "pro-monthly",
-        "product_name": "Nano Banana 专业版月付",
+        "product_name": "Charlie&Lola AI 专业版月付",
         "credits": 500,
         "valid_months": 1,
         "group": "monthly"
@@ -136,7 +136,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "ultra-monthly",
-        "product_name": "Nano Banana 极速版月付",
+        "product_name": "Charlie&Lola AI 极速版月付",
         "credits": 2000,
         "valid_months": 1,
         "group": "monthly"
@@ -167,7 +167,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "free-yearly",
-        "product_name": "Nano Banana 免费方案",
+        "product_name": "Charlie&Lola AI 免费方案",
         "credits": 120,
         "valid_months": 12,
         "group": "yearly"
@@ -230,7 +230,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "pro-yearly",
-        "product_name": "Nano Banana 专业版年付",
+        "product_name": "Charlie&Lola AI 专业版年付",
         "credits": 6000,
         "valid_months": 12,
         "group": "yearly"
@@ -261,7 +261,7 @@
           "icon": "RiFlashlightFill"
         },
         "product_id": "ultra-yearly",
-        "product_name": "Nano Banana 极速版年付",
+        "product_name": "Charlie&Lola AI 极速版年付",
         "credits": 24000,
         "valid_months": 12,
         "group": "yearly"
