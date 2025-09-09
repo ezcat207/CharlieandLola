@@ -17,10 +17,10 @@ interface Translations {
   title: { main: string; subtitle: string };
   description: string;
   features: {
-    guaranteed: { title: string; subtitle: string };
-    no_lottery: { title: string; subtitle: string };
-    one_sentence: { title: string; subtitle: string };
-    instant: { title: string; subtitle: string };
+    trending: { title: string; subtitle: string };
+    ai_powered: { title: string; subtitle: string };
+    character_maker: { title: string; subtitle: string };
+    social_ready: { title: string; subtitle: string };
   };
   buttons: {
     try_now: string;
@@ -505,20 +505,20 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
             {/* Key Features */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12" aria-label="Key Features">
               <article className="text-center">
-                <h3 className="text-2xl font-bold text-cl-orange mb-2">{t.features.guaranteed.title}</h3>
-                <p className="text-foreground text-sm">{t.features.guaranteed.subtitle}</p>
+                <h3 className="text-2xl font-bold text-cl-orange mb-2">{t.features.trending.title}</h3>
+                <p className="text-foreground text-sm">{t.features.trending.subtitle}</p>
               </article>
               <article className="text-center">
-                <h3 className="text-2xl font-bold text-cl-green mb-2">{t.features.no_lottery.title}</h3>
-                <p className="text-foreground text-sm">{t.features.no_lottery.subtitle}</p>
+                <h3 className="text-2xl font-bold text-cl-green mb-2">{t.features.ai_powered.title}</h3>
+                <p className="text-foreground text-sm">{t.features.ai_powered.subtitle}</p>
               </article>
               <article className="text-center">
-                <h3 className="text-2xl font-bold text-cl-blue mb-2">{t.features.one_sentence.title}</h3>
-                <p className="text-foreground text-sm">{t.features.one_sentence.subtitle}</p>
+                <h3 className="text-2xl font-bold text-cl-blue mb-2">{t.features.character_maker.title}</h3>
+                <p className="text-foreground text-sm">{t.features.character_maker.subtitle}</p>
               </article>
               <article className="text-center">
-                <h3 className="text-2xl font-bold text-cl-yellow mb-2">{t.features.instant.title}</h3>
-                <p className="text-foreground text-sm">{t.features.instant.subtitle}</p>
+                <h3 className="text-2xl font-bold text-cl-yellow mb-2">{t.features.social_ready.title}</h3>
+                <p className="text-foreground text-sm">{t.features.social_ready.subtitle}</p>
               </article>
             </section>
           </header>

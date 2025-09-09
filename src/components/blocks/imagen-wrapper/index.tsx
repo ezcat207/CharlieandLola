@@ -18,10 +18,10 @@ export default async function ImagenWrapper({ locale = 'en' }: ImagenWrapperProp
     title: { main: t('title.main'), subtitle: t('title.subtitle') },
     description: t('description'),
     features: {
-      guaranteed: { title: t('features.guaranteed.title'), subtitle: t('features.guaranteed.subtitle') },
-      no_lottery: { title: t('features.no_lottery.title'), subtitle: t('features.no_lottery.subtitle') },
-      one_sentence: { title: t('features.one_sentence.title'), subtitle: t('features.one_sentence.subtitle') },
-      instant: { title: t('features.instant.title'), subtitle: t('features.instant.subtitle') },
+      trending: { title: t('features.trending.title'), subtitle: t('features.trending.subtitle') },
+      ai_powered: { title: t('features.ai_powered.title'), subtitle: t('features.ai_powered.subtitle') },
+      character_maker: { title: t('features.character_maker.title'), subtitle: t('features.character_maker.subtitle') },
+      social_ready: { title: t('features.social_ready.title'), subtitle: t('features.social_ready.subtitle') },
     },
     buttons: {
       try_now: t('buttons.try_now'),
@@ -52,6 +52,7 @@ export default async function ImagenWrapper({ locale = 'en' }: ImagenWrapperProp
         }
       },
     },
+
     preview: {
       title: t('preview.title'),
       placeholder: t('preview.placeholder'),

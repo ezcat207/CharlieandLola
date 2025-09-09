@@ -148,29 +148,32 @@
     "badge": {
       "text": "Charlie and Lola AI Trend"
     },
+
     "title": {
-      "main": "Charlie & Lola",
-      "subtitle": "AI Style Magic"
-    },
-    "description": "Transform your photos into charming Charlie and Lola characters with our AI generator. Join the viral TikTok trend and create unique cartoon art with hand-drawn charm and flat colors.",
-    "features": {
-      "guaranteed": {
-        "title": "Authentic",
-        "subtitle": "Cartoon Style"
-      },
-      "no_lottery": {
-        "title": "Instant",
-        "subtitle": "Transformation"
-      },
-      "one_sentence": {
-        "title": "Easy",
-        "subtitle": "Photo to Art"
-      },
-      "instant": {
-        "title": "Viral",
-        "subtitle": "Trend Ready"
-      }
-    },
+  "main": "Charlie & Lola AI Character Maker",
+  "subtitle": "Viral TikTok Trend Generator"
+},
+
+   "description": "Create viral Charlie and Lola characters with our AI generator! Join the TikTok trend with ChatGPT-powered character maker. Transform photos into Lauren Child's iconic art style - perfect for social media trends and #charlieandlola content.",
+   "features": {
+  "trending": {
+    "title": "Viral TikTok",
+    "subtitle": "Trend Ready"
+  },
+  "ai_powered": {
+    "title": "Better Than ChatGPT",
+    "subtitle": "Advanced AI Generator"
+  },
+  "character_maker": {
+    "title": "Character",
+    "subtitle": "Creator Tool"
+  },
+  "social_ready": {
+    "title": "#CharlieAndLola",
+    "subtitle": "Social Media"
+  }
+},
+
     "buttons": {
       "try_now": "Try Charlie & Lola AI Now",
       "browse_gallery": "Browse Gallery",

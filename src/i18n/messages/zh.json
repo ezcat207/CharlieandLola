@@ -149,28 +149,29 @@
       "text": "查理罗拉AI潮流"
     },
     "title": {
-      "main": "查理和罗拉",
-      "subtitle": "AI风格魔法"
-    },
-    "description": "使用我们的AI生成器，将您的照片转换为迷人的查理和罗拉角色。加入TikTok热门潮流，创作具有手绘感和扁平色彩的独特卡通艺术。",
-    "features": {
-      "guaranteed": {
-        "title": "正宗",
-        "subtitle": "卡通风格"
-      },
-      "no_lottery": {
-        "title": "即时",
-        "subtitle": "变身"
-      },
-      "one_sentence": {
-        "title": "简单",
-        "subtitle": "照片转艺术"
-      },
-      "instant": {
-        "title": "热门",
-        "subtitle": "潮流就绪"
-      }
-    },
+  "main": "查理和罗拉AI角色生成器",
+  "subtitle": "爆款TikTok趋势生成器"
+},
+
+   "description": "使用我们的AI生成器创建爆款查理和罗拉角色！加入TikTok趋势，使用ChatGPT驱动的角色生成器。将照片转换为劳伦·柴尔德标志性的艺术风格——非常适合社交媒体趋势和#charlieandlola内容。",
+   "features": {
+  "trending": {
+    "title": "爆款TikTok",
+    "subtitle": "趋势就绪"
+  },
+  "ai_powered": {
+    "title": "优于ChatGPT",
+    "subtitle": "高级AI生成器"
+  },
+  "character_maker": {
+    "title": "角色",
+    "subtitle": "创作工具"
+  },
+  "social_ready": {
+    "title": "#查理和罗拉",
+    "subtitle": "社交媒体"
+  }
+},
     "buttons": {
       "try_now": "立即体验查理罗拉AI",
       "browse_gallery": "浏览画廊",
