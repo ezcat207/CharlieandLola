@@ -1,0 +1,535 @@
+<section class="module" id="module-6" style="background: var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">06</span>
+      <h1 class="module-title">Every Language, Every Screen</h1>
+      <p class="module-subtitle">Add <code>/zh</code> to the address bar and the entire app becomes Chinese — same buttons, same layout, same code. Not one component was duplicated to make that happen.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1: The audio guide -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Museum Audio Guide</h2>
+        <p>The museum gets built once. The paintings hang where they hang, the corridors run where they run. At the door you pick a language and get a handset — and from then on, every plaque you stand in front of is narrated in <em>your</em> language.</p>
+
+        <p>Nobody built a second museum for Mandarin speakers. That is the entire idea of this module, and it has three parts.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🏛️</div>
+            <h4 class="pattern-title">The Building</h4>
+            <p class="pattern-desc">The <strong>structure</strong> — components, layout, buttons, the shape of every page. Built once, shared by everyone.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🎧</div>
+            <h4 class="pattern-title">The Handset</h4>
+            <p class="pattern-desc">The <span class="term" data-definition="A locale is the language-and-region setting for a visitor — en for English, zh for Chinese. It decides not just words but also prices, dates and number formats.">locale</span>: which language you picked up at the door. In this app, it is the <code>/zh</code> in the address.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">📖</div>
+            <h4 class="pattern-title">The Narration</h4>
+            <p class="pattern-desc">The <strong>content</strong> — every word on the site, living in data files rather than inside the code.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Separate Structure From Content</strong>
+            <p>The moment text stops living inside your components and starts living in data files, you get translations, marketing experiments, and non-developers editing copy — all for free, all at once. It is the same principle as Module 2&apos;s &quot;the page is a template, the content is data&quot;, now applied to every word on the site. Retro-fitting this later, into an app where text is scattered across two hundred components, is a brutal and expensive job.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: The doorman -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Doorman</h2>
+        <p>One file runs before <em>every single page request</em> in this app. It looks at the address, works out which language you want, and routes you accordingly. It is twelve lines long, and it is the only reason <code>/zh/pricing</code> works at all.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">import</span> createMiddleware <span class="code-keyword">from</span> <span class="code-string">"next-intl/middleware"</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { routing } <span class="code-keyword">from</span> <span class="code-string">"./i18n/routing"</span>;</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">export default</span> <span class="code-function">createMiddleware</span>(routing);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">export const</span> config = {</span>
+<span class="code-line">  <span class="code-property">matcher</span>: [</span>
+<span class="code-line">    <span class="code-string">"/"</span>,</span>
+<span class="code-line">    <span class="code-string">"/(en|en-US|zh|zh-CN|zh-TW|zh-HK|zh-MO|ja|ko|ru|fr|de|ar|es|it)/:path*"</span>,</span>
+<span class="code-line">    <span class="code-string">"/((?!privacy-policy|terms-of-service|api/|_next|_vercel|.*\\..*).*)"</span>,</span>
+<span class="code-line">  ],</span>
+<span class="code-line">};</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Borrow a ready-made doorman from a library called next-intl, and the rules we want it to follow.</p>
+              <p class="tl">Make that doorman the thing that greets every visitor. That single line is the whole
+                <span class="term" data-definition="Middleware is code that runs in between a request arriving and the page that answers it — a checkpoint every visitor passes through. Language routing, authentication and redirects commonly live here.">middleware</span>.</p>
+              <p class="tl">Now describe which addresses the doorman should stand at.</p>
+              <p class="tl">The home page, for one.</p>
+              <p class="tl">And anything that starts with a language code. Notice this list is far longer than the two languages the app actually supports — the doorman <em>recognises</em> thirteen and the museum only narrates in two.</p>
+              <p class="tl">And everything else, <em>except</em> the legal pages, anything under <code>api/</code>, and files like images. That is a
+                <span class="term" data-definition="A regular expression is a compact notation for describing text patterns — match these addresses but not those. Famously unreadable, genuinely useful, and something you can safely ask an AI to write and explain.">regular expression</span>:
+                dense, unreadable, and doing real work.</p>
+              <p class="tl">API addresses are deliberately excluded — a program calling your app does not need a language prefix on its request.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>And the actual language list is even shorter and even plainer:</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export const</span> locales = [<span class="code-string">"en"</span>, <span class="code-string">"zh"</span>];</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">export const</span> localeNames: <span class="code-keyword">any</span> = {</span>
+<span class="code-line">  <span class="code-property">en</span>: <span class="code-string">"English"</span>,</span>
+<span class="code-line">  <span class="code-property">zh</span>: <span class="code-string">"中文"</span>,</span>
+<span class="code-line">};</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">export const</span> defaultLocale = <span class="code-string">"en"</span>;</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">export const</span> localePrefix = <span class="code-string">"as-needed"</span>;</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Two real languages. That is the whole list — adding a third starts here.</p>
+              <p class="tl">What to write in the language switcher menu for each one, in that language.</p>
+              <p class="tl">If we cannot tell what someone wants, assume English.</p>
+              <p class="tl">&quot;As needed&quot; is a small, real product decision: the default language gets the clean address (<code>/pricing</code>), and only other languages carry a
+                <span class="term" data-definition="A URL prefix is a segment added to the front of a web address path — the zh in /zh/pricing. It tells the server something about the request before the page is even chosen.">prefix</span>
+                (<code>/zh/pricing</code>).</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Watch a Chinese visitor and a German visitor go through the same door.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-6-1","label":"Someone in Shanghai asks for /zh/pricing."},
+          {"highlight":"flow-actor-6-2","label":"Before any page exists, the request passes the doorman. Every request does.","packet":true,"from":"actor-6-1","to":"actor-6-2"},
+          {"highlight":"flow-actor-6-2","label":"The doorman reads zh out of the address and notes it: this visitor is being narrated in Chinese."},
+          {"highlight":"flow-actor-6-3","label":"The pricing page component is asked to render. The SAME component English visitors get.","packet":true,"from":"actor-6-2","to":"actor-6-3"},
+          {"highlight":"flow-actor-6-4","label":"It goes and fetches two files: messages/zh.json for buttons and labels, pages/pricing/zh.json for the actual page content.","packet":true,"from":"actor-6-3","to":"actor-6-4"},
+          {"highlight":"flow-actor-6-1","label":"Back comes the same page, filled with Chinese text and prices in yuan. Zero components were duplicated.","packet":true,"from":"actor-6-4","to":"actor-6-1"},
+          {"highlight":"flow-actor-6-2","label":"Now someone in Berlin asks for /de/pricing. The doorman recognises de and waves them through."},
+          {"highlight":"flow-actor-6-4","label":"But there is no de.json to load. Instead of an error page, the loader quietly hands back English. Wrong language beats broken page."}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-6-1">
+              <div class="flow-actor-icon" style="background: var(--color-actor-2)">🌐</div>
+              <span>Browser</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-6-2">
+              <div class="flow-actor-icon" style="background: var(--color-accent)">🚪</div>
+              <span>Middleware</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-6-3">
+              <div class="flow-actor-icon" style="background: var(--color-actor-3)">📄</div>
+              <span>Page</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-6-4">
+              <div class="flow-actor-icon" style="background: var(--color-actor-4)">🗂️</div>
+              <span>Text Files</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet-6"></div>
+          <div class="flow-step-label" id="flow-label-6">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: Two kinds of text -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Two Kinds of Text, Two Different Homes</h2>
+        <p>Not all words are the same. This app keeps them in two separate places, and the distinction is worth getting right in any project you build.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🔘</div>
+            <h4 class="pattern-title">Interface Labels</h4>
+            <p class="pattern-desc">Buttons, error messages, form hints. Short, reused everywhere. Home: <code>i18n/messages/en.json</code> and <code>zh.json</code>.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">📰</div>
+            <h4 class="pattern-title">Page Content</h4>
+            <p class="pattern-desc">The entire marketing page, section by section. Home: <code>i18n/pages/landing/en.json</code> and <code>zh.json</code>.</p>
+          </div>
+        </div>
+
+        <p>The first kind looks like this — a
+          <span class="term" data-definition="JSON is a plain-text format for storing structured information as labels and values. It is the most common way programs exchange data, and it is readable by anyone: no programming needed to edit it.">JSON</span>
+          file of
+          <span class="term" data-definition="A key is the label you look something up by; the value is what you get back. sign_in is the key, Sign In is the value. Same key in every language file, different value.">keys and values</span>,
+          where the key is identical in both languages and only the value changes.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🇬🇧</div>
+            <h4 class="pattern-title">en.json</h4>
+            <p class="pattern-desc"><code>"sign_in": "Sign In"</code><br><code>"pricing": "Pricing"</code><br><code>"my_credits": "My Credits"</code></p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">🔑</div>
+            <h4 class="pattern-title">The Component</h4>
+            <p class="pattern-desc">Asks for the key, never the words:<br><code>t("sign_in")</code><br>One component. One line. Both languages.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🇨🇳</div>
+            <h4 class="pattern-title">zh.json</h4>
+            <p class="pattern-desc"><code>"sign_in": "登录"</code><br><code>"pricing": "价格"</code><br><code>"my_credits": "我的积分"</code></p>
+          </div>
+        </div>
+
+        <p>The second kind is the surprising one. The <em>entire</em> landing page — hero headline, features, testimonials, FAQ, all eight pricing plans — is a data file, with sections named <code>hero</code>, <code>introduce</code>, <code>benefit</code>, <code>usage</code>, <code>feature</code>, <code>stats</code>, <code>testimonial</code>, <code>faq</code>, <code>cta</code>, <code>footer</code>.</p>
+
+        <p>Module 2 showed the page component drawing each section only if the data for it exists. <strong>This is where that data comes from.</strong></p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export async function</span> <span class="code-function">getPage</span>(</span>
+<span class="code-line">  name: string,</span>
+<span class="code-line">  locale: string</span>
+<span class="code-line">): Promise&lt;LandingPage | PricingPage | ShowcasePage&gt; {</span>
+<span class="code-line">  <span class="code-keyword">try</span> {</span>
+<span class="code-line">    <span class="code-keyword">if</span> (locale === <span class="code-string">"zh-CN"</span>) {</span>
+<span class="code-line">      locale = <span class="code-string">"zh"</span>;</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">return await import</span>(</span>
+<span class="code-line">      <span class="code-string">`@/i18n/pages/${name}/${locale.toLowerCase()}.json`</span></span>
+<span class="code-line">    ).<span class="code-function">then</span>((module) =&gt; module.default);</span>
+<span class="code-line">  } <span class="code-keyword">catch</span> (error) {</span>
+<span class="code-line">    console.<span class="code-function">warn</span>(<span class="code-string">`Failed to load ${locale}.json, falling back to en.json`</span>);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">return await import</span>(<span class="code-string">`@/i18n/pages/${name}/en.json`</span>).<span class="code-function">then</span>(</span>
+<span class="code-line">      (module) =&gt; module.default</span>
+<span class="code-line">    );</span>
+<span class="code-line">  }</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Given a page name and a language, go and fetch that page&apos;s content.</p>
+              <p class="tl">Treat &quot;Chinese as spoken in mainland China&quot; as plain Chinese — one file serves both.</p>
+              <p class="tl">Build a file path out of the two pieces and load it. <code>landing</code> + <code>zh</code> becomes <code>pages/landing/zh.json</code>.</p>
+              <p class="tl">Hand back whatever was inside. That object <em>is</em> the marketing page — every headline, every feature, every price.</p>
+              <p class="tl">If loading failed for any reason at all, do not crash. Leave a note in the log so someone can find out why later.</p>
+              <p class="tl">Then load the English file instead and hand that back. The visitor gets a page in the wrong language rather than no page at all.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">✍️</div>
+          <div class="callout-content">
+            <strong class="callout-title">The Marketing Team Does Not Need You</strong>
+            <p>Rewriting the entire home page means editing a text file. No component is touched, no logic changes, nothing is redeployed differently. When you are designing a new project, ask for this on day one: <em>&quot;user-facing strings go in the translation files, not inline in components.&quot;</em> It is one sentence, and it saves weeks.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: The fallback chain -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">When There Is No Narration</h2>
+        <p>The same safety net protects the interface labels. Try to load the visitor&apos;s language; if anything at all goes wrong, quietly serve English.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">  <span class="code-keyword">try</span> {</span>
+<span class="code-line">    <span class="code-keyword">const</span> messages = (<span class="code-keyword">await import</span>(<span class="code-string">`./messages/${locale.toLowerCase()}.json`</span>))</span>
+<span class="code-line">      .default;</span>
+<span class="code-line">    <span class="code-keyword">return</span> {</span>
+<span class="code-line">      <span class="code-property">locale</span>: locale,</span>
+<span class="code-line">      <span class="code-property">messages</span>: messages,</span>
+<span class="code-line">    };</span>
+<span class="code-line">  } <span class="code-keyword">catch</span> (e) {</span>
+<span class="code-line">    <span class="code-keyword">return</span> {</span>
+<span class="code-line">      <span class="code-property">locale</span>: <span class="code-string">"en"</span>,</span>
+<span class="code-line">      <span class="code-property">messages</span>: (<span class="code-keyword">await import</span>(<span class="code-string">`./messages/en.json`</span>)).default,</span>
+<span class="code-line">    };</span>
+<span class="code-line">  }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Try to load the label file for whatever language this visitor asked for.</p>
+              <p class="tl">If that worked, hand back both the language and its words.</p>
+              <p class="tl">If it failed for <em>any</em> reason — no such file, a typo in the language code, a corrupted file — do not throw an error.</p>
+              <p class="tl">Say the language is English and hand back the English words instead. This is the
+                <span class="term" data-definition="A fallback is the safe alternative a program uses when its first choice is unavailable — a spare tyre. Good fallbacks are quiet and keep the thing usable.">fallback</span>,
+                and it is the same graceful degradation idea from last module wearing a different costume.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">🌏</div>
+          <div class="callout-content">
+            <strong class="callout-title">Localisation Is Adaptation, Not Translation</strong>
+            <p>The Chinese pricing file does not just carry Chinese words — it carries a separate <code>cn_amount</code>, priced for that market, and Chinese checkouts add WeChat Pay and Alipay as payment methods. Words, currency (<span class="term" data-definition="CNY is the international code for Chinese yuan, the way USD is the code for US dollars. Every currency has a three-letter code, and payment systems always use them.">CNY</span> rather than USD), date formats, payment methods, sometimes whole features. Translating the strings is the easy quarter of the job.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: Standard parts -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Built From Standard Parts</h2>
+        <p>The building itself is not hand-carved either. The interface comes in three layers, smallest to largest.</p>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong><span class="term" data-definition="Tailwind CSS is a styling approach where instead of writing style rules in a separate file, you attach lots of tiny pre-made class names directly to the element. Divisive among developers, extremely fast in practice.">Tailwind CSS</span> — the raw material</strong>
+              <p>Instead of writing <span class="term" data-definition="CSS is the language that controls how a web page looks — colours, spacing, fonts, layout. HTML says what is on the page; CSS says what it looks like.">style rules</span> in a separate file, you attach tiny
+                <span class="term" data-definition="A class name is a label attached to an element on a page so that styling can be applied to it. flex, rounded-md and gap-2 are each one small instruction.">class names</span>
+                directly to the element: <code>flex items-center gap-2 rounded-md</code>. The payoff is that there is never a mystery about which stylesheet a colour came from.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong><code>components/ui/</code> — 37 generic parts</strong>
+              <p>Button, card, dialog, tabs, tooltip, table. This is
+                <span class="term" data-definition="Shadcn UI is a collection of ready-made interface components you copy into your project rather than install. Because the code lives in your repo, you can edit any of it.">Shadcn UI</span>
+                — and crucially it is <em>not</em> an installed
+                <span class="term" data-definition="A component library is a package of ready-made interface pieces — buttons, menus, date pickers — that you install and use. Normally you cannot change how they work internally.">component library</span>.
+                The code was copied <em>into</em> the project, so any of it can be edited. You own the parts.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong><code>components/blocks/</code> — whole sections</strong>
+              <p><code>hero</code>, <code>pricing</code>, <code>faq</code>, <code>footer</code>, <code>showcase</code>. Each one assembled from the generic parts, and each one filled with text from the data files you just met.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>A button is not one button. It is a small menu of options, all defined in a single file.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">      <span class="code-property">variant</span>: {</span>
+<span class="code-line">        <span class="code-property">default</span>:</span>
+<span class="code-line">          <span class="code-string">"bg-primary text-primary-foreground shadow-xs hover:bg-primary/90"</span>,</span>
+<span class="code-line">        <span class="code-property">destructive</span>:</span>
+<span class="code-line">          <span class="code-string">"bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60"</span>,</span>
+<span class="code-line">        <span class="code-property">outline</span>:</span>
+<span class="code-line">          <span class="code-string">"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50"</span>,</span>
+<span class="code-line">        <span class="code-property">secondary</span>:</span>
+<span class="code-line">          <span class="code-string">"bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80"</span>,</span>
+<span class="code-line">        <span class="code-property">ghost</span>:</span>
+<span class="code-line">          <span class="code-string">"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50"</span>,</span>
+<span class="code-line">        <span class="code-property">link</span>: <span class="code-string">"text-primary underline-offset-4 hover:underline"</span>,</span>
+<span class="code-line">      },</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Here is the complete list of looks a button in this app can have. Each one is called a
+                <span class="term" data-definition="A variant is one named version of a reusable component — a primary button, a danger button, a small button. Choosing a variant is how you pick a look without inventing a new one.">variant</span>.</p>
+              <p class="tl"><strong>default</strong> — the solid brand-coloured button, slightly dimmer when your mouse is over it.</p>
+              <p class="tl"><strong>destructive</strong> — red, for the buttons that delete things. Long, because it also describes how it looks in
+                <span class="term" data-definition="Dark mode is a second colour scheme with a dark background, which many people prefer at night. Well-built apps define both and switch automatically.">dark mode</span>
+                and when keyboard-focused.</p>
+              <p class="tl"><strong>outline</strong> — a border and no fill. <strong>secondary</strong> — quieter than default. <strong>ghost</strong> — invisible until you hover.</p>
+              <p class="tl"><strong>link</strong> — looks like a link, behaves like a button.</p>
+              <p class="tl">Every button anywhere on the site is one of these six. That is what people mean by a
+                <span class="term" data-definition="A design system is an agreed set of reusable parts and rules — the approved buttons, colours, spacings — so that a product looks consistent without anyone having to police it.">design system</span>,
+                in practice.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">variant="destructive"</code>
+            <span class="badge-desc">Every delete button on the site, changed in one place, forever</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">size="sm" | "lg" | "icon"</code>
+            <span class="badge-desc">Three sizes plus the default — so nobody invents a fourth by accident</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: One palette + quiz -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">One Palette, One File</h2>
+        <p>Every colour in the app is defined once, in <code>theme.css</code>, and named after the cartoon it came from.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">  <span class="code-property">--cl-yellow</span>: <span class="code-function">oklch</span>(<span class="code-number">0.9 0.15 85</span>);</span>
+<span class="code-line">  <span class="code-property">--cl-orange</span>: <span class="code-function">oklch</span>(<span class="code-number">0.8 0.15 60</span>);</span>
+<span class="code-line">  <span class="code-property">--cl-blue</span>: <span class="code-function">oklch</span>(<span class="code-number">0.8 0.08 200</span>);</span>
+<span class="code-line">  <span class="code-property">--cl-pink</span>: <span class="code-function">oklch</span>(<span class="code-number">0.8 0.1 340</span>);</span>
+<span class="code-line">  <span class="code-property">--cl-green</span>: <span class="code-function">oklch</span>(<span class="code-number">0.85 0.15 140</span>);</span>
+<span class="code-line">  <span class="code-property">--cl-red</span>: <span class="code-function">oklch</span>(<span class="code-number">0.7 0.2 25</span>);</span>
+<span class="code-line">  <span class="code-property">--cl-brown</span>: <span class="code-function">oklch</span>(<span class="code-number">0.6 0.1 60</span>);</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Seven named colours, each stored in a
+                <span class="term" data-definition="A CSS custom property (also called a CSS variable) is a named colour or size defined once and referred to everywhere else. Change the definition and everything using it changes at once.">CSS variable</span>
+                — a name you define once and use everywhere.</p>
+              <p class="tl">The names are the point: <code>--cl-yellow</code>, not <code>#F5D442</code>. Nothing in this app hardcodes a
+                <span class="term" data-definition="A hex code is the six-character way of writing a colour, like #D94F30. Precise, universal, and completely meaningless to read.">hex code</span>.</p>
+              <p class="tl"><span class="term" data-definition="oklch is a newer way of writing colours as lightness, colourfulness and hue. Unlike hex codes, the numbers mean something a human can reason about — raise the first number and the colour genuinely looks lighter.">oklch</span>
+                is a newer colour notation: lightness, then colourfulness, then hue. Raise the first number and the colour actually looks lighter — which hex codes never let you do.</p>
+              <p class="tl">Dark mode is this exact same list of names, redefined with different values. Nothing else in the app has to know it happened.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🎨</div>
+          <div class="callout-content">
+            <strong class="callout-title">Why &quot;Make the Whole Site More Orange&quot; Is a One-Line Change</strong>
+            <p>Because there is exactly one place a colour is decided, and thirty-seven components that only ever refer to it by name. When you brief an AI assistant on styling, this is the shape to insist on:
+              <span class="term" data-definition="To hardcode a value is to write it directly wherever it is used, instead of defining it once and referring to it. Hardcoded values are the reason a simple change turns into finding and editing 200 files.">hardcoded</span>
+              colours scattered through components are how a five-minute rebrand becomes a two-week one.</p>
+          </div>
+        </div>
+
+        <h2 class="screen-heading" style="margin-top: var(--space-12)">Check Your Understanding</h2>
+        <p>Four scenarios about who has to do the work, and where the work lives.</p>
+
+        <div class="quiz-container" id="quiz-module6">
+
+          <div class="quiz-question-block"
+               data-correct="q1-c"
+               data-explanation-right="Exactly — the headline is a text field in a JSON data file. Anyone who can edit a text file can change it, in both languages, without touching a single component. That is the whole payoff of separating structure from content."
+               data-explanation-wrong="Have another look at where page content lives in this app. It is not written inside the component, and it is not in the database — it is a plain data file, one per language.">
+            <h3 class="quiz-question">The marketing team wants to change the headline on the home page. Do they need a developer?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q1-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Yes — the headline is written inside the hero component</span>
+              </button>
+              <button class="quiz-option" data-value="q1-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Yes — it is a row in the database and needs a query to change</span>
+              </button>
+              <button class="quiz-option" data-value="q1-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>No — it is a text field in a JSON data file, one per language</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q2-b"
+               data-explanation-right="Exactly — add fr to the locale list, add a name for it in the switcher, and write the JSON files. Not one component gets duplicated, because no component contains any words. Whether the translation is any good is a separate and much harder problem."
+               data-explanation-wrong="Think about what a component actually contains in this app. It asks for keys and receives words. So what would you have to change for a new language, and what could stay completely untouched?">
+            <h3 class="quiz-question">You add a French version. What do you have to create, and what do you <em>not</em> have to touch?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q2-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A French copy of every page component, plus the translation files</span>
+              </button>
+              <button class="quiz-option" data-value="q2-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add <code>fr</code> to the locale list and add the JSON files — no component is duplicated</span>
+              </button>
+              <button class="quiz-option" data-value="q2-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A whole second deployment of the app on a French domain</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q3-a"
+               data-explanation-right="Exactly — they get English. The loader tries the German file, fails, logs a warning for whoever is watching, and hands back English. A visitor seeing a page in the wrong language can still use your product; a visitor seeing a crash cannot."
+               data-explanation-wrong="Look again at the try/catch in the loader. Failing to find a file is treated as a normal, expected event with a planned answer — not as an emergency.">
+            <h3 class="quiz-question">A visitor in Germany arrives and the app has no German. What do they see?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q3-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The site in English — the fallback, with a warning quietly written to the log</span>
+              </button>
+              <button class="quiz-option" data-value="q3-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>An error page saying the language is unsupported</span>
+              </button>
+              <button class="quiz-option" data-value="q3-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A blank page with the layout but no text in it</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="scenario-block">
+            <div class="scenario-context">
+              <span class="scenario-label">Scenario</span>
+              <p>You ask an AI assistant to add a new &quot;Danger&quot; button style for a page that deletes account data. It offers to write the styling directly onto the button on that page.</p>
+            </div>
+            <div class="quiz-question-block"
+                 data-correct="q4-b"
+                 data-explanation-right="Exactly — it belongs as a new variant in the one button file. Then every Danger button on the site is identical, someone can change all of them at once later, and nobody has to guess which shade of red is the official one. Styling written onto one page is how design systems quietly rot."
+                 data-explanation-wrong="Think about what happens six months later when there are nine Danger buttons across the app and someone wants to change the red. Where would you want that colour to have been defined?">
+              <h3 class="quiz-question">Where should it go, and why does that matter?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="q4-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Directly on that page — it is only needed once</span>
+                </button>
+                <button class="quiz-option" data-value="q4-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>As a new variant in the one button file, so every Danger button stays identical and can be changed in one place</span>
+                </button>
+                <button class="quiz-option" data-value="q4-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>In the translation files, next to the button&apos;s label</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module6')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module6')">Try Again</button>
+        </div>
+
+        <p style="margin-top: var(--space-10)">Six modules of <em>how it works</em>. The last one is <em>what to do when it does not</em> — and how any of this gets from a laptop onto the real internet. That is <strong>When It Breaks</strong>.</p>
+      </section>
+
+    </div>
+  </div>
+</section>

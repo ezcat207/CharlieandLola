@@ -1,0 +1,502 @@
+<section class="module" id="module-1" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">The Journey of One Photo</h1>
+      <p class="module-subtitle">You drop a photo onto the box and click Generate. For four seconds, nothing visible happens. Here is everything that happens in those four seconds.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- ══════════════ SCREEN 1 ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">What this thing actually does</h2>
+
+        <p>Charlie &amp; Lola AI is a website with one job. You drag in a photo of yourself, or your dog, or a toy, and a few seconds later you get the same subject redrawn in the scratchy, flat-colour style of the British children's cartoon <em>Charlie and Lola</em>.</p>
+
+        <p>Then you download it, or copy a link to share it. That is the entire product.</p>
+
+        <div class="step-cards stagger-children">
+          <div class="step-card animate-in">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>You drop in a photo</strong>
+              <p>A dashed box on the page accepts up to five images at once</p>
+            </div>
+          </div>
+          <div class="step-card animate-in">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>You click Generate</strong>
+              <p>A spinner appears. Roughly four seconds pass.</p>
+            </div>
+          </div>
+          <div class="step-card animate-in">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>A cartoon version appears</strong>
+              <p>Same subject, redrawn. Download it or copy the share link.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Everything in this course is about the machinery behind that one button — and about the visual building blocks the interface is made from.</p>
+
+        <h3 class="screen-heading">What it is built out of</h3>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">🧱</div>
+            <div>
+              <strong>Next.js 15 + React</strong>
+              <p><span class="term" data-definition="Next.js is a framework — a big starter kit of pre-written code that handles the boring parts of building a website, like page addresses and talking to a server. You would say to an AI assistant: this is a Next.js app.">Next.js</span> is the website <span class="term" data-definition="A framework is a pre-built skeleton for an app. It already knows how to do the common jobs so you only write the parts unique to your product.">framework</span>; <span class="term" data-definition="React is the library that draws the screen. You describe what the page should look like for a given set of data, and React handles updating the actual pixels when that data changes.">React</span> draws what you see on screen.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-3)">🎨</div>
+            <div>
+              <strong>Tailwind CSS + Shadcn UI</strong>
+              <p><span class="term" data-definition="Tailwind CSS is a styling system where you set colours, spacing and sizes by adding short keyword labels directly onto an element, instead of writing separate style files.">Tailwind CSS</span> handles the looks; <span class="term" data-definition="Shadcn UI is a collection of ready-made interface pieces — buttons, sliders, dialogs — that you copy into your own project and then are free to edit.">Shadcn UI</span> supplies ready-made buttons, sliders and dialogs.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-4)">✏️</div>
+            <div>
+              <strong>Google Gemini</strong>
+              <p>The <span class="term" data-definition="A model is a trained AI system you send input to and get output back from. Gemini is Google&apos;s family of models; this app uses one that can look at a picture and draw a new one.">model</span> that does the actual drawing. It lives on Google's computers, not in this app.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>This course has two halves: the <strong>generator engine</strong> (how a photo becomes a cartoon) and the <strong>interface</strong> it lives inside (how the page is assembled from reusable pieces). This module is the engine, end to end.</p>
+      </section>
+
+      <!-- ══════════════ SCREEN 2 ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The seven stations</h2>
+
+        <p>Think of a one-hour photo lab. You hand your film over the counter, it disappears behind the wall into machines you never see, and twenty minutes later prints come back.</p>
+
+        <p>You have no idea what those machines do. But there <em>is</em> a fixed sequence back there, and every ruined photo has one specific station where it went wrong.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">The key idea of this whole module</strong>
+            <p>A generation is not one magical event. It is a relay of seven hand-offs between separate pieces of software — three of which are not on your computer at all.</p>
+          </div>
+        </div>
+
+        <p>Press <strong>Next Step</strong> and walk behind the counter. Five machines, seven hand-offs.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-1","label":"You drop a photo onto the dashed box. The browser reads the file into one very long text string — a data URL. Nothing has left your computer yet."},
+          {"highlight":"flow-actor-2","label":"You click Generate. ImagenClient packs the photo plus your settings into a FormData parcel.","packet":true,"from":"actor-1","to":"actor-2"},
+          {"highlight":"flow-actor-3","label":"The parcel is POSTed to /api/generate-cyberpunk — the server that belongs to this app.","packet":true,"from":"actor-2","to":"actor-3"},
+          {"highlight":"flow-actor-3","label":"The server picks an unused Gemini API key from its pool, converts the photo to base64, and glues it to a written style instruction.","packet":true,"from":"actor-3","to":"actor-4"},
+          {"highlight":"flow-actor-4","label":"Gemini reads the picture and the instruction, then sends back a NEW picture — encoded as text.","packet":true,"from":"actor-4","to":"actor-3"},
+          {"highlight":"flow-actor-5","label":"The server uploads that picture to Cloudflare R2 storage and gets back a public web address.","packet":true,"from":"actor-3","to":"actor-5"},
+          {"highlight":"flow-actor-1","label":"The address travels back to the browser, lands in setGeneratedImage(...), and React repaints the right-hand panel.","packet":true,"from":"actor-3","to":"actor-1"}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-1">
+              <div class="flow-actor-icon">🖱️</div>
+              <span>You<br>(the browser)</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-2">
+              <div class="flow-actor-icon">📦</div>
+              <span>ImagenClient<br>(page code)</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-3">
+              <div class="flow-actor-icon">⚙️</div>
+              <span>/api/generate-<br>cyberpunk</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4">
+              <div class="flow-actor-icon">✏️</div>
+              <span>Google<br>Gemini</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-5">
+              <div class="flow-actor-icon">🗄️</div>
+              <span>Cloudflare R2<br>(storage)</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet"></div>
+
+          <div class="flow-step-label" id="flow-label">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <p>Two of those five machines belong to other companies, reached over an <span class="term" data-definition="An API is the agreed list of requests one program is willing to accept from another — like a menu. Your server orders from Google&apos;s menu; your browser orders from your server&apos;s menu.">API</span>. Knowing the seven stations means that when something breaks, you can name the station instead of saying "the AI is broken."</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">the AI is broken</code>
+            <span class="badge-desc">What you get back: a shotgun of guesses from your AI coding assistant</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">the POST to /api/generate-cyberpunk returns fine but the preview stays empty</code>
+            <span class="badge-desc">What you get back: a fix</span>
+          </div>
+        </div>
+
+        <p>That second sentence is the actual skill this module teaches. Let us earn it, station by station.</p>
+      </section>
+
+      <!-- ══════════════ SCREEN 3 ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Stations 1–2: the photo never leaves the page (yet)</h2>
+
+        <p>Here is the surprise. When you drop a photo on the box and the thumbnail appears instantly, <strong>nothing has been sent anywhere</strong>. Your film is still sitting on your side of the counter.</p>
+
+        <p>The <span class="term" data-definition="The browser is the program you are reading this in — Chrome, Safari, Firefox. It runs on your own machine and can only see what the page gives it.">browser</span> reads the file off your disk and turns it into text that the page can display immediately. That is stations 1 and 2, and they are entirely local.</p>
+
+        <div class="step-cards stagger-children">
+          <div class="step-card animate-in">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>The file lands in the box</strong>
+              <p>Drag-and-drop, or the file picker — either way the browser hands over a File</p>
+            </div>
+          </div>
+          <div class="step-card animate-in">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>FileReader converts it to text</strong>
+              <p>The picture becomes one enormous string of letters and numbers</p>
+            </div>
+          </div>
+          <div class="step-card animate-in">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>The thumbnail appears</strong>
+              <p>That string can be pasted straight into an image tag, so the preview is instant</p>
+            </div>
+          </div>
+        </div>
+
+        <p>This is the <span class="term" data-definition="A function is a named chunk of code you can run on demand — like a recipe card. Point at it by name and it does its steps. Here, handleFileUpload runs every time a file arrives.">function</span> that does it, from the real file. Read the code on the left; the plain English on the right walks the same path.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">src/components/blocks/imagen-wrapper/imagen-client.tsx</span>
+            <pre><code>  <span class="code-keyword">const</span> <span class="code-function">handleFileUpload</span> = (file: File) => {
+    <span class="code-keyword">if</span> (uploadedImages.length >= <span class="code-number">5</span>) {
+      toast.<span class="code-function">error</span>(t.upload.max_images_error);
+      <span class="code-keyword">return</span>;
+    }
+
+    <span class="code-keyword">const</span> reader = <span class="code-keyword">new</span> <span class="code-function">FileReader</span>();
+    reader.onload = (e) => {
+      <span class="code-keyword">const</span> imageData = e.target?.result <span class="code-keyword">as</span> <span class="code-keyword">string</span>;
+      <span class="code-function">setUploadedImages</span>(prev => [...prev, imageData]);
+      <span class="code-function">setGeneratedImage</span>(<span class="code-keyword">null</span>);
+    };
+    reader.<span class="code-function">readAsDataURL</span>(file);
+  };</code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">Plain English</span>
+            <div class="translation-lines">
+              <p class="tl">Whenever a file arrives, run these steps on it.</p>
+              <p class="tl">First, a bouncer check: if five pictures are already loaded, show a polite error and stop right here.</p>
+              <p class="tl">Otherwise, hire a FileReader — the browser's built-in tool for turning a file into something the page can use.</p>
+              <p class="tl">Reading takes a moment, so leave instructions for when it finishes: "when you're done, do this."</p>
+              <p class="tl">The finished result is a long text string. Grab it.</p>
+              <p class="tl">Add that string to the list of uploaded images, keeping the ones already there.</p>
+              <p class="tl">Clear any previous cartoon result, so the old output does not sit next to a new input.</p>
+              <p class="tl">And finally — the line that actually starts the work — read the file, as a data URL.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Two things in there are worth knowing by name.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">📄</div>
+            <h4 class="pattern-title">data URL</h4>
+            <p class="pattern-desc">A <span class="term" data-definition="A data URL is a whole file — a picture, a sound — written out as one long line of text starting with data:image/png;base64,... It can be pasted anywhere a web address goes, and needs no server.">data URL</span> is the entire picture rewritten as text. It starts <code class="badge-code">data:image/png;base64,</code> and runs for thousands of characters.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🧠</div>
+            <h4 class="pattern-title">state</h4>
+            <p class="pattern-desc"><code class="badge-code">setUploadedImages</code> updates the <span class="term" data-definition="A component is one reusable chunk of interface — a button, an upload box, a whole panel — with its own code and its own memory. Pages are built by nesting components inside each other.">component</span>'s <span class="term" data-definition="State is a component&apos;s memory — the current values it is holding, like which images are loaded. Change the state and React automatically redraws the parts of the screen that depend on it.">state</span>. Change state, and React repaints the screen for you.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">✨</div>
+          <div class="callout-content">
+            <strong class="callout-title">Aha: an image is just text if you squint</strong>
+            <p><span class="term" data-definition="Base64 is a way of rewriting any file using only ordinary letters, digits and a couple of symbols. Nothing is lost — it just gets about a third longer — so files can travel down pipes built for text.">Base64</span> and data URLs mean the exact same picture can travel as a string of letters through channels that only carry text. That is why an AI service can hand a picture back to you over a plain text connection.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 4 ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Station 3: packing the parcel</h2>
+
+        <p>You click Generate. Now the film goes over the counter — and this is the moment the photo leaves your computer.</p>
+
+        <p>The page's code gathers the <span class="term" data-definition="An upload is the act of sending a file from your own machine to a server. Until that moment, the file is only ever on your side.">uploaded</span> images and every setting into one parcel, then hands it to the app's own <span class="term" data-definition="A server is a computer that belongs to the app, running somewhere in a data centre, that your browser sends requests to. It can hold secrets your browser never sees.">server</span>.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">imagen-client.tsx · generateImage()</span>
+            <pre><code>      <span class="code-keyword">const</span> formData = <span class="code-keyword">new</span> <span class="code-function">FormData</span>();
+
+      formData.<span class="code-function">append</span>(<span class="code-string">'mode'</span>, <span class="code-string">'image2image'</span>);
+      formData.<span class="code-function">append</span>(<span class="code-string">'style'</span>, <span class="code-string">'charlie-lola'</span>); <span class="code-comment">// Fixed style for Charlie and Lola</span>
+      formData.<span class="code-function">append</span>(<span class="code-string">'aspectRatio'</span>, aspectRatio);
+      formData.<span class="code-function">append</span>(<span class="code-string">'outputFormat'</span>, outputFormat);
+      formData.<span class="code-function">append</span>(<span class="code-string">'model'</span>, <span class="code-string">'standard'</span>); <span class="code-comment">// Fixed model</span>
+
+      <span class="code-keyword">if</span> (customPrompt.<span class="code-function">trim</span>()) {
+        formData.<span class="code-function">append</span>(<span class="code-string">'customPrompt'</span>, customPrompt);
+      }
+
+      <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt; uploadedImages.length; i++) {
+        <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(uploadedImages[i]);
+        <span class="code-keyword">const</span> blob = <span class="code-keyword">await</span> response.<span class="code-function">blob</span>();
+        formData.<span class="code-function">append</span>(<span class="code-string">`image_${i}`</span>, blob);
+      }
+
+      formData.<span class="code-function">append</span>(<span class="code-string">'imageCount'</span>, uploadedImages.length.<span class="code-function">toString</span>());
+
+      <span class="code-keyword">const</span> apiResponse = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'/api/generate-cyberpunk'</span>, {
+        <span class="code-property">method</span>: <span class="code-string">'POST'</span>,
+        <span class="code-property">body</span>: formData,
+      });</code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">Plain English</span>
+            <div class="translation-lines">
+              <p class="tl">Get an empty parcel. <span class="term" data-definition="FormData is a container for sending a mixed bag of things to a server in one go — text settings and real files side by side. It is the same machinery a normal web form uses when you attach a file.">FormData</span> can hold text labels and real files side by side.</p>
+              <p class="tl">Label it: we are turning an image into another image, not writing one from scratch.</p>
+              <p class="tl">Hard-code the style to charlie-lola. This app only makes one look, so this is never a choice the visitor makes.</p>
+              <p class="tl">Attach the shape you picked (square, portrait) and the file type you want back.</p>
+              <p class="tl">Hard-code the quality tier too — another decision the app makes for you.</p>
+              <p class="tl">If you typed anything into the extra-instructions box, and it is not just blank spaces, include it.</p>
+              <p class="tl">Now for the pictures. Walk through the uploaded ones, one at a time.</p>
+              <p class="tl">Remember each one is currently a long text string. Read that string back...</p>
+              <p class="tl">...and turn it into a <span class="term" data-definition="A blob is a raw lump of file data — the actual bytes of a picture — as opposed to a description of it. Servers want the bytes.">blob</span>: the real bytes of the file, rather than the text version.</p>
+              <p class="tl">Drop it into the parcel under a numbered name: image_0, image_1, and so on.</p>
+              <p class="tl">Note down how many pictures are in there, so the server does not have to guess.</p>
+              <p class="tl">Then hand the parcel over the counter — to <code class="badge-code">/api/generate-cyberpunk</code>, the app's own <span class="term" data-definition="An endpoint is one specific address on a server that does one specific job. /api/generate-cyberpunk is the address for &quot;make me a picture&quot;.">endpoint</span>.</p>
+              <p class="tl"><span class="term" data-definition="POST means &quot;here is some data, please do something with it&quot;, as opposed to GET which means &quot;please send me something&quot;. Uploads are always POST.">POST</span> means we are sending something, not just asking for something.</p>
+              <p class="tl">And the parcel itself is the body of the request.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Notice what is in the parcel: five text settings, then the images themselves. One container, two very different kinds of cargo.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">mode</code>
+            <span class="badge-desc">image2image — start from a picture, do not invent one from words alone</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">style</code>
+            <span class="badge-desc">Always charlie-lola. Hard-coded, not a setting the visitor can change</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">aspectRatio</code>
+            <span class="badge-desc">The shape of the result — square, portrait, landscape</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">outputFormat</code>
+            <span class="badge-desc">Which kind of image file you get back</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">customPrompt</code>
+            <span class="badge-desc">Optional extra wording from you — only included if you actually typed something</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">image_0 … image_4</code>
+            <span class="badge-desc">The pictures, as real file data</span>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">😅</div>
+          <div class="callout-content">
+            <strong class="callout-title">Yes, it says "cyberpunk"</strong>
+            <p>The <span class="term" data-definition="A route is a file on the server that handles requests to one address. In this app, src/app/api/generate-cyberpunk/route.ts is the file behind /api/generate-cyberpunk.">route</span> is called <code class="badge-code">/api/generate-cyberpunk</code> even though the app makes children's-book art. It is a leftover name from the template this app was built from. Module 5 takes stale naming seriously — for now, just enjoy it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 5 ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Stations 6–7: the picture comes back as text</h2>
+
+        <p>Behind the wall, Gemini has drawn something. It cannot post you a photograph down a wire, so it sends the picture the only way a text connection allows: as base64.</p>
+
+        <p>The server gives it a name and, if all else fails, wraps it straight back up as a data URL.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">src/app/api/generate-cyberpunk/route.ts</span>
+            <pre><code>    <span class="code-comment">// Generate filename and store the image</span>
+    <span class="code-keyword">const</span> batch = <span class="code-function">getUuid</span>();
+    <span class="code-keyword">const</span> fileExtension = generatedImageMimeType.<span class="code-function">split</span>(<span class="code-string">'/'</span>)[<span class="code-number">1</span>];
+    <span class="code-keyword">const</span> filename = <span class="code-string">`charlie-lola-${batch}.${fileExtension}`</span>;
+
+    <span class="code-keyword">let</span> finalImageUrl = <span class="code-string">`data:${generatedImageMimeType};base64,${generatedImageData}`</span>;</code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">Plain English</span>
+            <div class="translation-lines">
+              <p class="tl">A note-to-self in the code, for whoever reads it next.</p>
+              <p class="tl">Mint a <span class="term" data-definition="A UUID is a long random ID like 3f2a-9c1b-… that is effectively guaranteed never to repeat. Handy when you need a unique filename and nobody is keeping a list.">unique ID</span> so this result gets a filename nobody else will ever collide with.</p>
+              <p class="tl">Gemini told us the picture is, say, image/png. Chop that in half and keep the second bit: png. That is the <span class="term" data-definition="A MIME type is a short label that says what kind of file something is — image/png, image/jpeg, application/json. Servers use it to know how to treat the data.">MIME type</span> becoming a file extension.</p>
+              <p class="tl">Glue them together: charlie-lola-3f2a9c1b.png.</p>
+              <p class="tl">And build a fallback address — the whole picture as a data URL — so there is always something to show, even before it reaches <span class="term" data-definition="A storage bucket is a folder in the cloud with a public web address. Cloudflare R2 is one such service — upload a file, get back a link anyone can open.">cloud storage</span>.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Whatever address wins — the storage link or the data URL — it travels back to the browser wrapped in <span class="term" data-definition="JSON is a plain-text way of writing structured data: labels and values in curly brackets. It is how a server and a browser most commonly talk.">JSON</span>. And then station 7 is four lines long.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">imagen-client.tsx · back in the browser</span>
+            <pre><code>      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> apiResponse.<span class="code-function">json</span>();
+
+      <span class="code-keyword">if</span> (result.code === <span class="code-number">0</span> &amp;&amp; result.data?.imageUrl) {
+        <span class="code-function">setGeneratedImage</span>(result.data.imageUrl);
+</code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">Plain English</span>
+            <div class="translation-lines">
+              <p class="tl">Unwrap the <span class="term" data-definition="A response is what a server sends back after you ask it something: a status, plus usually some data. Getting a response does not by itself mean the answer was a good one.">response</span> from the server and read what is inside.</p>
+              <p class="tl">Two conditions, both of which must hold: the app's own status code says all-clear (zero means fine here), AND there is genuinely an image address in the reply.</p>
+              <p class="tl">Only then, put that address into state — and React repaints the right-hand panel with your cartoon.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Worth pausing on: the server can reply perfectly well and still be reporting a failure <em>inside</em> the message. "The request succeeded" and "the image appeared" are two separate claims.</p>
+
+        <h3 class="screen-heading">Name the station</h3>
+
+        <p>Three situations. In each one, work out which station is involved before you pick — that is the whole exercise.</p>
+
+        <div class="quiz-container" id="quiz-module1">
+
+          <div class="quiz-question-block"
+               data-correct="local-only"
+               data-explanation-right="Exactly. FileReader runs entirely inside the browser, on your own machine. Stations 1 and 2 never touch the internet — which is why the thumbnail is instant and works offline. The photo only crosses the counter at station 3."
+               data-explanation-wrong="Not quite — think about where the work happened. The thumbnail comes from FileReader turning the file into a data URL, and that all happens inside the browser on the visitor&apos;s own machine. No wifi needed. Nothing crosses the counter until the Generate click at station 3.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p>Someone tells you: "I dropped my photo in and the thumbnail appeared instantly — and my wifi was off at the time." Is that possible, and what does it tell you?</p>
+              </div>
+            </div>
+            <h3 class="quiz-question">Which stations had already run?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="local-only" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Only 1 and 2 — reading the file into a data URL is entirely local, so it works with no connection at all</span>
+              </button>
+              <button class="quiz-option" data-value="through-server" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>1 through 3 — the thumbnail is proof the server received the upload and sent a preview back</span>
+              </button>
+              <button class="quiz-option" data-value="impossible" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>None — a thumbnail cannot appear without a connection, so they must be misremembering</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="response-handling"
+               data-explanation-right="Right. The parcel went out and came back with an address in it, so stations 3 through 6 all did their jobs. What is left is station 7 — the check on result.code and the handing-off to setGeneratedImage. Naming that narrows the search from a whole app to a few lines."
+               data-explanation-wrong="Have another think about what the successful response proves. If the reply already contains an imageUrl, then the parcel arrived, Gemini drew something, and storage handed back an address — stations 3 to 6 are all fine. The only station left is the browser deciding what to do with that reply.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p>The preview panel stays stubbornly empty. But you look at the browser's <span class="term" data-definition="The network tab is a built-in browser panel that lists every request the page made and what came back. It is the single most useful place to look when something will not load.">network tab</span> and the POST to <code class="badge-code">/api/generate-cyberpunk</code> came back successfully, with an <code class="badge-code">imageUrl</code> right there in the reply.</p>
+              </div>
+            </div>
+            <h3 class="quiz-question">Where do you look first?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="gemini" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Google Gemini — the model probably returned something malformed</span>
+              </button>
+              <button class="quiz-option" data-value="response-handling" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Station 7 — how the browser handles the reply, starting with the <code class="badge-code">result.code === 0</code> check</span>
+              </button>
+              <button class="quiz-option" data-value="storage" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Cloudflare R2 — the file never really made it into storage</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="server-and-gemini"
+               data-explanation-right="Yes. The upload side already handles up to five images, and the panel already knows how to show a result. The real change is on the server: calling Gemini more than once and returning several addresses instead of one — which then makes the results panel plural."
+               data-explanation-wrong="Look at what already exists before assuming everything must change. handleFileUpload already accepts up to five images, so the drop box is not the bottleneck. The station that has to genuinely change shape is the one that talks to Gemini and decides what comes back.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p>You want to add a feature: "generate three variations at once." You are about to describe it to your AI coding assistant and want to point it at the right place.</p>
+              </div>
+            </div>
+            <h3 class="quiz-question">Which station's shape changes most?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="upload-ui" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The upload box — it would need to accept multiple files for the first time</span>
+              </button>
+              <button class="quiz-option" data-value="server-and-gemini" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The server route and its call to Gemini — it has to ask for several pictures and return several addresses</span>
+              </button>
+              <button class="quiz-option" data-value="filereader" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>FileReader — it would need to read each file three separate times</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module1')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module1')">Try Again</button>
+        </div>
+
+        <h3 class="screen-heading">Next: the line that station 3 crossed</h3>
+
+        <p>Look back at the seven stations. Stations 1 and 2 ran on your machine. Stations 4, 5 and 6 ran on machines owned by Google and Cloudflare.</p>
+
+        <p>Somewhere in the middle, station 3 crossed a line — and one of the things that stayed on the far side of it was the <span class="term" data-definition="An API key is a secret password that identifies your app to an outside service like Google. Anyone holding it can spend your money, which is why it must never reach a visitor&apos;s browser.">API key</span>.</p>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🚪</div>
+          <div class="callout-content">
+            <strong class="callout-title">Coming up in Module 2 — Front of House, Backstage</strong>
+            <p>Which of these stations run in the visitor's browser, which run on the company's server, and why the API key can only ever live on one side. That line is the single most important thing to understand about this app.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>

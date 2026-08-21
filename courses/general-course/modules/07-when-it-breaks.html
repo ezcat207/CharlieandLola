@@ -1,0 +1,715 @@
+<section class="module" id="module-7" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">07</span>
+      <h1 class="module-title">When It Breaks</h1>
+      <p class="module-subtitle">Six modules of how it works. Here is the part nobody writes down: what to do at 11pm when a user emails &quot;it&apos;s broken&quot; and you have no idea where to start.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1: The flight recorder -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Nobody Guesses in Aviation</h2>
+        <p>When an aircraft has a bad day, investigators do not sit in a room theorising. They pull the flight recorder and read what the aircraft was actually doing, second by second, until reality stops matching what everyone assumed.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">You Do Not Debug by Thinking Harder</strong>
+            <p>You debug by <em>getting more instrument readings</em>. Every hour lost to a bug is usually an hour spent theorising instead of looking. <span class="term" data-definition="Debugging is the work of finding out why software is doing something other than what you expected — and it is mostly investigation, not typing.">Debugging</span> is closer to reading a black box recorder than to having a brilliant idea.</p>
+          </div>
+        </div>
+
+        <p>Here is the shape of the whole thing. You already know the route a request takes: <strong>Browser → Server → outside service → Database → back.</strong> A bug is simply the first point on that route where reality stopped matching expectation.</p>
+
+        <p>Every observation you make cuts the remaining search space roughly in half. Engineers call that a
+          <span class="term" data-definition="A binary search is a way of finding something fast by halving the search space each time — like finding a word in a dictionary by opening the middle, then the middle of the correct half, and so on.">binary search</span>,
+          and it turns an unbounded mystery into about five questions.</p>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🗣️</div>
+          <div class="callout-content">
+            <strong class="callout-title">Why This Is the Most Valuable Module for You</strong>
+            <p>AI assistants are excellent at fixing a problem you can describe <em>precisely</em>, and terrible at finding one you can only describe as &quot;it doesn&apos;t work&quot;. Vague reports send them into loops of speculative rewrites, each one leaving the codebase slightly worse. One precise sentence — <em>&quot;the POST to /api/generate-cyberpunk returns 200 with code -1 and message &apos;Insufficient credits&apos;, even though the balance shows 40&quot;</em> — usually gets fixed on the first try. This module is about how to write that sentence.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: The five-question ladder -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Five-Question Ladder</h2>
+        <p>For any bug, in any app, ask these in this order. The order matters — each question is cheap and rules out everything below it.</p>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Did the request even leave the Browser?</strong>
+              <p>Open <span class="term" data-definition="Dev tools are the inspection panels built into every browser — press F12 or right-click and choose Inspect. They show you the page structure, the errors, and every request the page makes.">dev tools</span> and look at the
+                <span class="term" data-definition="The Network tab in dev tools lists every request the page sent and what came back — address, status, timing, and the full reply. It is the single most useful debugging screen there is.">Network tab</span>.
+                No request at all means the bug is in the click handler, not on the server. You have just eliminated the entire backend.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Did the Server receive it, and what did it answer?</strong>
+              <p>Read the <span class="term" data-definition="A status code is the three-digit number every web response carries: 200 means fine, 404 means not found, 401 means not signed in, 500 means the server itself broke.">status code</span> and the reply body. This app always answers with the same shape — <code>{ code, message, data }</code>, where <code>code: 0</code> means fine and <code>code: -1</code> means an error with a human-readable message sitting right there.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Did an outside service refuse?</strong>
+              <p>Gemini quota, Stripe signature, storage credentials. Critically: these appear in the <span class="term" data-definition="A log is the running diary a program writes about what it is doing. Server logs live on the server or in your hosting dashboard, and are invisible from the browser.">server logs</span>, never in the browser. If you have not looked at your logs, you have not looked.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Is the data actually what you think it is?</strong>
+              <p>Go and look. Is there a credits row for that order number? Is the order status still <code>created</code>? Assumptions about data are where confident people lose whole evenings.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <strong>Is it the environment, not the code?</strong>
+              <p>Works locally, fails in
+                <span class="term" data-definition="Production is the live version real customers use. Development is the copy running on your own laptop. They run the same code with different settings, which is exactly why they behave differently.">production</span>?
+                Suspect
+                <span class="term" data-definition="An environment variable is a setting stored outside your code — on the server — that changes how the app behaves. Missing ones are the single most common cause of works-here-not-there.">environment variables</span>
+                first, every single time. Module 3&apos;s missing GitHub sign-in button was exactly this.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Watch the ladder run on a real complaint.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-7-1","label":"A customer emails: I paid, but I have no credits. Resist the urge to guess. Go and take readings."},
+          {"highlight":"flow-actor-7-1","label":"Question 1: did the request leave the Browser at all? Network tab says yes, and the checkout request looks normal."},
+          {"highlight":"flow-actor-7-2","label":"Question 2: what did the Server answer? Status 200, code 0. The checkout was created successfully. Half the pipeline is now ruled out.","packet":true,"from":"actor-7-1","to":"actor-7-2"},
+          {"highlight":"flow-actor-7-3","label":"Question 3: did an outside service refuse? Stripe shows the payment as succeeded. So the money moved.","packet":true,"from":"actor-7-2","to":"actor-7-3"},
+          {"highlight":"flow-actor-7-4","label":"Question 4: is the data what you think? Look at the order row. Status is still created, not paid. And there is no credits row for that order number.","packet":true,"from":"actor-7-2","to":"actor-7-4"},
+          {"highlight":"flow-actor-7-3","label":"That narrows it to one thing: the webhook. Either it never arrived, or it arrived and failed to verify.","packet":true,"from":"actor-7-3","to":"actor-7-2"},
+          {"highlight":"flow-actor-7-2","label":"Question 5: environment, not code. The webhook address registered with Stripe still points at the old test domain. Nothing was ever broken in the code."}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-7-1">
+              <div class="flow-actor-icon" style="background: var(--color-actor-2)">🌐</div>
+              <span>Browser</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-7-2">
+              <div class="flow-actor-icon" style="background: var(--color-accent)">🖥️</div>
+              <span>Server</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-7-3">
+              <div class="flow-actor-icon" style="background: var(--color-actor-3)">💳</div>
+              <span>Stripe</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-7-4">
+              <div class="flow-actor-icon" style="background: var(--color-actor-4)">🗄️</div>
+              <span>Database</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet-7"></div>
+          <div class="flow-step-label" id="flow-label-7">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <p>Notice what never happened in that sequence: nobody changed any code, and nobody had a brilliant idea. Seven observations, one cause.</p>
+      </section>
+
+      <!-- SCREEN 3: Three bugs from this codebase -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Three Bug Shapes, All From This Codebase</h2>
+        <p>The first one is the most teachable seven lines in the whole project. Read it, and ask yourself what a customer sees when the database is unreachable.</p>
+
+        <div class="bug-challenge">
+          <h3>Which line turns a serious outage into a quiet lie?</h3>
+          <div class="bug-code">
+            <div class="bug-line" data-line="1" onclick="checkBugLine(this, false)"
+                 data-hint="That is just tidying up — a negative balance would be nonsense to show anyone. Keep looking, further down.">
+              <span class="line-num">1</span>
+              <code>if (user_credits.left_credits &lt; 0) {</code>
+            </div>
+            <div class="bug-line" data-line="2" onclick="checkBugLine(this, false)"
+                 data-hint="Same idea — clamping a nonsense value to zero. The problem is what happens when the whole function fails.">
+              <span class="line-num">2</span>
+              <code>&nbsp;&nbsp;user_credits.left_credits = 0;</code>
+            </div>
+            <div class="bug-line" data-line="3" onclick="checkBugLine(this, false)"
+                 data-hint="Marking someone as a paying user if they have any credits left. Reasonable. Look at the very bottom.">
+              <span class="line-num">3</span>
+              <code>if (user_credits.left_credits &gt; 0) { user_credits.is_pro = true; }</code>
+            </div>
+            <div class="bug-line" data-line="4" onclick="checkBugLine(this, false)"
+                 data-hint="This is the happy path — the real answer being handed back. The problem is the other exit from this function.">
+              <span class="line-num">4</span>
+              <code>&nbsp;&nbsp;return user_credits;</code>
+            </div>
+            <div class="bug-line" data-line="5" onclick="checkBugLine(this, false)"
+                 data-hint="Catching the error is not the mistake — you are allowed to catch errors. It is what happens in the next two lines.">
+              <span class="line-num">5</span>
+              <code>} catch (e) {</code>
+            </div>
+            <div class="bug-line" data-line="6" onclick="checkBugLine(this, false)"
+                 data-hint="Writing it to the log is the one good thing here. Now look at what gets handed back to the customer.">
+              <span class="line-num">6</span>
+              <code>&nbsp;&nbsp;console.log("get user credits failed: ", e);</code>
+            </div>
+            <div class="bug-line bug-target" data-line="7" onclick="checkBugLine(this, true)"
+                 data-explanation="This returns the <code>user_credits</code> object created at the top of the function — the one still full of zeros. So when the database is unreachable, a paying customer is not told &quot;something went wrong&quot;. They are told, calmly and confidently, that they have <strong>0 credits</strong> — and they conclude they have been robbed. Support gets angry emails about missing credits while the real problem is a database outage nobody noticed. A catch block that swallows an error turns a loud problem into a quiet lie.">
+              <span class="line-num">7</span>
+              <code>&nbsp;&nbsp;return user_credits;</code>
+            </div>
+          </div>
+          <div class="bug-feedback"></div>
+        </div>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">if</span> (user_credits.left_credits &lt; <span class="code-number">0</span>) {</span>
+<span class="code-line">      user_credits.left_credits = <span class="code-number">0</span>;</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">if</span> (user_credits.left_credits &gt; <span class="code-number">0</span>) {</span>
+<span class="code-line">      user_credits.is_pro = <span class="code-keyword">true</span>;</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">return</span> user_credits;</span>
+<span class="code-line">  } <span class="code-keyword">catch</span> (e) {</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"get user credits failed: "</span>, e);</span>
+<span class="code-line">    <span class="code-keyword">return</span> user_credits;</span>
+<span class="code-line">  }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">WHAT THE USER EXPERIENCES</span>
+            <div class="translation-lines">
+              <p class="tl">Never show a negative balance. Fair enough.</p>
+              <p class="tl">Anyone with credits left counts as a paying user.</p>
+              <p class="tl">Hand back the real, correct balance. This is the normal, everything-is-fine path.</p>
+              <p class="tl">And here is the other exit. <code>catch</code> means &quot;if anything at all went wrong above, come here instead&quot;. A database outage lands here.</p>
+              <p class="tl">Write a note in the log, where no customer will ever see it and, realistically, nor will you.</p>
+              <p class="tl">Then hand back the object created at the very top of the function — the one still full of zeros. <strong>The customer is told they have 0 credits.</strong> Not &quot;we could not check&quot;. Zero. Confidently.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">🤫</div>
+          <div class="callout-content">
+            <strong class="callout-title">Say What Should Happen on Failure</strong>
+            <p>When you ask an AI to &quot;add error handling&quot;, this is very often what you get: a
+              <span class="term" data-definition="A try/catch block says: attempt this, and if anything goes wrong, run that instead. It stops a crash — but it does not decide whether stopping the crash was the right thing to do.">try/catch</span>
+              that swallows the problem and returns a plausible-looking default. Be specific instead: <em>&quot;if this fails, surface the error to the caller — do not return a default that looks like real data.&quot;</em> A crash is honest. A confident wrong answer is not.</p>
+          </div>
+        </div>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🔌</div>
+            <h4 class="pattern-title">The Environment Gap</h4>
+            <p class="pattern-desc">Works on the laptop, not in production. In this app, whole sign-in providers, the entire storage upload and the choice of payment company are all switched on and off by environment variables. Nearly always configuration, nearly never code.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🏷️</div>
+            <h4 class="pattern-title">The Name That Lies</h4>
+            <p class="pattern-desc">The image endpoint is still called <code>/api/generate-cyberpunk</code>, left over from an earlier version of the product. There are <code>.backup</code> copies of route files sitting in the repo too. Real codebases drift — describe <em>behaviour</em> to an AI, not filenames.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: What to log + the invisible ceiling -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Writing Your Own Flight Recorder</h2>
+        <p>Before every AI call, this app writes down a block of context. Somebody sat and decided what they would want to know at 3am, and it shows.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"=== Charlie and Lola API Request Details ==="</span>);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Mode:"</span>, mode);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Model:"</span>, model);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Aspect Ratio:"</span>, aspectRatio);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Output Format:"</span>, outputFormat);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Style:"</span>, style);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Custom Prompt:"</span>, customPrompt ? <span class="code-string">"Yes"</span> : <span class="code-string">"No"</span>);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"Images uploaded:"</span>, images.length);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"User Registered:"</span>, isRegisteredUser);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"User UUID:"</span>, userUuid || <span class="code-string">"Guest user"</span>);</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"==========================================="</span>);</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Draw a line in the log so this block is findable by eye among thousands of others.</p>
+              <p class="tl">Record every setting that shaped this request: which mode, which AI model, what shape, what file format, which style.</p>
+              <p class="tl">Note whether the user typed their own instructions — but <strong>not what they typed</strong>. A deliberate choice: yes or no is enough to
+                <span class="term" data-definition="To reproduce a bug is to make it happen again on purpose. A bug you can reproduce is nearly solved; a bug you cannot is mostly guesswork.">reproduce</span>
+                the problem.</p>
+              <p class="tl">How many images came in, whether the person was signed in, and who they were — or the word &quot;Guest&quot;.</p>
+              <p class="tl">Close the block. Everything needed to recreate this exact request, and nothing that would be embarrassing to leak.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">📝</div>
+          <div class="callout-content">
+            <strong class="callout-title">Log the Inputs You Would Need to Reproduce It. Never Log Secrets.</strong>
+            <p>Logs get copied into chat messages, support tickets and screenshots. API keys, passwords, tokens and full card details must never appear in them. &quot;Custom prompt: Yes&quot; is a perfect example of the discipline — enough to debug, not enough to expose anyone.</p>
+          </div>
+        </div>
+
+        <p>And then there are the limits you did not choose and cannot see. This is the entire <code>vercel.json</code> file:</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">{</span>
+<span class="code-line">  <span class="code-property">"functions"</span>: {</span>
+<span class="code-line">    <span class="code-property">"app/api/**/*"</span>: {</span>
+<span class="code-line">      <span class="code-property">"maxDuration"</span>: <span class="code-number">60</span>,</span>
+<span class="code-line">      <span class="code-property">"memory"</span>: <span class="code-number">1024</span></span>
+<span class="code-line">    }</span>
+<span class="code-line">  }</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Settings for the bits of code that answer requests.</p>
+              <p class="tl">Apply these to every API address in the app — the stars mean &quot;anything nested under here&quot;.</p>
+              <p class="tl">Hard ceiling: 60 seconds. Take longer and the request is killed mid-flight, whatever it was doing.</p>
+              <p class="tl">And about a gigabyte of
+                <span class="term" data-definition="A memory limit caps how much working space a piece of code may use at once. Exceed it and the code is stopped, usually with an unhelpful error.">working memory</span>.
+                Image generation takes around ten seconds, so there is headroom — but a slow day at Google, or a bigger image, eats into it invisibly.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Name the class of problem: <strong>limits you did not choose and cannot see.</strong> They are exactly why something works perfectly in testing and fails under load.</p>
+      </section>
+
+      <!-- SCREEN 5: Getting it onto the internet -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Getting It Onto the Internet</h2>
+        <p>First, the thing that surprises everyone: <strong>the code you write is not the code that runs.</strong> A
+          <span class="term" data-definition="A build is the step that turns the code developers write into the packaged, optimised version that actually runs on a server. Nothing you wrote is deleted — a second, machine-friendly copy is produced.">build</span>
+          step turns TypeScript into JavaScript, pre-renders pages, and
+          <span class="term" data-definition="To bundle is to combine many small code files into a few larger ones so a browser can download them quickly, rather than making hundreds of separate requests.">bundles</span>
+          everything into one folder that contains exactly what is needed to run and nothing else.</p>
+
+        <p>This app can be shipped three different ways, and each trade-off is worth knowing.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">▲</div>
+            <h4 class="pattern-title">Vercel</h4>
+            <p class="pattern-desc">The default. Push to
+              <span class="term" data-definition="Git is the system that tracks every change to a codebase and lets people work on it together. Pushing means sending your changes up to the shared copy.">git</span>
+              and it builds and deploys itself. Easiest by a mile — and you are on their terms, including that 60-second ceiling.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">☁️</div>
+            <h4 class="pattern-title">Cloudflare Workers</h4>
+            <p class="pattern-desc">Lives on its own
+              <span class="term" data-definition="A branch is a parallel version of a codebase where changes can be made without disturbing the main one. Here, a whole deployment variant lives on its own branch.">branch</span>,
+              runs at the
+              <span class="term" data-definition="The edge means running your code in many small data centres physically close to users, rather than one big one far away. Faster, cheaper, and more restricted in what it can do.">edge</span>.
+              Cheap and fast, more constraints — <code>src/db/index.ts</code> literally has an <code>if (isCloudflareWorker)</code> branch that opens exactly one database connection instead of a pool of ten.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🐳</div>
+            <h4 class="pattern-title">Docker</h4>
+            <p class="pattern-desc">A recipe that builds a self-contained box — a
+              <span class="term" data-definition="A container is a sealed box holding your app and everything it needs to run, so it behaves identically on any machine. Docker is the most common tool for making them.">container</span>
+              — that runs identically anywhere. Most portable, most work.</p>
+          </div>
+        </div>
+
+        <p>The Docker recipe is worth one look, because two lines of it are pure professional habit.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">FROM</span> base <span class="code-keyword">AS</span> runner</span>
+<span class="code-line"><span class="code-keyword">WORKDIR</span> /app</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">RUN</span> addgroup --system --gid <span class="code-number">1001</span> nodejs &amp;&amp; \</span>
+<span class="code-line">    adduser --system --uid <span class="code-number">1001</span> nextjs &amp;&amp; \</span>
+<span class="code-line">    mkdir .next &amp;&amp; \</span>
+<span class="code-line">    chown nextjs:nodejs .next</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">COPY</span> --from=builder /app/public ./public</span>
+<span class="code-line"><span class="code-keyword">COPY</span> --from=builder --chown=nextjs:nodejs /app/.next/standalone ./</span>
+<span class="code-line"><span class="code-keyword">COPY</span> --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">USER</span> nextjs</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Start a fresh, clean box for actually running the app. The messy box that did the building is thrown away — this is a
+                <span class="term" data-definition="A multi-stage build uses one temporary container to compile the app and a second clean one to run it, so all the build tools are left behind. The result is a much smaller, safer image.">multi-stage build</span>.</p>
+              <p class="tl">Work in a folder called <code>/app</code>.</p>
+              <p class="tl">Create a plain, unprivileged user called <code>nextjs</code> to run everything, and give it ownership of the folder it needs.</p>
+              <p class="tl">Copy in only the finished output from the build box — not the source code, not the build tools, not the notes.</p>
+              <p class="tl">Then switch to that limited user. If someone ever finds a way in, they arrive as <code>nextjs</code>, not as
+                <span class="term" data-definition="The root user is the all-powerful administrator account on a machine, allowed to do anything at all. Running an app as root means a break-in gets total control.">root</span>
+                — so a break-in cannot take the whole machine. Two lines, an enormous difference.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="screen-heading" style="font-size: var(--text-lg); margin-top: var(--space-10)">The Pre-Flight Checklist</h3>
+        <p>Read it aloud before every launch, on any project. &quot;I&apos;m sure it&apos;s fine&quot; is not a check.</p>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-4)">🔑</div>
+            <div>
+              <strong>Environment variables set in production?</strong>
+              <p>Not on your laptop — in production. All of them, including the ones you added last week.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">🗄️</div>
+            <div>
+              <strong>Database reachable from production?</strong>
+              <p>Reachable from your laptop is not the same test. Firewall rules and connection limits differ.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-3)">📩</div>
+            <div>
+              <strong>Webhook registered and pointing at the live domain?</strong>
+              <p>The single most common launch-day payment bug, and you just watched it happen.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-error)">🔐</div>
+            <div>
+              <strong>No secrets in the code?</strong>
+              <p>Search the repo for anything that looks like a password or a key before you make it public.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-5)">📈</div>
+            <div>
+              <strong>External quotas high enough for launch day?</strong>
+              <p>Free-tier AI limits do not survive a good day on social media.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-accent)">🔦</div>
+            <div>
+              <strong>Can you see the logs?</strong>
+              <p>Find out where they are <em>before</em> you need them, not at 11pm with users waiting.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: The whole picture -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Whole Picture</h2>
+        <p>Seven modules in one diagram. Click anything to see what it does and which module covered it.</p>
+
+        <div class="arch-diagram">
+          <div class="arch-zone arch-zone-browser">
+            <h4 class="arch-zone-label">In the Browser — Modules 2 &amp; 6</h4>
+            <div class="arch-component" data-desc="components/ui/ — 37 generic parts: buttons, cards, dialogs, tabs. Copied into the project rather than installed, so any of them can be edited. Module 6.">
+              <div class="arch-icon">🧱</div>
+              <span>ui/ parts</span>
+            </div>
+            <div class="arch-component" data-desc="components/blocks/ — whole page sections assembled from the generic parts: hero, pricing, faq, footer, showcase. Each one filled with text from the translation data files. Module 6.">
+              <div class="arch-icon">🏗️</div>
+              <span>blocks/</span>
+            </div>
+            <div class="arch-component" data-desc="Client components — the interactive pieces that run in your browser: the upload box, the generate button, the language switcher. They can respond to clicks, but they can never be trusted about who you are. Module 2.">
+              <div class="arch-icon">🖱️</div>
+              <span>client components</span>
+            </div>
+          </div>
+
+          <div class="arch-zone">
+            <h4 class="arch-zone-label">On the Server — Modules 1, 2, 3 &amp; 6</h4>
+            <div class="arch-component" data-desc="middleware.ts — the doorman. Runs before every single page request, reads the language out of the address, and routes accordingly. Twelve lines. Module 6.">
+              <div class="arch-icon">🚪</div>
+              <span>Middleware</span>
+            </div>
+            <div class="arch-component" data-desc="Pages and API routes. A page returns HTML for a human; an API route returns data for a program. /api/generate-cyberpunk is the one that makes the cartoons — and it is still named after a previous version of the product. Modules 1 and 2.">
+              <div class="arch-icon">🛣️</div>
+              <span>Routes</span>
+            </div>
+            <div class="arch-component" data-desc="Services — the business rules. Should this person be allowed to do this? What does it cost? updateOrder and decreaseCredits live here. This is where the actual product decisions are written down. Modules 2 and 4.">
+              <div class="arch-icon">⚖️</div>
+              <span>Services</span>
+            </div>
+            <div class="arch-component" data-desc="Models — the only code allowed to talk to the database. Every insert, every query. Keeping this in one layer is why you can change your database without touching your business rules. Module 2.">
+              <div class="arch-icon">📇</div>
+              <span>Models</span>
+            </div>
+            <div class="arch-component" data-desc="Auth — NextAuth, getUserUuid(), the signed session cookie. Identity always comes from the verified session on the server, never from anything the browser typed into a request. Module 3.">
+              <div class="arch-icon">🎫</div>
+              <span>Auth</span>
+            </div>
+          </div>
+
+          <div class="arch-zone arch-zone-external">
+            <h4 class="arch-zone-label">Rented From Other People — Modules 4 &amp; 5</h4>
+            <div class="arch-component" data-desc="PostgreSQL, hosted by Supabase. Eight tables: users, orders, credits, apikeys, posts, categories, affiliates, feedbacks. Described in TypeScript, changed through numbered migration files. And, in this app, deleted. Module 5.">
+              <div class="arch-icon">🗄️</div>
+              <span>Database</span>
+            </div>
+            <div class="arch-component" data-desc="Stripe — takes the money, then calls your server back with a signed webhook to confirm it. The redirect back to your site proves nothing; the webhook is the fact. Module 4.">
+              <div class="arch-icon">💳</div>
+              <span>Stripe</span>
+            </div>
+            <div class="arch-component" data-desc="Google Gemini — makes the cartoon. Reached through a pool of up to six API keys handed out in rotation, with any key that hits its quota benched until tomorrow. Module 5.">
+              <div class="arch-icon">✨</div>
+              <span>Gemini</span>
+            </div>
+            <div class="arch-component" data-desc="Cloudflare R2 — object storage for finished images. If it is not configured, the app falls back to embedding the entire image in the reply as text: worse, but working. Module 5.">
+              <div class="arch-icon">🪣</div>
+              <span>Storage</span>
+            </div>
+          </div>
+
+          <div class="arch-description">Click any piece to see what it does.</div>
+        </div>
+
+        <p>Every arrow in that picture runs the same way: the Browser asks, the Server decides, the outside world answers, the Database remembers.</p>
+      </section>
+
+      <!-- SCREEN 7: The vocabulary -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Vocabulary You Now Own</h2>
+        <p>This was the real payoff all along. These are not trivia — they are the words that let you tell an AI assistant precisely what you want, instead of describing it and hoping.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">request / response</code>
+            <span class="badge-desc">One question, one answer. Everything on the web is this.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">endpoint</code>
+            <span class="badge-desc">One specific address that answers one specific kind of question</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">session / token</code>
+            <span class="badge-desc">The signed wristband that says who you are, checked on every request</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">webhook</code>
+            <span class="badge-desc">Another service calling <em>you</em>, unprompted, when something really happened</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">idempotent</code>
+            <span class="badge-desc">Safe to run twice. Say this word when asking for payment code.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">append-only ledger</code>
+            <span class="badge-desc">Never overwrite a balance — add a line and sum them</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">schema / migration</code>
+            <span class="badge-desc">The blueprint, and the numbered reviewable permit that changes it</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">connection pool</code>
+            <span class="badge-desc">A few open lines held ready and shared, not a new call every time</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">rate limit / quota</code>
+            <span class="badge-desc">The cap on how much of someone else&apos;s service you may use</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">environment variable</code>
+            <span class="badge-desc">Settings outside the code. The first suspect in every works-here-not-there bug.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">graceful degradation</code>
+            <span class="badge-desc">When part of it fails, the rest keeps working in a reduced way</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">locale / i18n</code>
+            <span class="badge-desc">Which language and region a visitor gets, and the machinery that serves it</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">component / variant</code>
+            <span class="badge-desc">A reusable interface piece, and its named looks</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">middleware</code>
+            <span class="badge-desc">A checkpoint every request passes through before reaching a page</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">server vs client</code>
+            <span class="badge-desc">Runs privately on their computer vs runs visibly on yours. Trust accordingly.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 8: Final quiz + send-off -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">One Last Time</h2>
+        <p>Five scenarios drawing on the whole course. Take your time with the fourth one.</p>
+
+        <div class="quiz-container" id="quiz-module7">
+
+          <div class="quiz-question-block"
+               data-correct="q1-b"
+               data-explanation-right="Exactly — and in that order, because each step is cheap and rules out everything after it. Did Stripe send the webhook? Did it verify against the signing secret? Is the order status still created rather than paid? Is there a credits row carrying that order number? The first place reality stops matching expectation is your bug."
+               data-explanation-wrong="Refunding first hides the evidence, and rewriting the credits code assumes you already know where the fault is. Start by taking readings along the pipeline you now know by heart: Stripe, the webhook, the order row, the credits row.">
+            <h3 class="quiz-question">A customer says they paid but have no credits. What do you check, and in what order?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q1-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Refund them immediately, then investigate when there is time</span>
+              </button>
+              <button class="quiz-option" data-value="q1-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Did Stripe send the webhook → did it verify → is the order marked paid → is there a credits row for that order number</span>
+              </button>
+              <button class="quiz-option" data-value="q1-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Ask an AI to rewrite the credits service to be more reliable</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q2-c"
+               data-explanation-right="Exactly. Every sign-in provider in this app is wrapped in a check on its environment variables — no variables, no button, no error message. Same code, different settings, different behaviour. Suspect configuration before code, every single time."
+               data-explanation-wrong="The code is identical in both places — you did not write a different version for production. So what else differs between your laptop and the live server? Almost always the settings that live outside the code.">
+            <h3 class="quiz-question">Everything works locally. In production, &quot;Sign in with GitHub&quot; does nothing at all. Best first guess?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q2-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A bug in the sign-in component</span>
+              </button>
+              <button class="quiz-option" data-value="q2-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>GitHub is down</span>
+              </button>
+              <button class="quiz-option" data-value="q2-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Missing environment variables in production, so the provider was never added to the list</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q3-a"
+               data-explanation-right="Exactly — specify what should happen on failure. Otherwise you get a catch block that returns a plausible default, and a database outage becomes a customer being calmly told they have zero credits. A crash you can see beats a wrong answer you cannot."
+               data-explanation-wrong="Adding a try/catch is easy; deciding what the failure should look like to a human being is the actual work. If you do not say, you will get a default value that is indistinguishable from real data.">
+            <h3 class="quiz-question">An AI assistant offers to &quot;add error handling&quot; to a function that fetches a balance. What should you specify?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q3-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>What should happen on failure — surface the error, do not return a default that looks like real data</span>
+              </button>
+              <button class="quiz-option" data-value="q3-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>That it should catch every possible error so the app never crashes</span>
+              </button>
+              <button class="quiz-option" data-value="q3-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Which line number to put the try block on</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="scenario-block">
+            <div class="scenario-context">
+              <span class="scenario-label">Capstone Scenario</span>
+              <p>You want users to be able to save their favourite generated images. You are about to brief an AI assistant on it.</p>
+            </div>
+            <div class="quiz-question-block"
+                 data-correct="q4-c"
+                 data-explanation-right="Exactly — and being able to list those layers unprompted is the whole point of this course. A new favourites table plus a migration (Module 5). A model, because only models talk to the database, and a service for the rules about who may favourite what (Module 2). An API route for the browser to call (Modules 1 and 2), which starts by calling getUserUuid() so identity comes from the session and never from the request (Module 3). A component built from the existing ui/ parts (Module 6). And new strings in both en.json and zh.json, because the app is bilingual (Module 6). Brief an AI with that list and you will get something worth keeping."
+                 data-explanation-wrong="Think about the route a request takes through this app, and everything it touches on the way. A single component cannot store anything, and a single table cannot show anything. Trace the whole path — and do not forget that this app speaks two languages.">
+              <h3 class="quiz-question">Which layers would you expect to change?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="q4-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Just a new component with a heart icon on it</span>
+                </button>
+                <button class="quiz-option" data-value="q4-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>A new database table, and nothing else</span>
+                </button>
+                <button class="quiz-option" data-value="q4-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>A table plus a migration, a model, a service, an API route that checks the session, a component — and new strings in both languages</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q5-b"
+               data-explanation-right="Exactly — the two invisible ceilings from this module. The 60-second function limit in vercel.json kills any request that runs long, and an exhausted Gemini key pool turns into queueing and retries that push requests towards that limit. Under load they feed each other, which is why a traffic spike breaks things that were fine in testing."
+               data-explanation-wrong="Think about what only bites when there is a lot of traffic: a hard ceiling on how long one request may take, and a daily allowance being consumed much faster than usual. Both of those are in this app right now.">
+            <h3 class="quiz-question">The generation feature starts timing out, but only during a traffic spike. Name two suspects you now know about.</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q5-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The translation files and the design system</span>
+              </button>
+              <button class="quiz-option" data-value="q5-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The 60-second function limit, and every key in the Gemini pool being benched on quota</span>
+              </button>
+              <button class="quiz-option" data-value="q5-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The webhook signature and the credits ledger</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module7')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module7')">Try Again</button>
+        </div>
+
+        <div class="callout callout-accent" style="margin-top: var(--space-12)">
+          <div class="callout-icon">🎈</div>
+          <div class="callout-content">
+            <strong class="callout-title">You Just Read a Real Production Codebase, End to End</strong>
+            <p>Not a tutorial project — a live app with real customers, real money moving through it, a hardcoded password, a deleted database, and an endpoint named after a product that no longer exists. That is what all of them look like, including the ones built by teams of twenty.</p>
+          </div>
+        </div>
+
+        <p>You do not need to write any of this from scratch. You need to read it, recognise the shapes, and know the words — and you now do. The next time an AI assistant hands you something that smells off, you will be able to say exactly why.</p>
+
+        <p style="margin-top: var(--space-8)"><strong>Go and build something. And when it breaks, you already know which question to ask first.</strong></p>
+      </section>
+
+    </div>
+  </div>
+</section>

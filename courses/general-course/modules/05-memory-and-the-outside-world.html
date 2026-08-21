@@ -1,0 +1,572 @@
+<section class="module" id="module-5" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">Memory and the Outside World</h1>
+      <p class="module-subtitle">Every module so far has said &quot;and then it saves it to the database&quot; as if that were one word. It is about six ideas — and the most useful thing about this particular database is that when we went looking for it, it was gone.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1: Blueprints and permits -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Blueprints and Permits</h2>
+        <p>A
+          <span class="term" data-definition="A database is a program whose whole job is to store information safely and find it again fast. Think of a filing system that never forgets, can be searched instantly, and can be used by thousands of people at once.">database</span>
+          is a program whose entire job is to remember things reliably and find them again instantly. This app uses
+          <span class="term" data-definition="PostgreSQL (usually said Post-gress) is one of the most widely used databases in the world. It is free, open-source, and the default sensible choice for most web apps.">PostgreSQL</span>,
+          rented from a company called
+          <span class="term" data-definition="Supabase is a company that runs PostgreSQL databases for you, so you do not have to own or maintain a server. It has a free tier, which matters later in this module.">Supabase</span>.</p>
+
+        <p>There is a file in this project called <code>schema.ts</code>. It is the building&apos;s blueprint: this building has a Users room with these dimensions, an Orders room with those, a Credits room down the hall.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">📐</div>
+            <h4 class="pattern-title">The Blueprint</h4>
+            <p class="pattern-desc">The <span class="term" data-definition="A schema is the description of what a database contains — which tables exist, what columns each one has, and what kind of value goes in each column.">schema</span>: what rooms exist and what shape they are.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">📋</div>
+            <h4 class="pattern-title">The Permits</h4>
+            <p class="pattern-desc">Numbered, dated changes: <em>#0004 — add a password column to Users.</em> Applied in order, they build the whole thing.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🏢</div>
+            <h4 class="pattern-title">The Building</h4>
+            <p class="pattern-desc">The live database, with real people living in it right now. You cannot just hand a builder a new blueprint.</p>
+          </div>
+        </div>
+
+        <p>That last card is the whole problem. Redrawing a blueprint is easy. Changing a building people already live in, without knocking it down, is a completely different job — and it is why
+          <span class="term" data-definition="A migration is a small, numbered file describing one change to a database — add this column, rename that table. Run in order, migrations take a database from empty to its current shape, and anyone can read exactly what changed.">migrations</span>
+          exist.</p>
+      </section>
+
+      <!-- SCREEN 2: The eight tables -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Eight Rooms</h2>
+        <p>Here is the entire product, described as furniture. Eight
+          <span class="term" data-definition="A database table is a grid of saved information — columns for the kinds of fact you store, one row per thing stored. Like a spreadsheet the app can search instantly.">tables</span>,
+          nothing else.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">users</code>
+            <span class="badge-desc">One row per account: uuid, email, nickname, avatar, which service they signed in with, invite code</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">orders</code>
+            <span class="badge-desc">One row per purchase attempt: order number, amount, status, Stripe session id, credits bought</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">credits</code>
+            <span class="badge-desc">The ledger from last module — one row per grant or spend</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">apikeys</code>
+            <span class="badge-desc">Developer keys, the ones starting <code>sk-</code></span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">posts</code>
+            <span class="badge-desc">Blog articles</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">categories</code>
+            <span class="badge-desc">Blog categories</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">affiliates</code>
+            <span class="badge-desc">Referral rewards — who invited whom, and what they earned</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">feedbacks</code>
+            <span class="badge-desc">User feedback and ratings</span>
+          </div>
+        </div>
+
+        <p>And here is one of those rooms as the blueprint actually describes it. The surprise for most people: this is not database language, it is ordinary
+          <span class="term" data-definition="TypeScript is a version of JavaScript that also lets you describe what shape your data is. The editor then catches mistakes as you type, before the code ever runs.">TypeScript</span>.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export const</span> credits = <span class="code-function">pgTable</span>(<span class="code-string">"credits"</span>, {</span>
+<span class="code-line">  <span class="code-property">id</span>: <span class="code-function">integer</span>().<span class="code-function">primaryKey</span>().<span class="code-function">generatedAlwaysAsIdentity</span>(),</span>
+<span class="code-line">  <span class="code-property">trans_no</span>: <span class="code-function">varchar</span>({ <span class="code-property">length</span>: <span class="code-number">255</span> }).<span class="code-function">notNull</span>().<span class="code-function">unique</span>(),</span>
+<span class="code-line">  <span class="code-property">created_at</span>: <span class="code-function">timestamp</span>({ <span class="code-property">withTimezone</span>: <span class="code-keyword">true</span> }),</span>
+<span class="code-line">  <span class="code-property">user_uuid</span>: <span class="code-function">varchar</span>({ <span class="code-property">length</span>: <span class="code-number">255</span> }).<span class="code-function">notNull</span>(),</span>
+<span class="code-line">  <span class="code-property">trans_type</span>: <span class="code-function">varchar</span>({ <span class="code-property">length</span>: <span class="code-number">50</span> }).<span class="code-function">notNull</span>(),</span>
+<span class="code-line">  <span class="code-property">credits</span>: <span class="code-function">integer</span>().<span class="code-function">notNull</span>(),</span>
+<span class="code-line">  <span class="code-property">order_no</span>: <span class="code-function">varchar</span>({ <span class="code-property">length</span>: <span class="code-number">255</span> }),</span>
+<span class="code-line">  <span class="code-property">expired_at</span>: <span class="code-function">timestamp</span>({ <span class="code-property">withTimezone</span>: <span class="code-keyword">true</span> }),</span>
+<span class="code-line">});</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Describe a table called <code>credits</code>. Everything in the curly brackets is a
+                <span class="term" data-definition="A column is one kind of fact a table stores — the email column, the amount column. Every row has a value for every column.">column</span>.</p>
+              <p class="tl">A plain counting number that the database fills in itself, and that is the row&apos;s
+                <span class="term" data-definition="A primary key is the one column guaranteed to be unique for every row — the thing you use to point at exactly one record and no other.">primary key</span>:
+                the thing you point at to mean this row and no other.</p>
+              <p class="tl">A reference number, up to 255 characters, that must be present and must never repeat.</p>
+              <p class="tl">When this line was written, stored with its
+                <span class="term" data-definition="A timestamp is a stored moment in time. Storing it with a timezone means the same instant reads correctly whether you are in London or Shanghai.">timezone</span>
+                so it means the same instant everywhere in the world.</p>
+              <p class="tl">Whose line it is, and what kind of movement it was. Both required.</p>
+              <p class="tl">The amount — a whole number, positive or negative. This is the plus and minus from last module.</p>
+              <p class="tl">Which order it relates to, if any, and the date it stops counting. Both optional — a signup gift has no order.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🧩</div>
+          <div class="callout-content">
+            <strong class="callout-title">Why Describe the Database in TypeScript?</strong>
+            <p>A tool called <span class="term" data-definition="Drizzle is an ORM — a translator that turns ordinary code into database instructions, so developers describe what they want in the language they are already writing in.">Drizzle</span> reads that file and generates the real database instructions. The payoff is that your editor now knows the shape of your data: misspell <code>left_credits</code> and you are told immediately, in red, before the code ever runs. Software that catches your mistakes while you type is worth an enormous amount.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: Migrations -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Permits</h2>
+        <p>There are five permits in this project, in a folder called <code>migrations</code>, with names generated from a word list. They look absurd and they are completely serious.</p>
+
+        <div class="file-tree">
+          <div class="ft-folder open">
+            <span class="ft-name">src/db/migrations/</span>
+            <span class="ft-desc">Every change ever made to the shape of this database, in order</span>
+            <div class="ft-children">
+              <div class="ft-file"><span class="ft-name">0000_flimsy_toad.sql</span><span class="ft-desc">The empty lot becomes a building</span></div>
+              <div class="ft-file"><span class="ft-name">0001, 0002</span><span class="ft-desc">Two more changes along the way</span></div>
+              <div class="ft-file"><span class="ft-name">0003_steady_toad.sql</span><span class="ft-desc">Add a category column to Posts</span></div>
+              <div class="ft-file"><span class="ft-name">0004_striped_colossus.sql</span><span class="ft-desc">Add a password column to Users</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p>Open <code>0004_striped_colossus.sql</code> and this is the whole file. One line. Its brevity is the point.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">ALTER TABLE</span> <span class="code-string">"users"</span> <span class="code-keyword">ADD COLUMN</span> <span class="code-string">"password_hash"</span> <span class="code-function">varchar</span>(<span class="code-number">255</span>);</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Change the existing <code>users</code> table — do not rebuild it, do not empty it, just change it.</p>
+              <p class="tl">Add one new column called <code>password_hash</code>, holding up to 255 characters.</p>
+              <p class="tl">That is the entire permit. This is written in
+                <span class="term" data-definition="SQL (say sequel) is the language databases speak. It is deliberately close to English: SELECT, INSERT, ALTER TABLE, DELETE.">SQL</span>,
+                the language databases actually speak — and you can read it, which is exactly the point.</p>
+              <p class="tl">Module 3&apos;s email-and-password sign-in door needed somewhere to store a scrambled password. This file is the moment that door became possible.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Ask For the Migration, Not Just the Change</strong>
+            <p>When you tell an AI assistant &quot;add a phone number field to users&quot;, it may edit the blueprint and quietly push the change straight into your database. Say instead: <em>&quot;change the schema and generate a migration for it.&quot;</em> The difference is a file you can read, review, keep in version history, and run identically on your laptop, on the test site and in production. Invisible schema changes are how two copies of the same app drift apart.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: The day the database vanished -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Day the Database Vanished</h2>
+        <p>While making this course, we tried to connect to this app&apos;s database. It answered:</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">💀</div>
+          <div class="callout-content">
+            <strong class="callout-title">tenant or user not found</strong>
+            <p>The Supabase project had been deleted — most likely reclaimed as an idle
+              <span class="term" data-definition="A free tier is the no-cost level of a paid service. It usually comes with limits, and often with a rule that unused projects get paused or deleted after a period of inactivity.">free-tier</span>
+              project. Nothing in the code is wrong. The code is fine. The <em>thing the code depends on</em> stopped existing.</p>
+          </div>
+        </div>
+
+        <p>Learn the <em>shape</em> of that error, because you will meet it again. It appeared at the connection stage — before a single one of the app&apos;s
+          <span class="term" data-definition="A query is a single question or instruction sent to a database: find me this, save that, delete the other.">queries</span>
+          ever ran. That timing is the tell.</p>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Errors at the connection stage</strong>
+              <p>&quot;Not found&quot;, &quot;authentication failed&quot;, &quot;could not connect&quot; — before any of your queries run. Almost never your code. Suspect the address, the credentials, or the service itself.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Errors from a specific query</strong>
+              <p>&quot;column does not exist&quot;, &quot;duplicate key&quot;. The connection is fine — this is your code, or a migration that was never run.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>No error, wrong answer</strong>
+              <p>Everything &quot;works&quot; but the numbers are wrong. The hardest kind. Module 7 is about these.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Two things would have caught this earlier: a health check that actually touches the database rather than just returning &quot;OK&quot;, and knowing in advance that free tiers reclaim idle projects.</p>
+
+        <p>When the database <em>does</em> exist, the app does not open a new connection for every question it asks. Opening one is slow, so it keeps a small set open and reuses them — a
+          <span class="term" data-definition="A connection pool is a small set of open database connections kept ready and shared between requests, instead of opening a fresh one every time. Like a switchboard with a few permanent phone lines rather than dialling from scratch on every call.">connection pool</span>.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">max: 10</code>
+            <span class="badge-desc">At most ten open lines at once. The eleventh request waits its turn rather than overwhelming the database.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">idle_timeout: 30</code>
+            <span class="badge-desc">A line sitting unused for 30 seconds gets hung up. Do not pay to hold lines nobody is talking on.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">connect_timeout: 10</code>
+            <span class="badge-desc">If dialling takes more than 10 seconds, give up and fail loudly instead of hanging forever.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: The password in the code -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Password in the Code</h2>
+        <p>There is a patch in <code>src/db/index.ts</code>, written to work around a database password containing a <code>/</code> character that broke the connection address. We have replaced the password with <code>[REDACTED]</code> below. <strong>The real file has it in plain text.</strong></p>
+
+        <div class="bug-challenge">
+          <h3>Two things are wrong here. Click the line that worries you most:</h3>
+          <div class="bug-code">
+            <div class="bug-line" data-line="1" onclick="checkBugLine(this, false)"
+                 data-hint="That is only a comment — a note for human readers. Honest, even. Look at what the next line is comparing against.">
+              <span class="line-num">1</span>
+              <code>// Apply URL encoding for the specific password issue we're seeing</code>
+            </div>
+            <div class="bug-line bug-target" data-line="2" onclick="checkBugLine(this, true)"
+                 data-explanation="Two lessons, and both are worth more than the bug itself. <strong>One:</strong> a real database password is written into the source code. Code gets committed, shared, copied to laptops and screenshotted in chat — a secret in code is a secret that has already leaked. It belongs in an environment variable. <strong>Two:</strong> even if the password were safe here, this is the wrong fix. The problem is that a special character breaks the address; the real solution is to URL-encode the value in the environment variable once, for any password. This patch only ever works for one specific password on one specific day.">
+              <span class="line-num">2</span>
+              <code>if (databaseUrl.includes(':[REDACTED]@')) {</code>
+            </div>
+            <div class="bug-line" data-line="3" onclick="checkBugLine(this, false)"
+                 data-hint="Close — this line has the same problem as the one above it. Look one line higher, at the check that decides whether any of this runs.">
+              <span class="line-num">3</span>
+              <code>&nbsp;&nbsp;databaseUrl = databaseUrl.replace(':[REDACTED]@', ':[REDACTED-ENCODED]@');</code>
+            </div>
+            <div class="bug-line" data-line="4" onclick="checkBugLine(this, false)"
+                 data-hint="Logging that something happened is fine and even helpful. The problem is above.">
+              <span class="line-num">4</span>
+              <code>&nbsp;&nbsp;console.log('Applied URL encoding for database password special character');</code>
+            </div>
+            <div class="bug-line" data-line="5" onclick="checkBugLine(this, false)"
+                 data-hint="A closing bracket has never hurt anyone. Look further up.">
+              <span class="line-num">5</span>
+              <code>}</code>
+            </div>
+          </div>
+          <div class="bug-feedback"></div>
+        </div>
+
+        <p>Nobody should feel bad about this. It is a 2am &quot;just make it work&quot; patch, and it did work. It is also <em>exactly</em> what an AI assistant will write if you say &quot;the database URL is failing&quot; and paste the error — a fix aimed at your one symptom rather than at the cause.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">🔐</div>
+          <div class="callout-content">
+            <strong class="callout-title">Secrets Never Go in Code</strong>
+            <p>Passwords, API keys and webhook secrets belong in
+              <span class="term" data-definition="An environment variable is a setting stored outside your code — on the server itself — that the app reads at startup. Changing it does not change any code, and it never gets committed alongside the code.">environment variables</span>,
+              set on the server and never committed. And when a fix works only for one exact value, ask what the general version of that fix would be. &quot;Handle any password with special characters&quot; is a different instruction from &quot;handle this password&quot; — and you are the one who has to ask for it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: The outside world -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Three Things You Do Not Control</h2>
+        <p>The database is rented. So is the AI, the image storage, and the payments. Each one fails in its own particular way.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">✨</div>
+            <h4 class="pattern-title">Google Gemini</h4>
+            <p class="pattern-desc">Makes the cartoon. Fails with
+              <span class="term" data-definition="A quota is a cap on how much of a service you may use in a period — so many requests per day. Exceed it and the service refuses you until the clock resets.">quota exceeded</span>,
+              which arrives as
+              <span class="term" data-definition="HTTP 429 is the standard web response meaning Too Many Requests — you are being rate-limited. Every service on the internet uses the same number for it.">HTTP 429</span>.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🪣</div>
+            <h4 class="pattern-title">Cloudflare R2</h4>
+            <p class="pattern-desc"><span class="term" data-definition="Object storage is a service for keeping files — images, videos, backups — and handing back a web address for each one. Cheap, enormous, and not a database.">Object storage</span> for finished images. Fails by being unreachable, or by never having been configured at all.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">💳</div>
+            <h4 class="pattern-title">Stripe</h4>
+            <p class="pattern-desc">Takes the money. Fails by rejecting a signature, or by having its webhook pointed at the wrong address.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Your App Is Mostly a Coordinator</strong>
+            <p>Strip out the rented parts and there is surprisingly little left: some rules about credits, some pages, and a lot of careful arranging. That is normal and it is not a criticism — but it changes what &quot;the app is broken&quot; usually means. More often than not it means <em>an outside service said no</em>, and that is where to look first.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 7: The key pool -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">A Bank of Phone Lines</h2>
+        <p>Each Gemini
+          <span class="term" data-definition="An API key is a secret, password-like string that lets a program prove which account it belongs to when calling an outside service. Usage and billing are counted against it.">API key</span>
+          has a daily limit. So the app does not have one key — it reads up to six from environment variables and rotates through them like a switchboard rotating through phone lines.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">GEMINI_API_KEY</code>
+            <span class="badge-desc">Line one. The only one that must exist.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">GEMINI_API_KEY_1 … _5</code>
+            <span class="badge-desc">Five more optional lines. Any that are not set are quietly filtered out of the list at startup — no error, the pool just ends up smaller.</span>
+          </div>
+        </div>
+
+        <p>Step through the switchboard. Watch what happens when one line gets a busy signal.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-5-1","label":"Request 1 arrives. The switchboard hands out Key A."},
+          {"highlight":"flow-actor-5-2","label":"Key A calls Gemini. A cartoon comes back. The pool counts one request against Key A for today.","packet":true,"from":"actor-5-2","to":"actor-5-5"},
+          {"highlight":"flow-actor-5-3","label":"Request 2 arrives. Not Key A again — the switchboard rotates to Key B.","packet":true,"from":"actor-5-1","to":"actor-5-3"},
+          {"highlight":"flow-actor-5-4","label":"Request 3 arrives. Rotate again: Key C.","packet":true,"from":"actor-5-1","to":"actor-5-4"},
+          {"highlight":"flow-actor-5-5","label":"Key C calls Gemini and gets back HTTP 429: quota exceeded. That key is done for today.","packet":true,"from":"actor-5-4","to":"actor-5-5"},
+          {"highlight":"flow-actor-5-4","label":"The pool benches Key C — marks it unavailable and stops handing it out."},
+          {"highlight":"flow-actor-5-2","label":"Request 4 arrives. The switchboard skips the benched line and goes back to Key A. The user never knew anything happened.","packet":true,"from":"actor-5-1","to":"actor-5-2"},
+          {"highlight":"flow-actor-5-1","label":"If every line ends up benched, nobody gets a crash — they get an honest message saying the app is at capacity."}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-5-1">
+              <div class="flow-actor-icon" style="background: var(--color-accent)">☎️</div>
+              <span>Switchboard</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-5-2">
+              <div class="flow-actor-icon" style="background: var(--color-actor-2)">A</div>
+              <span>Key A</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-5-3">
+              <div class="flow-actor-icon" style="background: var(--color-actor-3)">B</div>
+              <span>Key B</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-5-4">
+              <div class="flow-actor-icon" style="background: var(--color-actor-4)">C</div>
+              <span>Key C</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-5-5">
+              <div class="flow-actor-icon" style="background: var(--color-actor-5)">✨</div>
+              <span>Gemini</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet-5"></div>
+          <div class="flow-step-label" id="flow-label-5">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <p>Here is the benching, and something else worth noticing.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">      <span class="code-comment">// Check if it&apos;s a quota/limit error</span></span>
+<span class="code-line">      <span class="code-keyword">if</span> (error.message?.<span class="code-function">includes</span>(<span class="code-string">'quota'</span>) || error.message?.<span class="code-function">includes</span>(<span class="code-string">'limit'</span>) || error.status === <span class="code-number">429</span>) {</span>
+<span class="code-line">        geminiApiPool.<span class="code-function">markKeyAsUnavailable</span>(geminiApiKey, <span class="code-string">'Quota exceeded'</span>);</span>
+<span class="code-line">        <span class="code-keyword">return</span> <span class="code-function">respErr</span>(<span class="code-string">"Too many users online! VIP users get priority access. You're in queue, please wait a moment or upgrade to VIP for instant access."</span>, <span class="code-string">'QUEUE_REQUIRED'</span>);</span>
+<span class="code-line">      }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Something went wrong with the AI call. Work out whether it was a
+                <span class="term" data-definition="A rate limit is a rule capping how often you may call a service — 60 requests a minute, 1,500 a day. Every serious service has them, and hitting one is a normal event, not a disaster.">rate limit</span>
+                by checking three different ways, because different services phrase it differently.</p>
+              <p class="tl">If it was: bench this key. Take it out of rotation so the next request tries a different one instead of hitting the same wall.</p>
+              <p class="tl">Then tell the user. And look closely at what they are told — this is not an error message, it is a sales pitch.</p>
+              <p class="tl">&quot;Too many users online, VIP users get priority access.&quot; A technical limit has been reframed as evidence the product is popular, and as a reason to pay. That is a deliberate product decision, living inside error-handling code.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 8: Graceful degradation + quiz -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Worse, But Working</h2>
+        <p>What if the image storage is not configured at all? The app does not error. It quietly does something worse instead.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">let</span> finalImageUrl = <span class="code-string">`data:${generatedImageMimeType};base64,${generatedImageData}`</span>;</span>
+<span class="code-line">    <span class="code-keyword">let</span> storedFilename = filename;</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-comment">// Store image if storage is configured</span></span>
+<span class="code-line">    <span class="code-keyword">const</span> hasStorageConfig = process.env.STORAGE_ENDPOINT &amp;&amp;</span>
+<span class="code-line">                            process.env.STORAGE_ACCESS_KEY &amp;&amp;</span>
+<span class="code-line">                            process.env.STORAGE_SECRET_KEY &amp;&amp;</span>
+<span class="code-line">                            process.env.STORAGE_BUCKET;</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Start by assuming the worst case: the image address is the entire image, encoded as a gigantic block of text called a
+                <span class="term" data-definition="A data URL is a web address that contains the file itself rather than pointing at one. Instead of a link to a picture, the link IS the picture, spelled out in text — which makes it enormous.">data URL</span>.</p>
+              <p class="tl">Note that this is the <em>default</em>, set before anything is even attempted. The good outcome is the upgrade; the poor outcome is the starting point.</p>
+              <p class="tl">Now check whether proper storage is set up — all four settings must be present. Miss one and storage counts as unconfigured.</p>
+              <p class="tl">If they are all there, upload the image and replace that giant text block with a short, real web address.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🪂</div>
+          <div class="callout-content">
+            <strong class="callout-title">Graceful Degradation</strong>
+            <p>Name the pattern:
+              <span class="term" data-definition="Graceful degradation means that when part of a system fails, the rest keeps working in a reduced way instead of collapsing. An escalator with the power off is still a staircase.">graceful degradation</span>.
+              The user still gets their cartoon. But the reply is now megabytes instead of bytes, the image is saved nowhere, and there is no link they can share. Worse, but working — and worth knowing that this is what &quot;it feels slow today&quot; sometimes actually is.</p>
+          </div>
+        </div>
+
+        <h2 class="screen-heading" style="margin-top: var(--space-12)">Check Your Understanding</h2>
+        <p>Four debugging scenarios. Two of them really happened.</p>
+
+        <div class="quiz-container" id="quiz-module5">
+
+          <div class="quiz-question-block"
+               data-correct="q1-b"
+               data-explanation-right="Exactly — and this is the real story from this codebase. The error appeared before any query ran, which points at the connection itself: wrong address, wrong credentials, or a service that no longer exists. Free tiers reclaim idle projects, and that is what had happened."
+               data-explanation-wrong="Look at the timing. The failure happened before a single query was sent — so nothing about your queries, your schema or your recent code changes can be responsible. What has to be true before any query can run at all?">
+            <h3 class="quiz-question">Your app suddenly returns errors on every page. The log says <code>tenant or user not found</code>, and it appears before any query runs. Most likely cause?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q1-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A bug in the last code change you shipped</span>
+              </button>
+              <button class="quiz-option" data-value="q1-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The database itself is gone or unreachable, or the connection details are wrong — not your application code</span>
+              </button>
+              <button class="quiz-option" data-value="q1-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A missing migration — some column the code expects does not exist</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q2-a"
+               data-explanation-right="Exactly. The blueprint change alone only updates the description. The migration is the reviewable, repeatable record that can be run on your laptop, the test site and production and produce the same result every time — and that you can read before it touches anything."
+               data-explanation-wrong="Think about the difference between redrawing the blueprint and issuing a permit. A schema edit describes the new shape; something else has to actually, safely, change the building people are living in — and leave a record of it.">
+            <h3 class="quiz-question">You ask an AI to &quot;add a phone number field to users&quot;. What should you insist it produces alongside the schema change?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q2-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A migration file — so the change is reviewable and repeats identically on every environment</span>
+              </button>
+              <button class="quiz-option" data-value="q2-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A backup of the whole database</span>
+              </button>
+              <button class="quiz-option" data-value="q2-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Nothing — editing the schema file is the change</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="scenario-block">
+            <div class="scenario-context">
+              <span class="scenario-label">Scenario</span>
+              <p>Image generation works for the first few dozen users each morning. By lunchtime, everyone gets &quot;Too many users online! VIP users get priority access.&quot; Overnight it fixes itself, then does the same thing again.</p>
+            </div>
+            <div class="quiz-question-block"
+                 data-correct="q3-b"
+                 data-explanation-right="Exactly — daily quotas reset at midnight, which is why it heals overnight and breaks again by lunchtime. Every key in the pool has been benched. Your levers: add more keys, raise the paid quota, or queue requests so you spend the quota you have on the users who matter most."
+                 data-explanation-wrong="Look at the rhythm of the failure: it heals overnight and returns during the day. Something is being counted, hitting a ceiling, and resetting on a daily clock. What in this module works exactly like that?">
+              <h3 class="quiz-question">What is going on, and what is one lever you could pull?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="q3-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The server runs out of memory during the day and restarts overnight</span>
+                </button>
+                <button class="quiz-option" data-value="q3-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The daily quota on every key in the pool is exhausted — add more keys, raise the paid quota, or queue requests</span>
+                </button>
+                <button class="quiz-option" data-value="q3-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>The database connection pool is full and never releases connections</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q4-c"
+               data-explanation-right="Exactly — graceful degradation in action. Generation still works, but the image comes back embedded in the reply as an enormous block of text, is saved nowhere, and cannot be linked to or shared. Nobody sees an error, which is exactly what makes this kind of fault so easy to miss."
+               data-explanation-wrong="Remember the default value at the top of that code: the giant embedded image is what happens when nothing is configured. The upload is an upgrade on top of it, not a requirement — so nothing crashes.">
+            <h3 class="quiz-question">The storage credentials are missing in production. What does a user actually experience?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q4-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>An error page — image generation is unavailable</span>
+              </button>
+              <button class="quiz-option" data-value="q4-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The image generates but appears blank</span>
+              </button>
+              <button class="quiz-option" data-value="q4-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It works, but slower — the image is embedded in the reply, saved nowhere, and cannot be shared as a link</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module5')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module5')">Try Again</button>
+        </div>
+
+        <p style="margin-top: var(--space-10)">Every error message we have quoted so far has been in English. But this app runs in two languages — and none of that text lives in the components. That is <strong>Every Language, Every Screen</strong>.</p>
+      </section>
+
+    </div>
+  </div>
+</section>

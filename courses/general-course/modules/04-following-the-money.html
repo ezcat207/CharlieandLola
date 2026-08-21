@@ -1,0 +1,664 @@
+<section class="module" id="module-4" style="background: var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">04</span>
+      <h1 class="module-title">Following the Money</h1>
+      <p class="module-subtitle">Thirty free credits, ten per image — so the fourth image is where this app has to become a business. The way it handles money is quietly the most carefully-built part of the whole codebase.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1: The chequebook register -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">There Is No Balance</h2>
+        <p>Last module ended on a cliffhanger: new accounts get 30 credits, an image costs 10, so what happens on the fourth one? The honest answer is that you run out — and the app has to know that with total certainty.</p>
+
+        <p>Picture the paper stub in the back of an old chequebook. One line per transaction: date, description, <em>+£200</em> or <em>−£35</em>. The rule that makes it trustworthy is this: <strong>you never rub out the balance and write a new one.</strong> You only ever add a line.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">+30</code>
+            <span class="badge-desc"><strong>new_user</strong> — signed up on 3 March. Expires in one year.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">−10</code>
+            <span class="badge-desc"><strong>image_generation</strong> — first cartoon</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">−10</code>
+            <span class="badge-desc"><strong>image_generation</strong> — second cartoon</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">+1000</code>
+            <span class="badge-desc"><strong>order_pay</strong> — bought the Premium plan, order #7429</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">−10</code>
+            <span class="badge-desc"><strong>image_generation</strong> — third cartoon</span>
+          </div>
+        </div>
+
+        <p>That list is a real
+          <span class="term" data-definition="A database table is a grid of saved information — columns for the kinds of fact you store, and one row for each thing you have stored. Think of a spreadsheet the app can search instantly.">table</span>
+          in this app&apos;s database, called <code>credits</code>. Look at the columns it does <em>not</em> have: there is no column called <code>balance</code> anywhere. Your balance is not a number the app keeps — it is the sum of those
+          <span class="term" data-definition="A row is one single entry in a database table — one line in the ledger, one card in the filing cabinet.">rows</span>, added up fresh every time anyone asks.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Never Overwrite a Balance. Always Append a Line.</strong>
+            <p>Engineers call this an <span class="term" data-definition="An append-only ledger is a record where you can add new entries but never edit or delete old ones — like a chequebook stub or a bank statement. The current total is worked out by adding everything up.">append-only ledger</span>, and it is one of the most valuable instructions you can give an AI assistant. Ask for &quot;add credits&quot; and you will almost certainly get <code>UPDATE users SET credits = credits - 10</code> — a single number being overwritten. That works right up until two requests land at the same moment, or a customer asks where their credits went, and then there is nothing to look at.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: The price never comes from the browser -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Buying: The Price Does Not Come From You</h2>
+        <p>When you click a plan on the pricing page, your Browser sends the Server a small package of information — a
+          <span class="term" data-definition="POST is one of the standard kinds of web request. A GET request asks for something; a POST request sends something to the server, like a form or an order.">POST</span>
+          request carrying three things: which product, which currency, which language.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🏷️</div>
+            <h4 class="pattern-title">product_id</h4>
+            <p class="pattern-desc">Which plan you clicked. Just a name, like <code>premium</code>.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">💱</div>
+            <h4 class="pattern-title">currency</h4>
+            <p class="pattern-desc">Dollars or yuan — which price list to read from.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🌍</div>
+            <h4 class="pattern-title">locale</h4>
+            <p class="pattern-desc">Which language you are browsing in.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-error)">
+            <div class="pattern-icon" style="background: var(--color-error)">🚫</div>
+            <h4 class="pattern-title">the price</h4>
+            <p class="pattern-desc"><strong>Not sent.</strong> Not now, not ever. The Server looks it up itself.</p>
+          </div>
+        </div>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-comment">// validate checkout params</span></span>
+<span class="code-line">    <span class="code-keyword">const</span> page = <span class="code-keyword">await</span> <span class="code-function">getPricingPage</span>(locale);</span>
+<span class="code-line">    <span class="code-keyword">if</span> (!page || !page.pricing || !page.pricing.items) {</span>
+<span class="code-line">      <span class="code-keyword">return</span> <span class="code-function">respErr</span>(<span class="code-string">"invalid pricing table"</span>);</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">const</span> item = page.pricing.items.<span class="code-function">find</span>(</span>
+<span class="code-line">      (item: PricingItem) =&gt; item.product_id === product_id</span>
+<span class="code-line">    );</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">if</span> (!item || !item.amount || !item.interval || !item.currency) {</span>
+<span class="code-line">      <span class="code-keyword">return</span> <span class="code-function">respErr</span>(<span class="code-string">"invalid checkout params"</span>);</span>
+<span class="code-line">    }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">A note for future readers: we are about to check that this order makes sense.</p>
+              <p class="tl">Load the Server&apos;s own price list for this language. Not the Browser&apos;s copy — the real one.</p>
+              <p class="tl">If the price list is missing or empty, stop immediately and say so. Never guess.</p>
+              <p class="tl">Search that list for the plan the visitor clicked, matching on its name.</p>
+              <p class="tl">If there is no such plan, or it has no price, no billing period or no currency, refuse the whole request.</p>
+              <p class="tl">Everything after this point uses <code>item.amount</code> — a number that came from the Server&apos;s own files, and never from you.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-content">
+            <strong class="callout-title">Never Trust the Client With Anything That Matters</strong>
+            <p>If the price arrived in the request, anyone could open dev tools, change <code>amount</code> to <code>1</code>, and buy the $99 plan for one
+              <span class="term" data-definition="Prices in payment systems are almost always stored in the smallest unit of the currency — cents rather than dollars — because whole numbers avoid the tiny rounding errors that decimals introduce.">cent</span>.
+              The rule generalises far beyond money: the Browser is a place your code runs, not a source of truth. Anything the Server decides must be looked up by the Server.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: The plot twist — webhooks -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Plot Twist: Nobody Tells the Server You Paid</h2>
+        <p>The Server creates an <strong>order</strong> row with status <code>created</code>, asks
+          <span class="term" data-definition="Stripe is a company that handles card payments for other businesses. Your app hands the customer over to Stripe, Stripe takes the money, and your app never touches the card details.">Stripe</span>
+          for a payment page, and sends your Browser there. Your card details never touch this app&apos;s servers.</p>
+
+        <p>Then you pay, and Stripe
+          <span class="term" data-definition="A redirect is when one site tells your browser to go and load a different page instead — like being handed a slip of paper and pointed at a different counter.">redirects</span>
+          you back. Here is the part that surprises everyone: <strong>that redirect is not proof of payment.</strong> Anyone could type that return address into their browser bar.</p>
+
+        <p>So Stripe does something separate. Its own servers make a request to <em>your</em> server, at a special address, saying &quot;this actually happened&quot;. That call-back-when-it-is-real message is a
+          <span class="term" data-definition="A webhook is a message one service sends to your server, unprompted, when something happens — like a delivery firm phoning you when the parcel is actually delivered, instead of you standing at the door guessing.">webhook</span>.</p>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">📦</div>
+          <div class="callout-content">
+            <strong class="callout-title">The Delivery Firm Phones You Back</strong>
+            <p>You do not stand at the door guessing whether the parcel arrived. The courier rings you when it is actually delivered. The customer walking back through your door is a hopeful sign; the courier&apos;s phone call is the fact.</p>
+          </div>
+        </div>
+
+        <p>Watch the whole conversation happen. Three participants, and one of them speaks up without being asked.</p>
+
+        <div class="chat-window" id="chat-module4">
+          <div class="chat-messages">
+            <div class="chat-message" data-msg="0" data-sender="browser" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">🌐</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">Browser</span>
+                <p>Hi — I would like the Premium plan, please. In dollars, in English.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="1" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-accent)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-accent)">Server</span>
+                <p>Let me look up what Premium actually costs. I am not taking your word for it.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="2" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-accent)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-accent)">Server</span>
+                <p>$0.99. Creating order <strong>#7429</strong>, status: <code>created</code>. Nobody has paid anything yet.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="3" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-accent)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-accent)">Server</span>
+                <p>Stripe — set me up a checkout for $0.99, and tag it with order 7429 so I know which one it was.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="4" data-sender="stripe" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">💳</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">Stripe</span>
+                <p>Done. Here is a payment page. Send them over to me.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="5" data-sender="browser" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">🌐</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">Browser</span>
+                <p><em>pays on Stripe&apos;s page — the Server never sees the card</em></p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="6" data-sender="stripe" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">💳</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">Stripe</span>
+                <p>📩 <code>checkout.session.completed</code> for order 7429. Signed, so you can prove it came from me.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="7" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-accent)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-accent)">Server</span>
+                <p>Signature checks out. Order 7429 was <code>created</code> → now <code>paid</code>. Writing a <strong>+1000</strong> line in the ledger.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="8" data-sender="stripe" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">💳</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">Stripe</span>
+                <p>📩 <code>checkout.session.completed</code> for order 7429.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="9" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-accent)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-accent)">Server</span>
+                <p>Already paid. Ignoring. 🙂</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-typing" id="chat-module4-typing" style="display:none">
+            <div class="chat-avatar" id="chat-module4-typing-avatar">?</div>
+            <div class="chat-typing-dots">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+
+          <div class="chat-controls">
+            <button class="btn chat-next-btn">Next Message</button>
+            <button class="btn chat-all-btn">Play All</button>
+            <button class="btn chat-reset-btn">Replay</button>
+            <span class="chat-progress"></span>
+          </div>
+        </div>
+
+        <p>Two things in that conversation are worth pulling apart. First, how the Server knows the message really came from Stripe. Second, that last exchange — Stripe said the same thing twice.</p>
+      </section>
+
+      <!-- SCREEN 4: Verifying the signature -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Proving Who Sent It</h2>
+        <p>The webhook address is a public address on the internet. Anyone can send a message to it claiming a payment succeeded — so every message arrives with a
+          <span class="term" data-definition="A cryptographic signature is a scrambled fingerprint of a message, made using a secret only the sender and receiver know. If even one character of the message changes, the fingerprint stops matching — so it proves both who sent it and that nobody edited it in transit.">cryptographic signature</span>
+          attached, and the Server refuses to believe anything it cannot verify.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">const</span> sign = req.headers.<span class="code-function">get</span>(<span class="code-string">"stripe-signature"</span>) <span class="code-keyword">as</span> string;</span>
+<span class="code-line">    <span class="code-keyword">const</span> body = <span class="code-keyword">await</span> req.<span class="code-function">text</span>();</span>
+<span class="code-line">    <span class="code-keyword">if</span> (!sign || !body) {</span>
+<span class="code-line">      <span class="code-keyword">throw new</span> Error(<span class="code-string">"invalid notify data"</span>);</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">const</span> event = <span class="code-keyword">await</span> stripe.webhooks.<span class="code-function">constructEventAsync</span>(</span>
+<span class="code-line">      body,</span>
+<span class="code-line">      sign,</span>
+<span class="code-line">      stripeWebhookSecret</span>
+<span class="code-line">    );</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"stripe notify event: "</span>, event);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">switch</span> (event.type) {</span>
+<span class="code-line">      <span class="code-keyword">case</span> <span class="code-string">"checkout.session.completed"</span>: {</span>
+<span class="code-line">        <span class="code-comment">// get checkout session</span></span>
+<span class="code-line">        <span class="code-keyword">const</span> session = event.data.object;</span>
+<span class="code-line">        <span class="code-keyword">await</span> <span class="code-function">handleCheckoutSession</span>(stripe, session);</span>
+<span class="code-line">        <span class="code-keyword">break</span>;</span>
+<span class="code-line">      }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Pull the signature Stripe attached to this message, and the raw text of the message itself.</p>
+              <p class="tl">If either one is missing, stop right here — this is not a message worth reading.</p>
+              <p class="tl">Hand all three to Stripe&apos;s own checking function: the message, the signature, and a shared secret only Stripe and this Server know.</p>
+              <p class="tl">If the fingerprint does not match, this line fails and nothing below it ever runs. A forged message dies here.</p>
+              <p class="tl">Write the verified message into the log, so there is a record if anyone needs to reconstruct what happened.</p>
+              <p class="tl">Stripe sends many kinds of message. Look at which kind this is and pick the matching branch.</p>
+              <p class="tl">If it is &quot;the customer finished checking out&quot;, pull out the details and go do the actual work of marking the order paid.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Notice where <code>stripeWebhookSecret</code> comes from: an
+          <span class="term" data-definition="An environment variable is a setting stored outside your code — like a name tag stuck on the server — that changes how the app behaves without anyone editing the code itself. Secrets live here, never in the code.">environment variable</span>
+          set on the server, never written into the code. If that secret is wrong, every real payment message gets rejected — and that is a very common launch-day bug.</p>
+      </section>
+
+      <!-- SCREEN 5: Idempotency -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Safe to Do Twice</h2>
+        <p>Stripe will sometimes send the same webhook more than once. That is deliberate: if a network blip means the first message was not acknowledged, sending it again is far better than losing a payment.</p>
+
+        <p>Which puts the burden on your side. The code has to be safe to run twice — a property with a name worth learning:
+          <span class="term" data-definition="Idempotent means doing something twice has exactly the same result as doing it once. Pressing a lift call button five times is idempotent; pressing a vending machine button five times is not.">idempotent</span>.
+          Say that word to an AI assistant and the payment code you get back is immediately better.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-comment">// order already paied</span></span>
+<span class="code-line">    <span class="code-keyword">if</span> (order.status === OrderStatus.Paid) {</span>
+<span class="code-line">      <span class="code-keyword">return</span>;</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-comment">// only update order status from created to paid</span></span>
+<span class="code-line">    <span class="code-keyword">if</span> (order.status !== OrderStatus.Created) {</span>
+<span class="code-line">      <span class="code-keyword">throw new</span> Error(<span class="code-string">"invalid order status"</span>);</span>
+<span class="code-line">    }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">const</span> paid_at = <span class="code-function">getIsoTimestr</span>();</span>
+<span class="code-line">    <span class="code-keyword">await</span> <span class="code-function">updateOrderStatus</span>(</span>
+<span class="code-line">      order_no,</span>
+<span class="code-line">      OrderStatus.Paid,</span>
+<span class="code-line">      paid_at,</span>
+<span class="code-line">      paid_email,</span>
+<span class="code-line">      paid_detail</span>
+<span class="code-line">    );</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">if</span> (order.user_uuid) {</span>
+<span class="code-line">      <span class="code-keyword">if</span> (order.credits &gt; 0) {</span>
+<span class="code-line">        <span class="code-comment">// increase credits for paied order</span></span>
+<span class="code-line">        <span class="code-keyword">await</span> <span class="code-function">updateCreditForOrder</span>(order <span class="code-keyword">as</span> unknown <span class="code-keyword">as</span> Order);</span>
+<span class="code-line">      }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">A note from whoever wrote this — with a typo in it, because real codebases have typos.</p>
+              <p class="tl"><strong>Guard one:</strong> if this order is already marked paid, quietly stop. No error, no fuss, no second helping of credits.</p>
+              <p class="tl">If the order is in some other unexpected state — cancelled, say — that is a genuine problem, so raise a loud error instead of continuing.</p>
+              <p class="tl">Record the exact moment of payment.</p>
+              <p class="tl">Flip the order from <code>created</code> to <code>paid</code>, storing who paid and Stripe&apos;s full record of it alongside.</p>
+              <p class="tl">Only if this order belongs to a signed-in account, and only if it actually bought credits…</p>
+              <p class="tl">…add the credits. Which has a guard of its own.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>That second guard lives in the credit service, and it is even simpler: before writing the <code>+1000</code> line, look for a line that already carries this order number.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">order.status === Paid</code>
+            <span class="badge-desc">Guard one — the order itself remembers it was already settled</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">findCreditByOrderNo</code>
+            <span class="badge-desc">Guard two — the ledger already has a line tagged with this order number, so stop</span>
+          </div>
+        </div>
+
+        <p>Two independent guards for the same mistake. That is not paranoia; that is what code touching money should look like.</p>
+      </section>
+
+      <!-- SCREEN 6: Spending — the ledger in motion -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Spending Is Just a Minus Sign</h2>
+        <p>Generating an image spends 10 credits. Here is the entire mechanism for that — and the whole idea of the module is hiding on one line.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">const</span> new_credit: <span class="code-keyword">typeof</span> creditsTable.$inferInsert = {</span>
+<span class="code-line">      <span class="code-property">trans_no</span>: <span class="code-function">getSnowId</span>(),</span>
+<span class="code-line">      <span class="code-property">created_at</span>: <span class="code-keyword">new</span> <span class="code-function">Date</span>(<span class="code-function">getIsoTimestr</span>()),</span>
+<span class="code-line">      <span class="code-property">expired_at</span>: <span class="code-keyword">new</span> <span class="code-function">Date</span>(expired_at),</span>
+<span class="code-line">      <span class="code-property">user_uuid</span>: user_uuid,</span>
+<span class="code-line">      <span class="code-property">trans_type</span>: trans_type,</span>
+<span class="code-line">      <span class="code-property">credits</span>: <span class="code-number">0</span> - credits,</span>
+<span class="code-line">      <span class="code-property">order_no</span>: order_no,</span>
+<span class="code-line">    };</span>
+<span class="code-line">    <span class="code-keyword">await</span> <span class="code-function">insertCredit</span>(new_credit);</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Build one new ledger line, ready to be written.</p>
+              <p class="tl">Give it a unique reference number of its own, so this exact
+                <span class="term" data-definition="A transaction here means one single movement of value — one line in the ledger. Every grant and every spend is its own transaction with its own reference number.">transaction</span>
+                can always be pointed at.</p>
+              <p class="tl">Stamp it with right now, and with the date it stops counting.</p>
+              <p class="tl">Record whose it is, and what kind of movement it was — a purchase, a signup gift, an image generation.</p>
+              <p class="tl"><strong>Here it is.</strong> Zero minus the amount. That single minus sign is the entire spending mechanism — a spend is just a grant with the sign flipped.</p>
+              <p class="tl">Note which order it relates to, if any.</p>
+              <p class="tl">Write the line. Nothing else in the database changes. Nothing is overwritten.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>And when the app needs your balance, it does exactly what you would do with a chequebook stub: adds the lines up.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-comment">// Get only valid credits for current balance</span></span>
+<span class="code-line">    <span class="code-keyword">const</span> validCredits = <span class="code-keyword">await</span> <span class="code-function">getUserValidCredits</span>(user_uuid);</span>
+<span class="code-line">    <span class="code-keyword">if</span> (validCredits) {</span>
+<span class="code-line">      validCredits.<span class="code-function">forEach</span>((v) =&gt; {</span>
+<span class="code-line">        user_credits.left_credits += v.credits || <span class="code-number">0</span>;</span>
+<span class="code-line">      });</span>
+<span class="code-line">    }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Ask the Database for this person&apos;s ledger lines — but only the ones that have not expired.</p>
+              <p class="tl">If there are any, walk through them one at a time.</p>
+              <p class="tl">Add each line&apos;s number to a running total. The plus rows push it up, the minus rows pull it down.</p>
+              <p class="tl">Whatever the total ends up being <em>is</em> the balance. It was worked out just now and will be thrown away again immediately.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Step through it once and watch the balance appear out of nowhere at the end.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-4-1","label":"Day one: you sign in. A line is written — plus 30, type new_user, expiring in a year."},
+          {"highlight":"flow-actor-4-2","label":"You generate a cartoon. A NEW line is written: minus 10. The plus-30 line is not touched."},
+          {"highlight":"flow-actor-4-3","label":"Another cartoon, another line: minus 10. Two separate lines, not one number edited twice."},
+          {"highlight":"flow-actor-4-4","label":"You buy the Premium plan. Stripe confirms by webhook, so a line is written: plus 1000, tagged with order 7429."},
+          {"highlight":"flow-actor-4-5","label":"Another cartoon: minus 10. Five lines now, and still no balance stored anywhere."},
+          {"highlight":"flow-actor-4-6","label":"Now the app needs your balance. It has to go and work it out.","packet":true,"from":"actor-4-1","to":"actor-4-6"},
+          {"highlight":"flow-actor-4-6","label":"Plus 30, minus 10 — running total 20.","packet":true,"from":"actor-4-2","to":"actor-4-6"},
+          {"highlight":"flow-actor-4-6","label":"Minus 10 again — running total 10.","packet":true,"from":"actor-4-3","to":"actor-4-6"},
+          {"highlight":"flow-actor-4-6","label":"Plus 1000 from the purchase — running total 1010.","packet":true,"from":"actor-4-4","to":"actor-4-6"},
+          {"highlight":"flow-actor-4-6","label":"Minus 10 for the last cartoon — running total 1000.","packet":true,"from":"actor-4-5","to":"actor-4-6"},
+          {"highlight":"flow-actor-4-6","label":"Balance: 1000 credits. Calculated from the lines, never stored. Expired lines were left out entirely."}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-4-1">
+              <div class="flow-actor-icon" style="background: var(--color-success)">+30</div>
+              <span>new_user</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4-2">
+              <div class="flow-actor-icon" style="background: var(--color-error)">−10</div>
+              <span>image</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4-3">
+              <div class="flow-actor-icon" style="background: var(--color-error)">−10</div>
+              <span>image</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4-4">
+              <div class="flow-actor-icon" style="background: var(--color-success)">+1000</div>
+              <span>order_pay</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4-5">
+              <div class="flow-actor-icon" style="background: var(--color-error)">−10</div>
+              <span>image</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4-6">
+              <div class="flow-actor-icon" style="background: var(--color-accent)">Σ</div>
+              <span>Balance</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet-4"></div>
+          <div class="flow-step-label" id="flow-label-4">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">⏳</div>
+          <div class="callout-content">
+            <strong class="callout-title">Two Business Decisions Hiding in the Code</strong>
+            <p>Every line has an
+              <span class="term" data-definition="To expire means to stop counting after a certain date. An expired credit line stays in the ledger forever as history, but is skipped when the balance is added up.">expiry</span>
+              date — signup credits last a year, purchased credits last until the end of the billing period. And when credits are spent, the lines are read in expiry order, soonest first. Nobody wrote a memo about that; the rule lives in one small phrase, <code>orderBy(asc(credits.expired_at))</code>, and it is as real a piece of company policy as anything in the terms of service.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 7: The whole price list in one place + quiz -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Five Kinds of Line, One Price List</h2>
+        <p>Everything a credit line can possibly be, and everything a credit can possibly cost, sits in thirteen lines of code.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export enum</span> CreditsTransType {</span>
+<span class="code-line">  NewUser = <span class="code-string">"new_user"</span>, <span class="code-comment">// initial credits for new user</span></span>
+<span class="code-line">  OrderPay = <span class="code-string">"order_pay"</span>, <span class="code-comment">// user pay for credits</span></span>
+<span class="code-line">  SystemAdd = <span class="code-string">"system_add"</span>, <span class="code-comment">// system add credits</span></span>
+<span class="code-line">  Ping = <span class="code-string">"ping"</span>, <span class="code-comment">// cost for ping api</span></span>
+<span class="code-line">  ImageGeneration = <span class="code-string">"image_generation"</span>, <span class="code-comment">// cost for image generation</span></span>
+<span class="code-line">}</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line"><span class="code-keyword">export enum</span> CreditsAmount {</span>
+<span class="code-line">  NewUserGet = <span class="code-number">30</span>,</span>
+<span class="code-line">  PingCost = <span class="code-number">1</span>,</span>
+<span class="code-line">  ImageGeneration = <span class="code-number">10</span>,</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Here is the complete list of reasons a ledger line can exist — an
+                <span class="term" data-definition="An enum is a fixed, named list of allowed values. Instead of letting any text be written into a field, the code says these five are the only options — so a typo becomes an error rather than a mystery.">enum</span>,
+                which means these five are the <em>only</em> options.</p>
+              <p class="tl">A signup gift, a purchase, a manual top-up from support, a test call, and an image generation.</p>
+              <p class="tl">And here is the whole price list, as plain numbers.</p>
+              <p class="tl">Thirty free on signup. One credit for a test ping. Ten credits per cartoon. Change the number 10 here and the price of the product changes everywhere.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>A few more real facts about how the money side is put together:</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">📝</div>
+            <h4 class="pattern-title">Prices Are a Text File</h4>
+            <p class="pattern-desc">All 8 plans live in <code>pricing/en.json</code>, not in a database. The featured plan is Premium at <code>amount: 99</code> — that is 99 cents.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🔀</div>
+            <h4 class="pattern-title">Two Payment Companies</h4>
+            <p class="pattern-desc">Stripe or Creem, chosen by one environment variable. Chinese customers also get WeChat Pay and Alipay.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">🤝</div>
+            <h4 class="pattern-title">Someone Else Gets Paid Too</h4>
+            <p class="pattern-desc">A paid order also triggers the
+              <span class="term" data-definition="An affiliate is someone who gets a share of the money when a person they referred makes a purchase — a referral commission.">affiliate</span>
+              payout to whoever invited that customer.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 8: Quiz -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Check Your Understanding</h2>
+        <p>Four money scenarios. These are the ones that cost real money and real trust when you get them wrong.</p>
+
+        <div class="quiz-container" id="quiz-module4">
+
+          <div class="quiz-question-block"
+               data-correct="q1-b"
+               data-explanation-right="Exactly — the webhook is a completely separate message from Stripe&apos;s servers to yours. It has nothing to do with the customer&apos;s browser, their tab, their wifi, or whether they ever came back to your site. That is the whole reason the redirect is not used as proof."
+               data-explanation-wrong="Think about who sends what. The redirect happens in the customer&apos;s browser — but the message that actually grants the credits comes from Stripe&apos;s own servers, directly to yours, with nobody in between.">
+            <h3 class="quiz-question">A customer pays on Stripe&apos;s page, then closes the tab before it redirects back to the app. Do they get their credits?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q1-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>No — the credits are granted by the page they land on when they come back</span>
+              </button>
+              <button class="quiz-option" data-value="q1-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Yes — the webhook travels server-to-server and does not depend on their browser at all</span>
+              </button>
+              <button class="quiz-option" data-value="q1-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Only if they sign in again within a few minutes</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q2-c"
+               data-explanation-right="Exactly — two independent guards. The order refuses to move from paid to paid, and the ledger refuses to write a second line carrying an order number it already has. Either one alone would do the job; having both is what payment code should look like."
+               data-explanation-wrong="Stripe repeating itself is deliberate, not a fault — it is how a payment survives a dropped connection. So the protection has to be on your side, in code that is safe to run twice.">
+            <h3 class="quiz-question">Stripe sends the same &quot;payment complete&quot; message twice. What stops the customer getting double credits?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q2-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Stripe never sends anything twice, so it cannot happen</span>
+              </button>
+              <button class="quiz-option" data-value="q2-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Nothing — support has to notice and take the credits back manually</span>
+              </button>
+              <button class="quiz-option" data-value="q2-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The order is already marked paid, and the ledger already has a line tagged with that order number — so the second run does nothing</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="scenario-block">
+            <div class="scenario-context">
+              <span class="scenario-label">Scenario</span>
+              <p>You ask an AI assistant to add a credits feature. It proposes putting a single <code>credits</code> number on the users table and adding to or subtracting from it whenever something happens.</p>
+            </div>
+            <div class="quiz-question-block"
+                 data-correct="q3-c"
+                 data-explanation-right="Exactly — and it is all three at once. You cannot answer &quot;where did my credits go?&quot;, you cannot expire some credits and not others, and two requests arriving at the same moment can each read the same starting number and overwrite each other. Say the words &quot;append-only ledger&quot; and you get a far better design first time."
+                 data-explanation-wrong="Have another look at what the ledger gives you that a single number cannot: a history you can read, a per-line expiry date, and safety when two things happen at once. This design costs one of those — actually, all of them.">
+              <h3 class="quiz-question">Name what gets worse.</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="q3-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Nothing important — it is simpler and does the same job</span>
+                </button>
+                <button class="quiz-option" data-value="q3-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>It is slower to read the balance</span>
+                </button>
+                <button class="quiz-option" data-value="q3-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>You lose the history, you can no longer expire credits selectively, and simultaneous requests can overwrite each other</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q4-a"
+               data-explanation-right="Exactly — nothing happens, because the price was never in the request to begin with. The Server reads it from its own pricing file every time. Generalise this instinct: any value that decides money, permissions or identity must be looked up by the Server, never accepted from the Browser."
+               data-explanation-wrong="Look again at what the Browser actually sends: a product name, a currency, and a language. There is no price in that package — the Server finds the price itself, so there is nothing for an attacker to edit.">
+            <h3 class="quiz-question">Someone edits the request in their browser to send <code>amount: 1</code> instead of the real price. What happens?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q4-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Nothing — the Browser never sends a price, so the extra field is simply ignored</span>
+              </button>
+              <button class="quiz-option" data-value="q4-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>They buy the plan for one cent</span>
+              </button>
+              <button class="quiz-option" data-value="q4-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Stripe catches it and rejects the payment</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module4')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module4')">Try Again</button>
+        </div>
+
+        <p style="margin-top: var(--space-10)">We have written a lot of rows to a database this module without once asking what a database actually <em>is</em> — or what happens when it disappears. It disappeared. Really. That is <strong>Memory and the Outside World</strong>.</p>
+      </section>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,733 @@
+<section class="module" id="module-5" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">Tapping the Walls</h1>
+      <p class="module-subtitle">Five real faults in this app. Not one of them crashes anything — which is exactly why they are all still here.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- ============ SCREEN 1: THE INSPECTION ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Nothing here is on fire</h2>
+
+        <p>Every one of the five faults on this page is real, is in the app right now, and none of them crash anything. The bugs that crash are the easy ones — they announce themselves.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">🔦</div>
+          <div class="callout-content">
+            <strong class="callout-title">The metaphor for this module: a home inspection</strong>
+            <p>An inspector does not wait for the ceiling to come down. They walk the house tapping walls, listening for the hollow spot, checking whether the switch by the door is wired to anything at all. Most of what they find is not dangerous — it is <em>disconnected</em>.</p>
+          </div>
+        </div>
+
+        <p>Wires that go nowhere. A light switch left over from a renovation that nobody removed. That is what is in this house — and in yours, and in every shipped product ever looked at under a torch.</p>
+
+        <div class="pattern-cards stagger-children">
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-1)">
+            <div class="pattern-icon" style="background: var(--color-actor-1)">📬</div>
+            <h4 class="pattern-title">1. The reply nobody reads</h4>
+            <p class="pattern-desc">The server writes <code>message</code>. The browser asks for <code>msg</code>. One word apart, so one whole branch never runs.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🔌</div>
+            <h4 class="pattern-title">2. Three switches, no wires</h4>
+            <p class="pattern-desc">Aspect ratio, file format and model tier can never change from the values they were born with.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🎨</div>
+            <h4 class="pattern-title">3. A style rule waiting by the phone</h4>
+            <p class="pattern-desc">Hand-written chunky shadows for the buttons that have never once appeared on screen.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🔒</div>
+            <h4 class="pattern-title">4. A label that tells a fib</h4>
+            <p class="pattern-desc">The button says you must sign in. Then it generates your picture anyway.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">🈳</div>
+            <h4 class="pattern-title">5. A word that was never delivered</h4>
+            <p class="pattern-desc">Written in English, translated into Chinese, and never carried the last few metres to the button.</p>
+          </div>
+        </div>
+
+        <p>One pattern accounts for all five: <strong>two halves that were each written correctly and never introduced to each other.</strong></p>
+      </section>
+
+      <!-- ============ SCREEN 2: FAULT 1 — HERO ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Fault 1 — the reply nobody reads</h2>
+
+        <p>When something goes wrong on the server, the app writes back a small note. Every failure note in the whole codebase is built by these fifteen lines.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE · src/lib/resp.ts</span>
+            <pre><code><span class="code-line"><span class="code-keyword">export</span> <span class="code-keyword">function</span> <span class="code-function">respErr</span>(message: <span class="code-keyword">string</span>, data?: <span class="code-keyword">any</span>) {</span>
+<span class="code-line">  <span class="code-keyword">return</span> <span class="code-function">respJson</span>(<span class="code-number">-1</span>, message, data);</span>
+<span class="code-line">}</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="code-keyword">export</span> <span class="code-keyword">function</span> <span class="code-function">respJson</span>(code: <span class="code-keyword">number</span>, message: <span class="code-keyword">string</span>, data?: <span class="code-keyword">any</span>) {</span>
+<span class="code-line">  <span class="code-keyword">let</span> json: { code: <span class="code-keyword">number</span>; message: <span class="code-keyword">string</span>; data?: <span class="code-keyword">any</span> } = {</span>
+<span class="code-line">    <span class="code-property">code</span>: code,</span>
+<span class="code-line">    <span class="code-property">message</span>: message,</span>
+<span class="code-line">  };</span>
+<span class="code-line">  <span class="code-keyword">if</span> (data) {</span>
+<span class="code-line">    json.data = data;</span>
+<span class="code-line">  }</span>
+<span class="code-line"></span>
+<span class="code-line">  <span class="code-keyword">return</span> Response.<span class="code-function">json</span>(json);</span>
+<span class="code-line">}</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Every error in the app leaves through this little door. It takes one thing: a sentence meant for a human.</p>
+              <p class="tl">It passes that sentence on, always stamped with the number <code>-1</code>. Hold on to that <code>-1</code> — it is the <em>only</em> failure number this app ever sends.</p>
+              <p class="tl">End of the door.</p>
+              <p class="tl">&nbsp;</p>
+              <p class="tl">The thing that actually writes the note. Three things go in: a number, a sentence, and optionally some extra data.</p>
+              <p class="tl">Here is the note spelled out in advance — this is <span class="term" data-definition="TypeScript is JavaScript with labels attached: you write down what shape your data is supposed to be, and the editor warns you before you run anything if you break your own rules.">TypeScript</span> describing the exact shape of what is about to be sent.</p>
+              <p class="tl">Slot one: the number.</p>
+              <p class="tl">Slot two: the sentence — and the label on this slot is the word <strong>message</strong>. That word is the whole fault.</p>
+              <p class="tl">Close the note.</p>
+              <p class="tl">Was there extra data to include?</p>
+              <p class="tl">Then tuck it in under the label <code>data</code>.</p>
+              <p class="tl">Close that check.</p>
+              <p class="tl">&nbsp;</p>
+              <p class="tl">Send it back to the browser as <span class="term" data-definition="JSON is a plain-text way of writing labelled data — names and values in curly brackets. It is how a server and a browser usually talk to each other.">JSON</span>: labelled text the browser can unpack.</p>
+              <p class="tl">Done. Every failure in this app arrives in the browser in exactly this shape.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>So: every reply carries a field called <code>message</code>, and every failure carries the code <code>-1</code>. Now here is the browser side, reading that reply.</p>
+
+        <div class="bug-challenge">
+          <h3>One of these lines can never run — no matter how busy the service gets. Click it.</h3>
+          <div class="bug-code">
+            <div class="bug-line" data-line="369" data-hint="This one runs all the time — requiresRegistration really is a field the server really sends. Keep looking for a line whose condition can never be true." onclick="checkBugLine(this, false)">
+              <span class="line-num">369</span>
+              <code>        if (result.data.requiresRegistration &amp;&amp; !session) {</code>
+            </div>
+            <div class="bug-line" data-line="370" data-hint="That is only the wording of a message. Look for a condition — a line that decides whether something happens at all." onclick="checkBugLine(this, false)">
+              <span class="line-num">370</span>
+              <code>          toast.success("Image generated! Sign in to download full resolution image.");</code>
+            </div>
+            <div class="bug-line bug-target" data-line="371" data-explanation="The server never sends a field called <code>msg</code>. Look back at <code>resp.ts</code> — it is called <code>message</code>. So <code>result.msg</code> is always empty, empty is never equal to QUEUE_REQUIRED, and this warning has never appeared on anyone&apos;s screen. When all six Gemini keys are exhausted, users get the generic failure toast instead of the queue message and the upgrade offer. And nothing complains: the reply arrives from the network as untyped data, so as far as TypeScript is concerned, asking for <code>result.msg</code> is a perfectly reasonable thing to want." onclick="checkBugLine(this, true)">
+              <span class="line-num">371</span>
+              <code>        } else if (result.msg === 'QUEUE_REQUIRED') {</code>
+            </div>
+            <div class="bug-line" data-line="372" data-hint="Warm — this is the message nobody has ever seen. But it is not the reason. Look one line up, at the condition guarding it." onclick="checkBugLine(this, false)">
+              <span class="line-num">372</span>
+              <code>          toast.warning("🚧 Service is busy. You're in the queue. Upgrade to premium to skip the queue!");</code>
+            </div>
+            <div class="bug-line" data-line="373" data-hint="This is the ordinary happy path, and it runs constantly — in fact it runs in cases where it should not. Look above it." onclick="checkBugLine(this, false)">
+              <span class="line-num">373</span>
+              <code>        } else {</code>
+            </div>
+            <div class="bug-line" data-line="374" data-hint="This is the normal success message, and it works. The broken line is a condition, not an action." onclick="checkBugLine(this, false)">
+              <span class="line-num">374</span>
+              <code>          toast.success(t.messages.success.generated);</code>
+            </div>
+            <div class="bug-line" data-line="375" data-hint="This one is fine — session is a real thing the browser genuinely knows about. Look for a field that only exists on one side of the wall." onclick="checkBugLine(this, false)">
+              <span class="line-num">375</span>
+              <code>          if (session) {</code>
+            </div>
+            <div class="bug-line" data-line="376" data-hint="This runs whenever a signed-in person generates something — it is what makes the credit counter tick down on screen." onclick="checkBugLine(this, false)">
+              <span class="line-num">376</span>
+              <code>            refreshCredits();</code>
+            </div>
+            <div class="bug-line" data-line="377" data-hint="A closing bracket cannot be the bug. Look at the lines that ask questions." onclick="checkBugLine(this, false)">
+              <span class="line-num">377</span>
+              <code>          }</code>
+            </div>
+            <div class="bug-line" data-line="378" data-hint="A closing bracket cannot be the bug. Look at the lines that ask questions." onclick="checkBugLine(this, false)">
+              <span class="line-num">378</span>
+              <code>        }</code>
+            </div>
+          </div>
+          <div class="bug-feedback"></div>
+        </div>
+
+        <p>The word for a branch like that is <span class="term" data-definition="An unreachable branch is an if/else path whose condition can never be true, so the code inside it never runs. It is not broken code — it is code nobody ever calls on.">unreachable branch</span>, and the reason it survives is that it produces a <span class="term" data-definition="A silent failure is something going wrong with no error message anywhere — no red text, no crash, no log line. The feature simply does not happen, and everyone assumes it did.">silent failure</span>: nothing errors, nothing logs, the feature just quietly is not there.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">🔐</div>
+          <div class="callout-content">
+            <strong class="callout-title">There is a second lock on the same door</strong>
+            <p>Elsewhere in the same function sits a branch guarded by <code>result.code === 1</code>. But <code>respErr</code> only ever sends <code>-1</code>, and successes carry their own number — so <code>1</code> is a value this app never produces. Two independent reasons, one dead branch.</p>
+          </div>
+        </div>
+
+        <h3 class="screen-heading" style="margin-top: var(--space-12)">Twenty lines later, the same person got it right</h3>
+
+        <p>This is the cruel part, and the reason nobody caught it. In the very same function, the insufficient-credits branch reads exactly the fields the server actually sends.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE · imagen-client.tsx</span>
+            <pre><code><span class="code-line">      } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (result.code === <span class="code-number">-1</span>) {</span>
+<span class="code-line">        <span class="code-comment">// Handle error responses (including insufficient credits)</span></span>
+<span class="code-line">        <span class="code-keyword">if</span> (result.data === <span class="code-string">'INSUFFICIENT_CREDITS'</span> || result.message?.<span class="code-function">includes</span>(<span class="code-string">'Insufficient credits'</span>)) {</span>
+<span class="code-line">          toast.<span class="code-function">error</span>(result.message || <span class="code-string">'Insufficient credits to generate image'</span>);</span>
+<span class="code-line">          <span class="code-keyword">return</span>;</span>
+<span class="code-line">        }</span>
+<span class="code-line">        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(result.message || <span class="code-string">'Generation failed'</span>);</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Did the note come back stamped <code>-1</code>? That is the number <code>respErr</code> really sends — so this branch really runs.</p>
+              <p class="tl">A note left by whoever wrote it.</p>
+              <p class="tl">Two ways to recognise a credits problem: the tag in <code>data</code>, or the words inside <code>message</code>. Both of those field names exist. Both work.</p>
+              <p class="tl">Show the person the server&apos;s own sentence as a <span class="term" data-definition="A toast is the small message that slides into a corner of the screen and fades away by itself — Saved, Copied, Something went wrong. Named after bread popping out of a toaster.">toast</span>, or a sensible stand-in if it is missing.</p>
+              <p class="tl">Stop here. Nothing else in this function should run.</p>
+              <p class="tl">Close the credits check.</p>
+              <p class="tl">Any other failure: raise it properly so the catch block below can show the generic error.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-success)">✅</div>
+            <div>
+              <strong><code>result.message</code> and <code>result.data</code></strong>
+              <p>Both spelled the way the server spells them. This branch has worked from the day it was written.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-error)">🚫</div>
+            <div>
+              <strong><code>result.msg</code></strong>
+              <p>Twenty lines earlier, in the same file, in the same function. Never fires. Nothing warns anybody.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 3: FAULT 2 ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Fault 2 — three switches with the wires cut</h2>
+
+        <p>The generator carries three settings around with it: a shape for the picture, a file format, and which tier of model to use.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE · imagen-client.tsx</span>
+            <pre><code><span class="code-line">  <span class="code-keyword">const</span> [aspectRatio, setAspectRatio] = <span class="code-function">useState</span>(<span class="code-string">'16:9'</span>);</span>
+<span class="code-line">  <span class="code-keyword">const</span> [outputFormat, setOutputFormat] = <span class="code-function">useState</span>(<span class="code-string">'jpeg'</span>);</span>
+<span class="code-line">  <span class="code-keyword">const</span> [selectedModel, setSelectedModel] = <span class="code-function">useState</span>(<span class="code-string">'pro'</span>);</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Two things come out of every one of these: the current value, and a <span class="term" data-definition="A state setter is the one function allowed to change a piece of a screen&apos;s memory. If nothing ever calls it, that value is frozen at whatever it started as, forever.">state setter</span> — the only hand allowed to change it. Shape starts at 16:9, and <code>setAspectRatio</code> is the only way it will ever move.</p>
+              <p class="tl">Same again for the file format: starts at jpeg, and only <code>setOutputFormat</code> can change it.</p>
+              <p class="tl">And the model tier: starts at pro, movable only by <code>setSelectedModel</code>. The Generate button reads this one to print (10 credits) beside itself.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Search the whole file for those three setter names and you find one mention each — the line that created them. Nothing else ever calls them, so nothing can ever move those values.</p>
+
+        <p>Now follow one of them all the way through the house. Click <strong>Next Step</strong>.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-m5-1","label":"There is no picker on the screen. Nothing anywhere calls setAspectRatio, so the value is welded to 16:9 for every visitor, forever."},
+          {"highlight":"flow-actor-m5-2","label":"The value sits in the page memory, exactly as it was born. This half is not broken — it is simply never touched.","packet":true,"from":"actor-m5-1","to":"actor-m5-2"},
+          {"highlight":"flow-actor-m5-3","label":"The browser really does send aspectRatio along with the photo. This wire is connected and working.","packet":true,"from":"actor-m5-2","to":"actor-m5-3"},
+          {"highlight":"flow-actor-m5-3","label":"The server checks it carefully against a list of allowed shapes and rejects anything unexpected. Careful, deliberate, correct work."},
+          {"highlight":"flow-actor-m5-4","label":"The parcel goes to Gemini: the written brief plus the photo. The aspect ratio is not in that parcel. Gemini is never told.","packet":true,"from":"actor-m5-3","to":"actor-m5-4"},
+          {"highlight":"flow-actor-m5-5","label":"The reply politely echoes aspectRatio back. The answer says 16:9. The picture was drawn without ever hearing about it.","packet":true,"from":"actor-m5-4","to":"actor-m5-5"}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-m5-1">
+              <div class="flow-actor-icon">🎛️</div>
+              <span>Picker<br>(missing)</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-m5-2">
+              <div class="flow-actor-icon">📌</div>
+              <span>Page memory<br>16:9</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-m5-3">
+              <div class="flow-actor-icon">🛃</div>
+              <span>Server<br>validates</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-m5-4">
+              <div class="flow-actor-icon">🎨</div>
+              <span>Gemini</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-m5-5">
+              <div class="flow-actor-icon">📤</div>
+              <span>Reply</span>
+            </div>
+          </div>
+
+          <div class="flow-packet"></div>
+
+          <div class="flow-step-label">Click "Next Step" to follow the aspect ratio</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🧰</div>
+          <div class="callout-content">
+            <strong class="callout-title">Nobody was being lazy here</strong>
+            <p>Writing that validation list on the server is real, careful work — someone was clearly planning the picker. The chain is missing two pieces at opposite ends: a control at the front, and one line at the back that hands the value to Gemini.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 4: FAULT 3 ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Fault 3 — a style rule waiting by the phone</h2>
+
+        <p>Module 4 showed the trick: every Shadcn brick stamps a small label on itself, and <code>theme.css</code> grabs everything wearing that label and restyles it in one go. <code>[data-slot="card"]</code> does this beautifully. Here is the same trick, one step further.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE · src/app/theme.css</span>
+            <pre><code><span class="code-line">[<span class="code-attr">data-slot</span>=<span class="code-value">"button"</span>][<span class="code-attr">data-variant</span>=<span class="code-value">"default"</span>] {</span>
+<span class="code-line">  <span class="code-property">background</span>: <span class="code-function">var</span>(--primary);</span>
+<span class="code-line">  <span class="code-property">color</span>: <span class="code-function">var</span>(--primary-foreground);</span>
+<span class="code-line">  <span class="code-property">border</span>: <span class="code-number">2px</span> solid <span class="code-function">var</span>(--foreground);</span>
+<span class="code-line">  <span class="code-property">border-radius</span>: <span class="code-function">var</span>(--radius);</span>
+<span class="code-line">  <span class="code-property">box-shadow</span>: <span class="code-number">4px</span> <span class="code-number">4px</span> <span class="code-number">0px</span> <span class="code-function">var</span>(--foreground);</span>
+<span class="code-line">  <span class="code-property">transition</span>: all <span class="code-number">0.2s</span> ease;</span>
+<span class="code-line">}</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">This first line is the <span class="term" data-definition="A CSS selector is the sentence at the top of a style rule that says which things on the page it applies to. If it describes nothing on the page, the rule below it is simply skipped — no error, no warning.">CSS selector</span>: find every element wearing <em>both</em> of these labels. Two <span class="term" data-definition="An attribute is a small labelled note written onto an element in the page, like id=&quot;submit&quot; or disabled. Style rules and scripts use them to find things.">attributes</span>, not one — and both are required.</p>
+              <p class="tl">Paint it with the primary colour role, not a hard-coded yellow.</p>
+              <p class="tl">Text in the matching foreground role, so it stays readable if the palette changes.</p>
+              <p class="tl">A fat two-pixel outline in the ink colour — that Charlie-and-Lola storybook edge.</p>
+              <p class="tl">Corners from the shared radius token, so every corner in the app moves together.</p>
+              <p class="tl">And the signature: a hard shadow offset down and right, like a sticker peeled off the page.</p>
+              <p class="tl">Animate any change over a fifth of a second.</p>
+              <p class="tl">End of a rule that has never once been applied to anything.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Here is why. This is the entire output of the Button component — everything it ever stamps onto the page.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE · src/components/ui/button.tsx</span>
+            <pre><code><span class="code-line">  <span class="code-keyword">return</span> (</span>
+<span class="code-line">    &lt;<span class="code-tag">Comp</span></span>
+<span class="code-line">      <span class="code-attr">data-slot</span>=<span class="code-value">"button"</span></span>
+<span class="code-line">      <span class="code-attr">className</span>={<span class="code-function">cn</span>(<span class="code-function">buttonVariants</span>({ variant, size, className }))}</span>
+<span class="code-line">      {...props}</span>
+<span class="code-line">    /&gt;</span>
+<span class="code-line">  )</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Hand back the thing to be drawn on the page.</p>
+              <p class="tl">Usually a real <code>&lt;button&gt;</code>, sometimes a link wearing a button costume.</p>
+              <p class="tl">Stamp on the label <span class="term" data-definition="A data- attribute is a custom label you invent and attach to an element — data-slot, data-state, data-variant. The browser ignores them, but your style rules and scripts can use them as handles.">data-slot</span> = button. This is the <em>only</em> label it ever writes. There is no <code>data-variant</code> here, and never has been.</p>
+              <p class="tl">Work out the Tailwind classes for the chosen look and size, and let anything passed in override them.</p>
+              <p class="tl">Pass through everything else the caller gave us — the click handler, the disabled flag, and so on.</p>
+              <p class="tl">Close the element.</p>
+              <p class="tl">Done. One label out, two labels required by the style rule.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-success)">🎯</div>
+            <div>
+              <strong><code>[data-slot="card"]</code> → matches every card</strong>
+              <p><code>card.tsx</code> really does stamp <code>data-slot="card"</code>. One label asked for, one label stamped. This is the rule from module 4 that works.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-error)">👻</div>
+            <div>
+              <strong><code>[data-slot="button"][data-variant="default"]</code> → matches nothing</strong>
+              <p>Two labels asked for, one stamped. Zero elements on the page qualify, so those chunky shadows and the nudge-on-hover have never rendered — not once, on anybody&apos;s screen.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🖼️</div>
+          <div class="callout-content">
+            <strong class="callout-title">The buttons still look fine, by the way</strong>
+            <p>Their colour comes from the <code>cva</code> table inside <code>button.tsx</code> — <code>bg-primary text-primary-foreground shadow-xs</code>. What never arrived is the hand-written storybook shadow described above. Nobody misses a thing they have never seen.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 5: FAULT 4 ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Fault 4 — the button that asks you to sign in, then does it anyway</h2>
+
+        <p>Signed out, the Generate button shows a padlock and the words <em>login required</em>. Then you click it, and it generates your picture.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">disabled={uploadedImages.length === 0 || isGenerating}</code>
+            <span class="badge-desc">The complete list of reasons the button ever refuses: no photo yet, or one is already being drawn. Being signed out is not on it.</span>
+          </div>
+        </div>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-error)">🔒</div>
+            <div>
+              <strong>What the label promises</strong>
+              <p>Padlock icon, the words "login required". A clear statement that nothing will happen until you sign in.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">▶️</div>
+            <div>
+              <strong>What the button does</strong>
+              <p>Runs <code>generateImage()</code>, which never checks for a <span class="term" data-definition="A session is the app&apos;s memory that you are signed in and who you are — the wristband you get at the door. No session means the app treats you as a guest.">session</span> at all. The picture gets made.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-success)">🎟️</div>
+            <div>
+              <strong>What the server does</strong>
+              <p>Treats guests deliberately: sends back <code>requiresRegistration: true</code> and charges no credits. The behaviour was designed. Only the wording is out of date.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>You have already met the branch that handles this properly — it was line 369 in the spot-the-bug exhibit, the one that offers a full-resolution download in exchange for signing in. That branch works. The label beside it is a leftover from when guests really were turned away.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">🏷️</div>
+          <div class="callout-content">
+            <strong class="callout-title">A stale label is a real fault, not a cosmetic one</strong>
+            <p>Some people read "login required", decide they cannot be bothered, and leave — never discovering that the free try was one click away. Nothing in the code is wrong. The product still loses.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 6: FAULT 5 ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Fault 5 — the word that was never delivered</h2>
+
+        <p>Switch free mode on and the Generate button reads <code>(undefined)</code>. The phrase exists. Someone wrote it, someone translated it — it just never travelled the last few metres.</p>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>The translation files — present ✅</strong>
+              <p><code>"limited_free": "Limited Free"</code> in English, <code>"限免"</code> in Chinese. Both written, both correct, both sitting there.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>The <code>Translations</code> <span class="term" data-definition="An interface is a written list of exactly which pieces of information a component expects to be handed, and what type each one is. It is a contract — and like any contract, it only covers what somebody remembered to write into it.">interface</span> — missing ❌</strong>
+              <p>The list at the top of <code>imagen-client.tsx</code> declaring every string the component expects. <code>limited_free</code> is not on the list.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>The mapping in <code>index.tsx</code> — missing ❌</strong>
+              <p>The wrapper from module 2 that hand-copies each string into one object before handing it to the browser. This one never gets copied.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>So the button asks for <code>t.buttons.limited_free</code>, is handed nothing at all, and prints the word JavaScript uses for nothing at all: <code>undefined</code>. No error. No warning. Just a strange word on a button.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">📮</div>
+          <div class="callout-content">
+            <strong class="callout-title">This is the bill for the hand-written wrapper</strong>
+            <p>Module 2 showed the wrapper copying translations across the client/server wall by hand. The cost: every new piece of text has to be added in <strong>three</strong> places — the JSON file, the interface, the mapping. Forget one and it fails without a sound.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 7: THE CLIPBOARD ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">What the five have in common</h2>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Aha: silence is a symptom</strong>
+            <p>A branch that never runs, a rule that matches nothing and a setter that is never called all produce exactly zero errors. Working code and disconnected code look identical from the outside — which is why "it does not crash" is not evidence that it works.</p>
+          </div>
+        </div>
+
+        <p>An inspector does not need to know how a house was built to tap the walls. Here is the clipboard — five questions you can ask about your own project this afternoon.</p>
+
+        <div class="pattern-cards stagger-children">
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-1)">
+            <div class="pattern-icon" style="background: var(--color-actor-1)">🔌</div>
+            <h4 class="pattern-title">Is this setter ever called?</h4>
+            <p class="pattern-desc">"Search the file for every place <code>setAspectRatio</code> is used." If the only hit is where it was created, the control is decorative.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🔤</div>
+            <h4 class="pattern-title">Do both sides spell it the same?</h4>
+            <p class="pattern-desc">"List the exact field names the server sends and the ones the client reads." Data crossing a network is never spell-checked by anybody.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🎯</div>
+            <h4 class="pattern-title">Does this selector match anything?</h4>
+            <p class="pattern-desc">"Show me an element that has both of these attributes." A style rule for a thing that does not exist is silent, tidy and useless.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🏷️</div>
+            <h4 class="pattern-title">Does the label match the behaviour?</h4>
+            <p class="pattern-desc">Read the button out loud, then read what it actually does. Words go stale faster than logic, and nothing checks them.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">🔗</div>
+            <h4 class="pattern-title">Is it wired all the way through?</h4>
+            <p class="pattern-desc">Anything hand-copied from place to place has as many failure points as it has hops. Count the hops before you add the sixth one.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🤖</div>
+          <div class="callout-content">
+            <strong class="callout-title">For steering AI: the three sentences that end a bug loop</strong>
+            <p>"Why is this broken?" gets you guesses, and the next twenty minutes get you more guesses. Say these three things instead, in this order.</p>
+          </div>
+        </div>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Name the station</strong>
+              <p>"This is the client-side handling of the response, in <code>imagen-client.tsx</code>." You learned the seven stations in module 1 for exactly this sentence.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Name the mismatch</strong>
+              <p>"The server sends a field called <code>message</code>. The client reads <code>result.msg</code>." A fact, not a symptom. Nothing left to diagnose.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Name the fix you want</strong>
+              <p>"Change the client to read <code>result.message</code>. Do not touch <code>resp.ts</code> — everything else in the app depends on it." Otherwise a helpful assistant may fix it from the wrong end and cause a <span class="term" data-definition="A regression is something that used to work and stopped working because of a change made somewhere else. The classic way to create one is to fix a bug at the wrong end of the chain.">regression</span> in ten other places.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Guesses in, guesses out. Specifics in, patches out.</p>
+      </section>
+
+      <!-- ============ SCREEN 8: QUIZ ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Four calls from the field</h2>
+
+        <p>Each of these is a message you might actually receive. Name the station before you pick.</p>
+
+        <div class="quiz-container" id="quiz-module5">
+
+          <div class="quiz-question-block"
+               data-correct="opt-client-msg"
+               data-explanation-right="Exactly — and notice you worked it out without reproducing the traffic spike. The server does its job: it marks the burnt key and sends the QUEUE_REQUIRED tag inside a field called message. The one word that does not line up is on the browser side, which makes this a one-line change in one file."
+               data-explanation-wrong="Have another look at what the symptom proves. A generic failure toast means the reply arrived and the client read it — it just did not recognise what it was holding. Anything further upstream would fail in a different, louder way.">
+            <h3 class="quiz-question">Traffic spikes and users report the site "just says generation failed". You know the queue-and-upgrade message exists — you can read it in the server code. Where do you look first?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-pool" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The Gemini key pool — all six keys must be burning out at once</span>
+              </button>
+              <button class="quiz-option" data-value="opt-client-msg" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The client&apos;s response handling — it reads <code>result.msg</code>, and the server sends <code>message</code></span>
+              </button>
+              <button class="quiz-option" data-value="opt-server-text" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The server route — <code>respErr</code> must be sending the wrong wording</span>
+              </button>
+              <button class="quiz-option" data-value="opt-toast" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The toast library — warning-style messages are probably being suppressed</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-never-rendered"
+               data-explanation-right="Exactly. The rule asks for two labels; the Button component stamps one. Saying this out loud matters, because it changes the job from find what broke it to stamp the attribute or rewrite the selector — and it stops anyone hunting through the history for a change that was never made."
+               data-explanation-wrong="Be careful with the word removed — it quietly assumes the shadow once worked. Before searching the history, compare the style rule against the component: the rule wants data-slot AND data-variant, and only one of those is ever written onto the element.">
+            <h3 class="quiz-question">A designer is certain the Generate button used to have a chunky offset shadow and that "someone removed it in a refactor". You look and find the shadow rule sitting in <code>theme.css</code>, untouched. What actually happened?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-twmerge" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>A Tailwind class overrode it — <code>twMerge</code> kept the wrong one of the two</span>
+              </button>
+              <button class="quiz-option" data-value="opt-never-rendered" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Nobody removed it. The rule needs a <code>data-variant</code> attribute the component never stamps, so it has never matched anything</span>
+              </button>
+              <button class="quiz-option" data-value="opt-dark" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It only applies in dark mode, and the designer was looking at light mode</span>
+              </button>
+              <button class="quiz-option" data-value="opt-notloaded" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span><code>theme.css</code> is not loaded on that particular page</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-three-places"
+               data-explanation-right="Exactly. Two ends of the chain are missing and one middle section already works. If you only ask for the control, you get a beautiful dropdown that changes nothing — and then a long confusing conversation about why. Tracing end to end before you ask is the whole skill."
+               data-explanation-wrong="Follow the value the whole way. A control that sets the value is not enough on its own: the browser already sends it, the server already validates it — and then the server never mentions it to Gemini. Leave that last piece out and the picker will look perfect and do nothing.">
+            <h3 class="quiz-question">You ask an AI assistant to "make the aspect-ratio picker work". What do you need to tell it so it does not stop halfway?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-just-ask" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Nothing more — it can read the code and work out the rest</span>
+              </button>
+              <button class="quiz-option" data-value="opt-dropdown-only" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add the dropdown and wire <code>setAspectRatio</code> — the rest of the chain already works</span>
+              </button>
+              <button class="quiz-option" data-value="opt-three-places" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add the dropdown and wire <code>setAspectRatio</code>; the value is already sent and validated; but the server must actually pass it to Gemini instead of just echoing it back</span>
+              </button>
+              <button class="quiz-option" data-value="opt-db" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add the dropdown and save the choice to the database so it is remembered next visit</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-wrapper"
+               data-explanation-right="Exactly — and the giveaway is that only this one word is missing. The JSON has it in both languages; the interface and the hand-written mapping in index.tsx do not. That is the standing cost of the wrapper from module 2: three places per string, and forgetting one is completely silent."
+               data-explanation-wrong="Look at the scope of the damage before you pick. If the files or the language switch were broken, every label on the page would be blank — not one word on one button. Something is wrong with this string specifically, somewhere on its way across.">
+            <h3 class="quiz-question">Free mode is switched on and the Generate button reads <code>(undefined)</code>. Every other label on the page is fine, and you have confirmed the phrase exists in both translation files. What happened?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-files" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The translation files failed to load for this visitor</span>
+              </button>
+              <button class="quiz-option" data-value="opt-locale" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The language switch broke and fell back to a language with no text in it</span>
+              </button>
+              <button class="quiz-option" data-value="opt-wrapper" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It was never carried across: it is missing from the <code>Translations</code> interface and from the hand-written mapping in <code>index.tsx</code></span>
+              </button>
+              <button class="quiz-option" data-value="opt-typo" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Gemini returned a malformed response and the button is showing part of it</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module5')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module5')">Try Again</button>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 9: CLOSING THE COURSE ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Five modules ago, this was a box you dropped a photo into</h2>
+
+        <p>You have not learned to write this app. You were never trying to. Here is what you can actually do now.</p>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-1)">🧭</div>
+            <div>
+              <strong>Trace one generation end to end</strong>
+              <p>Seven stations, from the file landing on the page to the finished drawing coming back as a web address. When something breaks, you can name the station.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">🎭</div>
+            <div>
+              <strong>Tell the browser half from the server half</strong>
+              <p>And say why the API key can only ever live on one side of that wall — the single most useful line you can draw through any web app.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-3)">✍️</div>
+            <div>
+              <strong>Recognise a rented model behind a written brief</strong>
+              <p>The whole Charlie &amp; Lola look is one paragraph of English sent to a general-purpose artist. Change the paragraph, change the product.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-4)">🎨</div>
+            <div>
+              <strong>Name a design token instead of a hex code</strong>
+              <p>"Use the <code>secondary</code> token" and "add a variant to <code>buttonVariants</code>" are two sentences that keep an interface from drifting into forty shades of almost-yellow.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-5)">🔦</div>
+            <div>
+              <strong>Spot a silent disconnection</strong>
+              <p>Two halves, each written correctly, never introduced. No crash, no error, no clue — until you tap the wall.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">📋</div>
+          <div class="callout-content">
+            <strong class="callout-title">The one habit worth keeping</strong>
+            <p>When something looks wrong, name the station before you propose the fix. That single reordering is what separates a five-minute exchange with an AI assistant from a two-hour loop of confident, plausible, wrong suggestions.</p>
+          </div>
+        </div>
+
+        <p>The app in this course is real and running, and the files are sitting on the same disk as this page. These three are the ones worth opening first.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">src/app/api/generate-cyberpunk/route.ts</code>
+            <span class="badge-desc">The server side of the whole feature: the key pool, the written brief, the call to Gemini, the upload. Still named after a product that no longer exists.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">src/components/blocks/imagen-wrapper/imagen-client.tsx</code>
+            <span class="badge-desc">Everything you see and touch — and the home of faults 1, 2, 4 and half of 5. Long, honest, and completely readable once you know the stations.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">src/app/theme.css</code>
+            <span class="badge-desc">The paint chart. Every colour, corner and shadow in the app, defined twice — once for light mode, once for dark.</span>
+          </div>
+        </div>
+
+        <p>Open one of them, scroll slowly, and see how much of it you can now read out loud. That is the whole send-off — no certificate, no new job title. Just a house you can walk through in the dark.</p>
+      </section>
+
+    </div>
+  </div>
+</section>
