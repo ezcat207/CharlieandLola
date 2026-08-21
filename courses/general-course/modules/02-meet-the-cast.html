@@ -1,0 +1,560 @@
+<section class="module" id="module-2" style="background: var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">Meet the Cast — How the Code Is Organised</h1>
+      <p class="module-subtitle">Every file has a job. Once you know the roles, you know exactly where to tell an AI to make a change.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1: The metaphor -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">A Codebase Is a Film Production</h2>
+        <p>In Module 1, a message travelled through five different pieces of code — and nobody introduced them. Time to meet the cast, because the single most useful thing you can tell an AI coding assistant is <strong>where</strong> a change belongs.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-1)">
+            <div class="pattern-icon" style="background: var(--color-actor-1)">🎭</div>
+            <h4 class="pattern-title">The Cast</h4>
+            <p class="pattern-desc">The parts you actually see — buttons, upload boxes, preview panels. In code, these are
+              <span class="term" data-definition="A framework for building user interfaces out of small, reusable pieces called components. It's the toolkit that turns 'a button and a box' into an actual interactive webpage.">React</span>
+              <span class="term" data-definition="A reusable building block of a web page — like a Lego brick other Lego bricks snap onto. Big apps are just many small components combined.">components</span>
+              living in <code>src/components/blocks/</code>.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🎬</div>
+            <h4 class="pattern-title">The Crew</h4>
+            <p class="pattern-desc">They work behind the camera and never appear in the shot:
+              <span class="term" data-definition="Short for Application Programming Interface — a defined way one piece of code asks another piece of code to do something, usually over the network.">API</span> routes, services, models, and the
+              <span class="term" data-definition="Where all the app's permanent data lives — user accounts, credit balances, orders. Think of it as a giant, always-available filing cabinet.">database</span>.
+              This is where the actual <span class="term" data-definition="The real rules of how the app is supposed to behave — 'new users get 30 credits' — as opposed to how something looks on screen.">business logic</span> lives.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🪑</div>
+            <h4 class="pattern-title">Props Department</h4>
+            <p class="pattern-desc">A shelf of generic, reusable objects any scene can borrow — a chair, a mug, a lamp. In code: 37 small pieces like buttons, cards, and dialogs in <code>src/components/ui/</code>.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🪜</div>
+            <h4 class="pattern-title">Chain of Command</h4>
+            <p class="pattern-desc">An actor doesn't wander into the accounts office to rewrite the budget. Requests travel up a strict chain, one step at a time — nobody skips ahead.</p>
+          </div>
+        </div>
+
+        <p>When you tell an AI "add a rule that Pro users get 3 free generations a day," it has to put that rule <em>somewhere</em>. Knowing which department owns that rule is often the difference between a
+          <span class="term" data-definition="All the code that makes up a project, taken together — every file, every folder.">codebase</span> that survives a year of changes and one that quietly falls apart before you even
+          <span class="term" data-definition="To publish a new version of the app so real users can actually access it.">deploy</span> it again.</p>
+      </section>
+
+      <!-- SCREEN 2: The map -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Map: Who Lives Where</h2>
+        <p>Here's the real top-level
+          <span class="term" data-definition="A container for organizing files on a computer — the same folders you see in Finder or File Explorer, just holding code instead of photos.">folder</span>
+          structure of <code>src/</code> — annotated with each department's film-crew role.</p>
+
+        <div class="file-tree">
+          <div class="ft-folder open">
+            <span class="ft-name">app/</span>
+            <span class="ft-desc"><strong>The stage.</strong> Every page and every
+              <span class="term" data-definition="A specific web address (like /pricing) and the code that responds when someone visits it.">route</span>
+              — an
+              <span class="term" data-definition="One specific address an API responds to, like a single phone extension in a large office.">endpoint</span> — lives here. The folder path IS the address.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">components/blocks/</span>
+            <span class="ft-desc"><strong>The cast.</strong> Big page sections: hero, pricing, faq, footer, imagen-wrapper.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">components/ui/</span>
+            <span class="ft-desc"><strong>Props department.</strong> 37 small generic pieces: button.tsx, card.tsx, dialog.tsx, tabs.tsx.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">services/</span>
+            <span class="ft-desc"><strong>The crew chiefs.</strong> Business rules: credit.ts, order.ts, user.ts, stripe.ts, affiliate.ts.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">models/</span>
+            <span class="ft-desc"><strong>The records office.</strong> The only files allowed to touch the database: user.ts, credit.ts, order.ts, post.ts.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">db/</span>
+            <span class="ft-desc"><strong>The filing cabinet itself.</strong></span>
+            <div class="ft-children">
+              <div class="ft-file">
+                <span class="ft-name">schema.ts</span>
+                <span class="ft-desc">The <span class="term" data-definition="The blueprint for a database table — which columns exist and what kind of data each one holds.">schema</span> — table shapes.</span>
+              </div>
+              <div class="ft-file">
+                <span class="ft-name">index.ts</span>
+                <span class="ft-desc">The live connection to the database.</span>
+              </div>
+            </div>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">auth/</span>
+            <span class="ft-desc"><strong>Security.</strong> Who you are — covered in Module 3.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">i18n/</span>
+            <span class="ft-desc"><strong>Translation department.</strong> English and Chinese text — Module 6.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">lib/</span>
+            <span class="ft-desc"><strong>The toolbox.</strong> Small helpers used by everyone: hash.ts, time.ts, resp.ts, storage.ts.</span>
+          </div>
+          <div class="ft-folder">
+            <span class="ft-name">aisdk/</span>
+            <span class="ft-desc"><strong>The specialist rig.</strong> A hand-built adapter for the Kling video-generation service.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: folders become URLs -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Folders Become Web Addresses</h2>
+        <p>In
+          <span class="term" data-definition="A framework built on top of React that adds routing, server rendering, and API endpoints — the production company running the whole show.">Next.js</span>
+          — the
+          <span class="term" data-definition="A pre-built structure of rules and tools an app is built on top of, so you don't reinvent the basics every time.">framework</span>
+          this app runs on — folders under <code>src/app/</code> literally become the
+          <span class="term" data-definition="The part of a web address after the domain name — the '/pricing' in charlieandlola.net/pricing.">URL path</span> in your browser bar.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">[locale]/(default)/pricing/page.tsx</code>
+            <span class="badge-desc">becomes <strong>charlieandlola.net/en/pricing</strong></span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">api/checkout/route.ts</code>
+            <span class="badge-desc">becomes <strong>charlieandlola.net/api/checkout</strong></span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">(admin)/admin/orders/page.tsx</code>
+            <span class="badge-desc">becomes <strong>charlieandlola.net/admin/orders</strong></span>
+          </div>
+        </div>
+
+        <p>Two notations make this readable once you know the trick:</p>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">[ ]</div>
+            <div>
+              <strong>[locale] — square brackets</strong>
+              <p>Means "anything goes here, and tell me what it was." That's how /en/pricing and /zh/pricing are the same one file.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-3)">( )</div>
+            <div>
+              <strong>(default), (admin), (console) — round brackets</strong>
+              <p>Mean "this folder is for organizing only." It does <strong>not</strong> appear in the URL at all — genuinely confusing the first time you see it.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: chain of command -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Chain of Command, in Three Files</h2>
+        <p>Remember <code>generate-cyberpunk/route.ts</code> from Module 1? Watch how one request passes through three layers, and how each layer only ever talks to the one directly below it.</p>
+
+        <h3 class="screen-heading" style="font-size: var(--text-lg)">Layer 1 — The Route</h3>
+        <p>Takes the request, checks in with the Service layer, and replies. File: <code>src/app/api/generate-cyberpunk/route.ts</code></p>
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-comment">// Get user info</span></span>
+<span class="code-line"><span class="code-keyword">const</span> userUuid = <span class="code-keyword">await</span> <span class="code-function">getUserUuid</span>();</span>
+<span class="code-line"><span class="code-keyword">const</span> isRegisteredUser = !!userUuid;</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment">// Check credits for registered users</span></span>
+<span class="code-line"><span class="code-keyword">if</span> (isRegisteredUser) {</span>
+<span class="code-line">  <span class="code-keyword">const</span> userCredits = <span class="code-keyword">await</span> <span class="code-function">getUserCredits</span>(userUuid);</span>
+<span class="code-line">  <span class="code-keyword">if</span> (userCredits.<span class="code-property">left_credits</span> &lt; CreditsAmount.<span class="code-property">ImageGeneration</span>) {</span>
+<span class="code-line">    <span class="code-keyword">return</span> <span class="code-function">respErr</span>(<span class="code-string">`Insufficient credits. You need ${CreditsAmount.ImageGeneration} credits but only have ${userCredits.left_credits}. Please recharge to continue.`</span>, <span class="code-string">'INSUFFICIENT_CREDITS'</span>);</span>
+<span class="code-line">  }</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Ask Security who's making this request — their <span class="term" data-definition="The record that keeps you 'logged in' as you move between pages, without re-entering your password every click.">session</span> (Module 3 opens this box).</p>
+              <p class="tl">Turn that into a plain yes/no: are they signed in at all?</p>
+              <p class="tl">If they ARE signed in, check their <span class="term" data-definition="The app's internal currency — a countable balance that gets spent whenever someone generates an image.">credits</span> balance before doing anything expensive.</p>
+              <p class="tl">Ask the Model layer how many credits this user actually has left.</p>
+              <p class="tl">Compare it to the price of one image — a number defined in the Service layer, not here.</p>
+              <p class="tl">Not enough? Stop immediately and send back a clear error message.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="screen-heading" style="font-size: var(--text-lg)">Layer 2 — The Service</h3>
+        <p>Knows the business rules. File: <code>src/services/credit.ts</code></p>
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export</span> <span class="code-keyword">enum</span> CreditsAmount {</span>
+<span class="code-line">  NewUserGet = <span class="code-number">30</span>,</span>
+<span class="code-line">  PingCost = <span class="code-number">1</span>,</span>
+<span class="code-line">  ImageGeneration = <span class="code-number">10</span>,</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Define a fixed, named menu of credit amounts — an <span class="term" data-definition="Short for 'enumeration' — a fixed, named list of values, like a menu a value must be chosen from.">enum</span> — used everywhere in the app.</p>
+              <p class="tl">New users start with 30 credits, free.</p>
+              <p class="tl">A test "ping" costs 1 credit.</p>
+              <p class="tl">Generating one image costs 10 credits. Change this ONE number and the whole app updates.</p>
+              <p class="tl">End of the list.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="screen-heading" style="font-size: var(--text-lg)">Layer 3 — The Model</h3>
+        <p>The only code allowed to touch the database. File: <code>src/models/credit.ts</code></p>
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">getAllUserCredits</span>(</span>
+<span class="code-line">  user_uuid: <span class="code-keyword">string</span></span>
+<span class="code-line">): Promise&lt;(<span class="code-keyword">typeof</span> credits.$inferSelect)[] | undefined&gt; {</span>
+<span class="code-line">  <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> <span class="code-function">db</span>()</span>
+<span class="code-line">    .<span class="code-function">select</span>()</span>
+<span class="code-line">    .<span class="code-function">from</span>(credits)</span>
+<span class="code-line">    .<span class="code-function">where</span>(<span class="code-function">eq</span>(credits.<span class="code-property">user_uuid</span>, user_uuid))</span>
+<span class="code-line">    .<span class="code-function">orderBy</span>(<span class="code-function">asc</span>(credits.<span class="code-property">created_at</span>));</span>
+<span class="code-line"> </span>
+<span class="code-line">  <span class="code-keyword">return</span> data;</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">A <span class="term" data-definition="A named, reusable block of code that performs one task — write it once, call it whenever you need that task done.">function</span> that takes one input: which user's records to fetch.</p>
+              <p class="tl"><span class="term" data-definition="A stricter version of JavaScript that catches typos and mismatched data before the code ever runs — spell-check for programming logic.">TypeScript</span> promises the answer will be a list of credit records, or nothing.</p>
+              <p class="tl">Open a connection to the database — this file is the ONLY one in the whole app allowed to do this.</p>
+              <p class="tl">Ask for rows from the credits table, but only the ones belonging to this one user.</p>
+              <p class="tl">Sort them oldest first, then hand the results back up to the Service layer.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-demo">
+          <div class="layer-tabs">
+            <button class="layer-tab active" onclick="showLayer('route')">Route</button>
+            <button class="layer-tab" onclick="showLayer('service')">Service</button>
+            <button class="layer-tab" onclick="showLayer('model')">Model</button>
+            <button class="layer-tab" onclick="showLayer('database')">Database</button>
+          </div>
+          <div class="layer-viewport">
+            <div class="layer" id="layer-route" style="display:block">
+              <div class="icon-row">
+                <div class="icon-circle" style="background: var(--color-actor-1)">📮</div>
+                <div>
+                  <strong>The Route</strong>
+                  <p>Takes the incoming request, asks Security who's asking, and asks the Service layer if the rules allow it. Never touches the database directly.</p>
+                </div>
+              </div>
+            </div>
+            <div class="layer" id="layer-service" style="display:none">
+              <div class="icon-row">
+                <div class="icon-circle" style="background: var(--color-actor-2)">📋</div>
+                <div>
+                  <strong>The Service</strong>
+                  <p>Owns the business rules — prices, limits, permissions. "10 credits per image" is written down here, and only here.</p>
+                </div>
+              </div>
+            </div>
+            <div class="layer" id="layer-model" style="display:none">
+              <div class="icon-row">
+                <div class="icon-circle" style="background: var(--color-actor-3)">🗂️</div>
+                <div>
+                  <strong>The Model</strong>
+                  <p>The only code allowed to run a database query. Every other layer has to ask it — nobody else writes the query themselves.</p>
+                </div>
+              </div>
+            </div>
+            <div class="layer" id="layer-database" style="display:none">
+              <div class="icon-row">
+                <div class="icon-circle" style="background: var(--color-actor-4)">🗄️</div>
+                <div>
+                  <strong>Database</strong>
+                  <p><span class="term" data-definition="A popular, reliable type of database software for storing structured data in tables.">Postgres</span>, accessed through
+                    <span class="term" data-definition="A tool that lets code talk to the database using normal JavaScript/TypeScript instead of writing raw SQL by hand.">Drizzle ORM</span>.
+                    The actual filing cabinet where every credit balance, order, and user record lives.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="layer-description" id="layer-desc">Click a tab above. Notice each layer only ever talks to the one directly below it — Route never queries the database, Service never touches SQL.</p>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">A Rule Should Live in Exactly One Place</strong>
+            <p>Engineers call this <span class="term" data-definition="A design principle: each piece of code should be responsible for exactly one job, and that job should live in exactly one place.">separation of concerns</span>. If "10 credits per image" lived in a button instead of the Service layer, you'd end up with the rule in five places — and four of them wrong within a month.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: cast vs crew, server vs client -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Cast vs Crew: On Stage and Backstage</h2>
+        <p>Some components run on the company's
+          <span class="term" data-definition="Code that runs on the company's computer before anything is sent to your browser. It can safely use secrets and talk to the database.">server</span>, before the page even reaches you. Others run in your own browser, on the
+          <span class="term" data-definition="Code that runs inside your own browser, after the page loads. It can react to your clicks, but can't be trusted with secrets.">client</span> side — the line is one piece of text at the top of a file: <code>'use client'</code>.</p>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">🖥️</div>
+            <div>
+              <strong>Server — index.tsx</strong>
+              <p>Looks up the translated text and hands it down. Can read secrets and databases — but can't respond to a click.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-1)">🖱️</div>
+            <div>
+              <strong>Client — imagen-client.tsx</strong>
+              <p>Handles clicks, drag-and-drop, spinners — anything that reacts to a human. Never trusted with secrets, because anything in the browser can be read by the user.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Server fetches, client interacts — a hand-off pair from the same feature.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE — server half</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export</span> <span class="code-keyword">default</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">ImagenWrapper</span>({ locale = <span class="code-string">'en'</span> }: ImagenWrapperProps = {}) {</span>
+<span class="code-line">  <span class="code-comment">// Set the request locale for server-side translations</span></span>
+<span class="code-line">  <span class="code-function">setRequestLocale</span>(locale);</span>
+<span class="code-line"> </span>
+<span class="code-line">  <span class="code-comment">// Get the translations on the server side with explicit locale</span></span>
+<span class="code-line">  <span class="code-keyword">const</span> t = <span class="code-keyword">await</span> <span class="code-function">getTranslations</span>({ locale, <span class="code-property">namespace</span>: <span class="code-string">'imagen'</span> });</span>
+<span class="code-line"> </span>
+<span class="code-line">  <span class="code-comment">// Pass translations as props to the client component</span></span>
+<span class="code-line">  <span class="code-keyword">const</span> translations = {</span>
+<span class="code-line">    <span class="code-property">badge</span>: { <span class="code-property">text</span>: t(<span class="code-string">'badge.text'</span>) },</span>
+<span class="code-line">    <span class="code-property">title</span>: { <span class="code-property">main</span>: t(<span class="code-string">'title.main'</span>), <span class="code-property">subtitle</span>: t(<span class="code-string">'title.subtitle'</span>) },</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">This function runs on the server. It <span class="term" data-definition="To turn code into the actual pixels shown on screen.">renders</span> before your browser ever sees it.</p>
+              <p class="tl">Lock in which language this request is for.</p>
+              <p class="tl">Fetch all the English/Chinese text for the "imagen" section — a
+                <span class="term" data-definition="A named group of text strings for one part of the app, so 'imagen' text and 'pricing' text don't get mixed up across languages.">translation namespace</span>.</p>
+              <p class="tl">Bundle that text up as
+                <span class="term" data-definition="Short for 'properties' — data handed from a parent component down to a child component, like a director handing an actor their lines.">props</span>
+                — ready to pass down to the client component below.</p>
+              <p class="tl">Each piece of on-screen copy gets its own labelled slot.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE — client half</span>
+            <pre><code>
+<span class="code-line"><span class="code-string">'use client'</span>;</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-keyword">import</span> React, { useState, useRef, useEffect } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { useSession } <span class="code-keyword">from</span> <span class="code-string">'next-auth/react'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { Card, CardContent } <span class="code-keyword">from</span> <span class="code-string">'@/components/ui/card'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { Button } <span class="code-keyword">from</span> <span class="code-string">'@/components/ui/button'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { cn } <span class="code-keyword">from</span> <span class="code-string">'@/lib/utils'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { useUserCredits } <span class="code-keyword">from</span> <span class="code-string">'@/hooks/useUserCredits'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> CreditDisplay <span class="code-keyword">from</span> <span class="code-string">'@/components/blocks/credits-display'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { toast } <span class="code-keyword">from</span> <span class="code-string">'sonner'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { convertToCdnUrl } <span class="code-keyword">from</span> <span class="code-string">'@/lib/cdn-url'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { useTheme } <span class="code-keyword">from</span> <span class="code-string">'@/contexts/theme-context'</span>;</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">This one line flips the switch: everything below runs in the browser, not the server.</p>
+              <p class="tl"><span class="term" data-definition="A line of code that pulls in a tool, component, or function from another file so this file can use it.">Import</span> React's own tools for tracking state and reacting to page loads.</p>
+              <p class="tl">Bring in the tool for checking whether someone is signed in — their session.</p>
+              <p class="tl">Borrow two generic props-department pieces: Card and CardContent.</p>
+              <p class="tl">Borrow the generic Button piece too.</p>
+              <p class="tl">A small helper for combining CSS class names cleanly.</p>
+              <p class="tl">A <span class="term" data-definition="A special React function (its name always starts with 'use') that lets a component tap into features like live data or session state.">hook</span> — a live, always-up-to-date read of this user's credit balance.</p>
+              <p class="tl">The small badge that shows the credit balance on screen.</p>
+              <p class="tl">A library for showing little pop-up notifications.</p>
+              <p class="tl">A helper that rewrites image links to load from a
+                <span class="term" data-definition="A network of servers around the world that deliver files, like images, fast — from a copy stored near you.">CDN</span> instead of one far-away server.</p>
+              <p class="tl">The current light/dark theme setting.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="screen-heading" style="font-size: var(--text-lg)">The Assembled Page</h3>
+        <p>The landing page barely contains content of its own — it's a list of cast members, each handed a slice of data. File: <code>src/app/[locale]/(default)/page.tsx</code></p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">&lt;ImagenWrapper locale={locale} /&gt;</span>
+<span class="code-line">{page.introduce &amp;&amp; &lt;Feature1 section={page.introduce} /&gt;}</span>
+<span class="code-line">{page.benefit &amp;&amp; &lt;Feature2 section={page.benefit} /&gt;}</span>
+<span class="code-line">{page.usage &amp;&amp; &lt;Feature3 section={page.usage} /&gt;}</span>
+<span class="code-line">{page.feature &amp;&amp; &lt;Feature section={page.feature} /&gt;}</span>
+<span class="code-line">{page.showcase &amp;&amp; &lt;Showcase section={page.showcase} /&gt;}</span>
+<span class="code-line">{page.stats &amp;&amp; &lt;Stats section={page.stats} /&gt;}</span>
+<span class="code-line">{page.pricing &amp;&amp; &lt;Pricing pricing={page.pricing} /&gt;}</span>
+<span class="code-line">{page.testimonial &amp;&amp; &lt;Testimonial section={page.testimonial} /&gt;}</span>
+<span class="code-line">{page.faq &amp;&amp; &lt;FAQ section={page.faq} /&gt;}</span>
+<span class="code-line">{page.cta &amp;&amp; &lt;CTA section={page.cta} /&gt;}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Always draw the upload widget — it's always there.</p>
+              <p class="tl">Only draw the "introduce" section if the data file actually has content for it.</p>
+              <p class="tl">Same trick, section by section: benefit, usage, feature, showcase, stats.</p>
+              <p class="tl">…pricing, testimonials, FAQ, and the final call-to-action — each one optional.</p>
+              <p class="tl">The <code>&amp;&amp;</code> means "only draw this if there's something to draw." No content, no section — nothing crashes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">The Page Is a Template. The Content Is Data.</strong>
+            <p>The landing page component doesn't hard-code a single word of copy. It just asks "does the data file have a pricing section?" — and Module 6 shows you exactly where that data file lives.</p>
+          </div>
+        </div>
+
+        <div class="quiz-container" id="quiz-module2">
+          <div class="quiz-question-block"
+               data-correct="q1-b"
+               data-explanation-right="Exactly — CreditsAmount lives in exactly one place. Change ImageGeneration from 10 to 5 and every route, every check, everywhere in the app updates automatically."
+               data-explanation-wrong="Not quite. Think about the 'one place, one rule' idea — if the price lived in a button or was copy-pasted into every route, you'd have to hunt down every copy and update them all, and you'd inevitably miss one.">
+            <h3 class="quiz-question">You want to change the cost of generating an image from 10 credits to 5. Which file do you edit?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q1-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The button component that starts the generation</span>
+              </button>
+              <button class="quiz-option" data-value="q1-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span><code>src/services/credit.ts</code> — the CreditsAmount list</span>
+              </button>
+              <button class="quiz-option" data-value="q1-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The database, directly</span>
+              </button>
+              <button class="quiz-option" data-value="q1-d" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Every API route that generates images</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q2-a"
+               data-explanation-right="Exactly. Once a query lives in a component instead of the Model layer, someone will write a slightly different version of that same query somewhere else — and now the two can quietly disagree."
+               data-explanation-wrong="Not quite — the real risk isn't speed or syntax. It's that the database rule now lives in two places instead of one, and those two places can drift apart over time.">
+            <h3 class="quiz-question">An AI coding assistant writes a database query directly inside a page component. Why should you push back?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q2-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It skips the Service and Model layers, so the rule can now drift out of sync in two places</span>
+              </button>
+              <button class="quiz-option" data-value="q2-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Page components are written in the wrong programming language for database queries</span>
+              </button>
+              <button class="quiz-option" data-value="q2-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It will make the page load slightly slower</span>
+              </button>
+              <button class="quiz-option" data-value="q2-d" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It's not really a problem — as long as it works, the layers don't matter</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q3-b"
+               data-explanation-right="Exactly. A countdown that updates every second has to react to time passing in front of the user's eyes — that's client territory. Telling an AI 'mark it use client' is precise enough that it knows exactly what to build."
+               data-explanation-wrong="Think about what a countdown actually needs to do: update on its own, every second, right in front of the user. That's a job for the client, not the server.">
+            <h3 class="quiz-question">You need a component that shows a live countdown timer, updating every second. Server or client component — and how do you tell the AI?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q3-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Server component — say "keep it on the server"</span>
+              </button>
+              <button class="quiz-option" data-value="q3-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Client component — say "mark it <code>'use client'</code>"</span>
+              </button>
+              <button class="quiz-option" data-value="q3-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Doesn't matter — either works exactly the same</span>
+              </button>
+              <button class="quiz-option" data-value="q3-d" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Neither — countdown timers can't be built as components</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q4-b"
+               data-explanation-right="Exactly. Round brackets like (console) or (admin) tell Next.js 'organize the files this way, but don't put it in the address.' Only square brackets like [locale], and plain folder names, ever show up in the URL."
+               data-explanation-wrong="Round-bracket folders are a Next.js-specific trick for tidying up files without changing the address a visitor types. Try picturing the folder path with (console) simply deleted from it — that's the real URL.">
+            <h3 class="quiz-question">In the URL, where does the folder name <code>(console)</code> show up?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q4-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Right after the domain: charlieandlola.net/(console)/</span>
+              </button>
+              <button class="quiz-option" data-value="q4-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Nowhere — round-bracket folders are for organizing files only</span>
+              </button>
+              <button class="quiz-option" data-value="q4-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Only when the user is signed in</span>
+              </button>
+              <button class="quiz-option" data-value="q4-d" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>At the very end of the address</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module2')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module2')">Try Again</button>
+        </div>
+
+        <p>The route in this module called <code>getUserUuid()</code> and we just... trusted it. Next module — <strong>Who Are You?</strong> — opens that box: sign-in, sessions, and how the server knows which account a request belongs to.</p>
+      </section>
+
+    </div>
+  </div>
+</section>

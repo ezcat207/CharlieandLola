@@ -1,0 +1,655 @@
+<section class="module" id="module-3" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">Commissioning the Artist</h1>
+      <p class="module-subtitle">The whole "Charlie &amp; Lola style" is one paragraph of English. Here is how it gets sent, and what the app does around it.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- ============ SCREEN 1: THE HOOK ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">There is no "Charlie &amp; Lola" button</h2>
+
+        <p>Open the generator and look at the prompt box on the right. You can read the entire product in there — and you are allowed to edit it.</p>
+
+        <p>Nobody trained a Charlie-and-Lola machine. Someone wrote a paragraph describing exactly how the drawing should look, and the app sends that paragraph plus your photo to a general-purpose artist, every single time you press the button.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">🖍️</div>
+          <div class="callout-content">
+            <strong class="callout-title">The metaphor for this module: commissioning an illustrator</strong>
+            <p>You are not applying a filter. You are handing a freelance illustrator a written brief and a reference photo, and waiting for what comes back. The "style" you picked in the interface <em>is</em> the brief.</p>
+          </div>
+        </div>
+
+        <h2 class="screen-heading" style="margin-top: var(--space-12)">The intelligence is rented. These five jobs are the app.</h2>
+
+        <p>The drawing talent belongs to Google. Everything the app itself contributes fits on five cards — and every one of them is a place things break.</p>
+
+        <div class="pattern-cards stagger-children">
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-2)">
+            <div class="pattern-icon" style="background: var(--color-actor-2)">🔑</div>
+            <h4 class="pattern-title">Choose a key</h4>
+            <p class="pattern-desc">Pick one of six <span class="term" data-definition="An API key is a long secret password that proves to an outside service that a request is coming from a paying, registered account. Whoever holds it can spend that account&apos;s money — which is why it never leaves the server.">API keys</span> that still has budget left for today.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-1)">
+            <div class="pattern-icon" style="background: var(--color-actor-1)">✍️</div>
+            <h4 class="pattern-title">Write the brief</h4>
+            <p class="pattern-desc">One long paragraph of English describing the look, what to keep, and what to avoid.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">📎</div>
+            <h4 class="pattern-title">Attach the photo</h4>
+            <p class="pattern-desc">Re-shape your upload into the exact parcel the artist expects to receive.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🔍</div>
+            <h4 class="pattern-title">Dig out the reply</h4>
+            <p class="pattern-desc">The answer is a mixed bag of parts. Find the one part that is actually a picture.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">🗄️</div>
+            <h4 class="pattern-title">Store it somewhere</h4>
+            <p class="pattern-desc">Put the finished drawing at a permanent web address so it can be shown and shared.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 2: HERO FLOW ANIMATION ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">One commission, start to finish</h2>
+
+        <p>Module 2 left us at the door of the <span class="term" data-definition="A route is a single web address on the server that accepts requests and sends back an answer — like one specific desk in an office, with its own job and its own queue.">route</span> that lives on the server. Step through it. Click <strong>Next Step</strong> — the last two steps show the ending where things go wrong.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-1","label":"Your photo and the chosen style arrive at the server route. First question the route asks: does ANY key still have life left today?"},
+          {"highlight":"flow-actor-2","label":"The pool hands over key #3 — the next one in the circle — and immediately moves its pointer to #4, so the next visitor gets a different key.","packet":true,"from":"actor-1","to":"actor-2"},
+          {"highlight":"flow-actor-3","label":"The photo and the written style brief travel to Gemini together, as one sealed parcel.","packet":true,"from":"actor-2","to":"actor-3"},
+          {"highlight":"flow-actor-3","label":"Gemini answers with candidates: a list of parts. Some parts are text, one part holds the new picture."},
+          {"highlight":"flow-actor-3","label":"The route walks the list, grabs the first part that carries inlineData, and throws the rest away."},
+          {"highlight":"flow-actor-4","label":"The picture is uploaded to R2 storage, where it stops being data-in-transit and becomes a normal web address.","packet":true,"from":"actor-3","to":"actor-4"},
+          {"highlight":"flow-actor-5","label":"That address travels back to the browser, and the finished drawing appears on your screen.","packet":true,"from":"actor-4","to":"actor-5"},
+          {"highlight":"flow-actor-3","label":"ALTERNATE ENDING. Instead of a picture, Gemini answers 429 Too Many Requests. That key is out of budget for the day.","packet":true,"from":"actor-2","to":"actor-3"},
+          {"highlight":"flow-actor-2","label":"Key #3 is marked burnt out and skipped by every future request. You see the message: Too many users online!","packet":true,"from":"actor-3","to":"actor-2"}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-1">
+              <div class="flow-actor-icon">📨</div>
+              <span>Request</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-2">
+              <div class="flow-actor-icon">🔑</div>
+              <span>Key Pool<br>(6 slots)</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-3">
+              <div class="flow-actor-icon">🎨</div>
+              <span>Gemini</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4">
+              <div class="flow-actor-icon">🗄️</div>
+              <span>R2 Storage</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-5">
+              <div class="flow-actor-icon">🖼️</div>
+              <span>Response</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet"></div>
+
+          <div class="flow-step-label" id="flow-label">Click "Next Step" to send a commission</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">Key Pool</code>
+            <span class="badge-desc">Six keys taking turns, so one account never carries the whole crowd</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">Gemini</code>
+            <span class="badge-desc">Google&apos;s image <span class="term" data-definition="A model is the trained AI system itself — the thing that actually generates the picture. You rent access to it by the request; you do not own it or keep a copy.">model</span>, rented by the request — the actual artist</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">R2 Storage</code>
+            <span class="badge-desc">Cloudflare&apos;s file warehouse — where finished images get a permanent web address</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 3: THE BRIEF ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The brief you are allowed to rewrite</h2>
+
+        <p>This is the actual <span class="term" data-definition="A prompt is the written instruction you give an AI model — plain English, no code. Changing the prompt is the single cheapest way to change what an AI feature produces.">prompt</span> the app sends, sitting in the source as one very long line. Read it as what it is: instructions to a freelancer.</p>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">📜</div>
+          <div class="callout-content">
+            <strong class="callout-title">From the brief itself</strong>
+            <p>"…thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm…"</p>
+            <p>"Retain the subject&apos;s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression…"</p>
+            <p>"Negative Prompt: No realistic shading, no detailed rendering, no anime or manga style, no 3D modeling, no photographic textures!"</p>
+          </div>
+        </div>
+
+        <p>Every good image brief has the same three-part shape. This structure transfers to any image model you will ever use.</p>
+
+        <div class="pattern-cards stagger-children">
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-1)">
+            <div class="pattern-icon" style="background: var(--color-actor-1)">🎯</div>
+            <h4 class="pattern-title">What to make</h4>
+            <p class="pattern-desc">The look you want, in concrete visual words: sketchy outlines, flat colours, childlike proportions.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">🔒</div>
+            <h4 class="pattern-title">What to preserve</h4>
+            <p class="pattern-desc">The things from the photo that must survive: clothing, hairstyle, skin tone, pose, expression.</p>
+          </div>
+          <div class="pattern-card animate-in" style="border-top: 3px solid var(--color-error)">
+            <div class="pattern-icon" style="background: var(--color-error)">🚫</div>
+            <h4 class="pattern-title">What to forbid</h4>
+            <p class="pattern-desc">The <span class="term" data-definition="A negative prompt is the list of things you explicitly do NOT want in the output. Image models drift toward glossy realism by default, so naming what to avoid is often more powerful than naming what you want.">negative prompt</span> — the list of default habits the model must resist.</p>
+          </div>
+        </div>
+
+        <p>Notice what this means for you: if the output keeps losing people&apos;s glasses, the fix is a few words added to the "retain" list. No new logic, no new <span class="term" data-definition="Deploying means pushing a new version of the app out to the live servers so real users get it. It is the moment a change stops being on your laptop and starts affecting everyone.">deploy</span> of clever code — just better writing.</p>
+      </section>
+
+      <!-- ============ SCREEN 4: SEALING THE PARCEL ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Sealing the parcel</h2>
+
+        <p>The brief and the photo have to travel together, in one shape the artist recognises. Here is that parcel being built.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">    <span class="code-keyword">const</span> imageEditPrompt = [</span>
+<span class="code-line">      { <span class="code-property">text</span>: charlieLolaPrompt },</span>
+<span class="code-line">      {</span>
+<span class="code-line">        <span class="code-property">inlineData</span>: {</span>
+<span class="code-line">          <span class="code-property">mimeType</span>: mimeType,</span>
+<span class="code-line">          <span class="code-property">data</span>: base64Image,</span>
+<span class="code-line">        },</span>
+<span class="code-line">      },</span>
+<span class="code-line">    ];</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Make the parcel we are about to hand the illustrator. It is a list with exactly two things in it.</p>
+              <p class="tl">Thing one: the written brief — that long Charlie &amp; Lola paragraph.</p>
+              <p class="tl">Thing two starts here: the reference photo.</p>
+              <p class="tl"><span class="term" data-definition="inlineData means the file travels inside the message itself, rather than as a link pointing somewhere else. Like stapling the photo to the letter instead of writing down where the photo can be found.">inlineData</span> = the photo rides inside the message, not as a link to fetch later.</p>
+              <p class="tl">Tell the artist what kind of file it is — the <span class="term" data-definition="A MIME type is a short label that says what kind of file something is, like image/png or image/jpeg. Without it, the receiving program has to guess, and guessing goes badly.">MIME type</span>, e.g. image/png.</p>
+              <p class="tl">And here is the photo itself, re-typed as one gigantic string of letters and numbers (<span class="term" data-definition="base64 is a way of rewriting a picture or any file as plain text characters, so it can travel inside a normal text message. It is about a third bigger than the original file — the price of being sendable as text.">base64</span>).</p>
+              <p class="tl">Close the photo item.</p>
+              <p class="tl">Close the list. Parcel sealed, ready to send.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="screen-heading" style="margin-top: var(--space-12)">The actual AI call is four lines</h2>
+
+        <p>All that hype, all that money, all that capability — and from the app&apos;s side it is one polite request with a name on it.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">      response = <span class="code-keyword">await</span> ai.models.<span class="code-function">generateContent</span>({</span>
+<span class="code-line">        <span class="code-property">model</span>: <span class="code-string">"gemini-2.5-flash-image-preview"</span>,</span>
+<span class="code-line">        <span class="code-property">contents</span>: imageEditPrompt,</span>
+<span class="code-line">      });</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Send the commission and wait for the reply. <code>await</code> means: stop here, do nothing else, until the artist answers.</p>
+              <p class="tl">Which artist? This exact one, by name. Swapping models is one word on this line.</p>
+              <p class="tl">And here is what we are sending: the parcel we just sealed.</p>
+              <p class="tl">End of the request. Everything after this is dealing with whatever comes back.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">ai.models</code>
+            <span class="badge-desc">Comes from Google&apos;s <span class="term" data-definition="An SDK (Software Development Kit) is a ready-made bundle of code a company publishes so other people can use their service without writing the plumbing themselves. It is the difference between buying a kettle and building one.">SDK</span> — the ready-made toolkit Google publishes so nobody has to hand-write the plumbing</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">-flash-</code>
+            <span class="badge-desc">Google&apos;s name for the fast, cheap tier of the model family — a deliberate cost choice</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">-preview</code>
+            <span class="badge-desc">Not final. Google can change or retire it, and this line stops working the day they do</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 5: DIGGING OUT THE REPLY ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Opening the envelope</h2>
+
+        <p>Gemini does not reply with a picture. It replies with <span class="term" data-definition="Candidates are the alternative answers a model returns — usually just one. Each candidate is made of parts: some parts are text, some are files. You have to look through them to find what you wanted.">candidates</span>: a bag of parts, some text, hopefully one image. The route rummages until it finds the picture.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> part <span class="code-keyword">of</span> response.candidates[<span class="code-number">0</span>].content.parts) {</span>
+<span class="code-line">      <span class="code-keyword">if</span> (part.inlineData) {</span>
+<span class="code-line">        generatedImageData = part.inlineData.data;</span>
+<span class="code-line">        generatedImageMimeType = part.inlineData.mimeType;</span>
+<span class="code-line">        <span class="code-keyword">break</span>;</span>
+<span class="code-line">      }</span>
+<span class="code-line">    }</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Take the first answer Gemini sent, and go through its parts one at a time.</p>
+              <p class="tl">Is this part a file rather than words? (Text parts have no <code>inlineData</code>.)</p>
+              <p class="tl">Yes — so keep the picture data.</p>
+              <p class="tl">And keep the note saying what kind of image file it is.</p>
+              <p class="tl"><code>break</code> = stop looking. We found what we came for; ignore the rest.</p>
+              <p class="tl">Close the "if it is a file" check.</p>
+              <p class="tl">Close the loop. If we got all the way here without finding one, there is no image — and the app says so.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-4)">🧭</div>
+            <div>
+              <strong>Worth remembering when you debug</strong>
+              <p>If a user ever sees "No image data found in Gemini API response", this loop ran and found nothing. The call worked, the key worked — the artist just replied with words instead of a drawing, usually a polite refusal.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 6: THE KEY POOL ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Six keys, taking turns</h2>
+
+        <p>Google puts a daily ceiling on each account. So this app holds six keys and rotates through them — a pattern called <span class="term" data-definition="Round-robin means taking strict turns in a fixed circle: first, second, third, back to first. No favourites, no cleverness — just the next one along.">round-robin</span>, the same way a deck of chores rotates through a house of flatmates.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">    <span class="code-comment">// Try each key starting from current index</span></span>
+<span class="code-line">    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt; <span class="code-keyword">this</span>.apiKeys.length; i++) {</span>
+<span class="code-line">      <span class="code-keyword">const</span> index = (<span class="code-keyword">this</span>.currentIndex + i) % <span class="code-keyword">this</span>.apiKeys.length;</span>
+<span class="code-line">      <span class="code-keyword">const</span> keyStatus = <span class="code-keyword">this</span>.apiKeys[index];</span>
+<span class="code-line"></span>
+<span class="code-line">      <span class="code-keyword">if</span> (keyStatus.isAvailable &amp;&amp; keyStatus.requestCount &lt; keyStatus.dailyLimit) {</span>
+<span class="code-line">        <span class="code-keyword">this</span>.currentIndex = (index + <span class="code-number">1</span>) % <span class="code-keyword">this</span>.apiKeys.length;</span>
+<span class="code-line">        keyStatus.lastUsed = <span class="code-keyword">new</span> <span class="code-function">Date</span>();</span>
+<span class="code-line">        keyStatus.requestCount++;</span>
+<span class="code-line">        <span class="code-keyword">return</span> keyStatus.key;</span>
+<span class="code-line">      }</span>
+<span class="code-line">    }</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">A note left by whoever wrote this, for whoever reads it next.</p>
+              <p class="tl">Walk around the circle of keys once — at most six tries, then give up.</p>
+              <p class="tl">Start from wherever we stopped last time. The <code>%</code> (<span class="term" data-definition="Modulo, written %, gives the remainder after dividing. Think of a clock face: 3 hours after 11 is 2, not 14. Run past the last key and you wrap around to the first.">modulo</span>) is a clock face — run past the last key and you wrap around to the first.</p>
+              <p class="tl">Pick up that key and its record card: is it healthy, how much has it spent today.</p>
+              <p class="tl">&nbsp;</p>
+              <p class="tl">Two conditions, both required: this key is not marked burnt out, AND it is still under its daily allowance.</p>
+              <p class="tl">Good one. Move the pointer to the NEXT key straight away, so the following visitor gets a different one.</p>
+              <p class="tl">Stamp the time it was last used.</p>
+              <p class="tl">Add one to its tally for today.</p>
+              <p class="tl">Hand the key over. Done — nobody looks at the remaining keys.</p>
+              <p class="tl">Close the check.</p>
+              <p class="tl">Close the circle. If we get past here, all six were unusable.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Aha: a rate limit is a nightclub capacity, not a fine</strong>
+            <p>A <span class="term" data-definition="A rate limit is a cap on how many requests you may make in a period of time. Go over it and the service simply refuses you until the window resets — it does not bill you extra.">rate limit</span> does not charge you more when you go over. It stops letting you in. That is why apps pool keys: six doors instead of one, same club.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-content">
+            <strong class="callout-title">The pool lives in memory, not in a database</strong>
+            <p>The counters are <span class="term" data-definition="In-memory means the information is held in the server&apos;s short-term working memory, not written to disk or a database. It is fast — and it vanishes completely the moment that server restarts.">in-memory</span>, held by a single copy of the pool object (a <span class="term" data-definition="A singleton is a thing the program deliberately creates only one of, so everybody shares the same copy. Handy for shared state — until you run several servers, and each one quietly gets its own singleton.">singleton</span>). Run three server copies and each has its own private pool with its own idea of which keys are burnt out. Restart, and the app forgets everything.</p>
+          </div>
+        </div>
+
+        <p>Those six keys are <span class="term" data-definition="An environment variable is a setting stored outside the code — on the server, in a config panel — so secrets never sit in the source files and can differ between test and live.">environment variables</span>, set on the server and never shipped to your browser.</p>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">GEMINI_API_KEY</code>
+            <span class="badge-desc">The first key. If only this one is set, the pool is a pool of one</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">GEMINI_API_KEY_2 … _5</code>
+            <span class="badge-desc">The extra doors — optional, and each one multiplies daily capacity</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">STORAGE_ENDPOINT</code>
+            <span class="badge-desc">Where finished pictures get uploaded — the address of the file warehouse</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">STORAGE_ACCESS_KEY</code>
+            <span class="badge-desc">The username half of the warehouse credentials</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">STORAGE_SECRET_KEY</code>
+            <span class="badge-desc">The password half. Server-side only, always</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">STORAGE_BUCKET</code>
+            <span class="badge-desc">Which shelf inside the warehouse these images belong on</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 7: WHEN THINGS GO WRONG ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">When a key burns out</h2>
+
+        <p>Sooner or later a key hits its <span class="term" data-definition="A quota is the total allowance an account gets in a period — say 500 images a day. Spend it and you are done until the clock resets, no matter how much you are willing to pay.">quota</span> and Gemini refuses. Here is the app catching that and turning it into something a human can read.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">      <span class="code-comment">// Check if it's a quota/limit error</span></span>
+<span class="code-line">      <span class="code-keyword">if</span> (error.message?.<span class="code-function">includes</span>(<span class="code-string">'quota'</span>) || error.message?.<span class="code-function">includes</span>(<span class="code-string">'limit'</span>) || error.status === <span class="code-number">429</span>) {</span>
+<span class="code-line">        geminiApiPool.<span class="code-function">markKeyAsUnavailable</span>(geminiApiKey, <span class="code-string">'Quota exceeded'</span>);</span>
+<span class="code-line">        <span class="code-keyword">return</span> <span class="code-function">respErr</span>(<span class="code-string">"Too many users online! VIP users get priority access. You're in queue, please wait a moment or upgrade to VIP for instant access."</span>, <span class="code-string">'QUEUE_REQUIRED'</span>);</span>
+<span class="code-line">      }</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">A note explaining the check below.</p>
+              <p class="tl">Three ways to recognise "you are out of budget": the word quota in the error, the word limit, or the code <span class="term" data-definition="HTTP 429 is the standard internet reply meaning Too Many Requests. It is the bouncer&apos;s hand on your chest — come back later, nothing personal.">429</span>. Any one of them counts.</p>
+              <p class="tl">Mark that key burnt out in the pool, so no future request wastes time on it.</p>
+              <p class="tl">Send the user a friendly message instead of a scary error — and a tag, <code>QUEUE_REQUIRED</code>, so the interface knows to show the queue and upgrade prompt.</p>
+              <p class="tl">Close the check. Any other kind of error falls through to the general handler below.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Note what that message really means: "too many users online" is one honest reading, and "we ran out of allowance on all six accounts" is another. Same code, different story.</p>
+
+        <h2 class="screen-heading" style="margin-top: var(--space-12)">Bending instead of breaking</h2>
+
+        <p>Storage is optional. If the warehouse is not set up, the app does not crash — it just carries the picture home in its pockets.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">    <span class="code-keyword">const</span> hasStorageConfig = process.env.STORAGE_ENDPOINT &amp;&amp; </span>
+<span class="code-line">                            process.env.STORAGE_ACCESS_KEY &amp;&amp; </span>
+<span class="code-line">                            process.env.STORAGE_SECRET_KEY &amp;&amp; </span>
+<span class="code-line">                            process.env.STORAGE_BUCKET;</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Before uploading anything, ask: do we actually have a warehouse address?</p>
+              <p class="tl">And a username for it?</p>
+              <p class="tl">And a password?</p>
+              <p class="tl">And a shelf to put things on? All four, or we skip uploading entirely.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🪂</div>
+          <div class="callout-content">
+            <strong class="callout-title">A feature that degrades instead of dying</strong>
+            <p>With no storage configured, the image URL stays as a giant <code>data:image/png;base64,...</code> string and the app still works — the picture just travels inside the response instead of living at a web address. That is a <span class="term" data-definition="A fallback is the lesser-but-still-working path a program takes when the ideal one is unavailable — the stairs when the lift is out. Good software has them; brittle software just stops.">fallback</span>, and it is why a fresh developer can run this app with no cloud account at all.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 8: THE DOCUMENTATION TRAP ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The documentation trap</h2>
+
+        <p>This project&apos;s own instructions file, <code>CLAUDE.md</code>, says in bold that the generator <em>requires a valid OpenAI API key to function</em>, and lists <code>OPENAI_API_KEY</code> as REQUIRED.</p>
+
+        <p>It does not. Nothing in the generator calls OpenAI. Everything you have just read calls Google Gemini.</p>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-error)">📄</div>
+            <div>
+              <strong>What the docs say</strong>
+              <p>OPENAI_API_KEY is required. The feature is a "cyberpunk image generator".</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-success)">⚙️</div>
+            <div>
+              <strong>What the code does</strong>
+              <p>Reads GEMINI_API_KEY through the key pool and calls gemini-2.5-flash-image-preview.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-4)">🏷️</div>
+            <div>
+              <strong>Other honest leftovers</strong>
+              <p>The <span class="term" data-definition="An endpoint is one specific web address on the server that does one job — like a single phone extension in a company. Renaming one means updating every place that dials it.">endpoint</span> is still called generate-cyberpunk, and a whole unused video toolkit sits in the codebase with only a demo page importing it.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>This is completely normal residue. A product got rebuilt — cyberpunk became Charlie &amp; Lola, OpenAI became Gemini — and the documentation stayed where it was, as documentation always does.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">🤖</div>
+          <div class="callout-content">
+            <strong class="callout-title">Why this matters more for you than for a developer</strong>
+            <p>An AI coding assistant reads <code>CLAUDE.md</code> and README files as gospel. Ask one to "fix the image generation" and it may cheerfully add OpenAI code to a Gemini app — and be very confident about it.</p>
+          </div>
+        </div>
+
+        <p>So here is the habit worth building. Before you trust a doc, ask what the code actually calls — you can literally say this to your AI assistant:</p>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>"Search the codebase for which AI provider this feature actually imports."</strong>
+              <p>Searching for a word across every file is called <span class="term" data-definition="To grep is to search every file in a project for a word or pattern. It is the fastest way to find out what a codebase really does, as opposed to what its README claims.">grepping</span>, and it takes seconds.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>"Show me the file the docs describe, and tell me where they disagree."</strong>
+              <p>Force the mismatch into the open before any code gets written.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>"Update CLAUDE.md to match reality first, then make the change."</strong>
+              <p>Fixing the doc is a two-minute job that stops the next five confident mistakes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 9: QUIZ ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Think it through</h2>
+
+        <p>Four situations. None of them have appeared word-for-word above — that is the point.</p>
+
+        <div class="quiz-container" id="quiz-module3">
+
+          <div class="quiz-question-block"
+               data-correct="opt-memory"
+               data-explanation-right="Exactly. markKeyAsUnavailable writes to memory, and while markKeyAsAvailable and resetDailyLimits exist in the pool, nothing calls them on a schedule. Once a key is marked burnt, it stays burnt until the server restarts — which is why restarting the app is the accidental cure, and why this belongs in a database or on a timer, not in one server&apos;s head."
+               data-explanation-wrong="Not quite — and the clue is that Google says you have quota left. That means the refusal is not coming from Google at all any more; it is coming from the pool&apos;s own memory of a refusal it saw earlier. Nothing in the code ever un-marks a burnt key on a schedule.">
+            <h3 class="quiz-question">Every user suddenly sees "Too many users online!" — but your Google dashboard shows plenty of quota left on all six keys. What is the most likely cause?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-google" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Google is throttling the account behind the scenes and the dashboard is lagging</span>
+              </button>
+              <button class="quiz-option" data-value="opt-memory" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The keys got marked unavailable in the pool&apos;s memory earlier, and nothing ever un-marks them</span>
+              </button>
+              <button class="quiz-option" data-value="opt-prompt" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The prompt got too long, so requests are being rejected before they reach the model</span>
+              </button>
+              <button class="quiz-option" data-value="opt-storage" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Storage is misconfigured, so finished images have nowhere to go</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-brief"
+               data-explanation-right="Exactly. Glasses are an accessory, and the brief already has a retain list. Adding a few words there costs one line of English, no new logic, no model change — and it is the single biggest quality lever in almost any AI feature."
+               data-explanation-wrong="Think about where the instructions actually live. The model is a rented generalist that does whatever the written brief asks — so the cheapest lever is almost always the wording, not the machinery around it.">
+            <h3 class="quiz-question">Users complain the output keeps dropping people&apos;s glasses. What is the cheapest place to fix it?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-model" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Switch to a more expensive, more capable Gemini model</span>
+              </button>
+              <button class="quiz-option" data-value="opt-brief" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add glasses to the "retain the subject&apos;s original…" list in the prompt paragraph</span>
+              </button>
+              <button class="quiz-option" data-value="opt-detect" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add code that detects glasses in the upload and pastes them back onto the result</span>
+              </button>
+              <button class="quiz-option" data-value="opt-retry" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Call the model three times and pick whichever result kept the glasses</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-correct-premise"
+               data-explanation-right="Exactly. The request contains a false premise picked up from a stale doc. Correcting it first — and pointing at the route and the key pool — is the difference between a clean change and an assistant confidently bolting OpenAI onto a Gemini app."
+               data-explanation-wrong="Careful — the phrase &quot;matching how we do it today&quot; is doing a lot of damage here, because today the app uses Gemini, not OpenAI. Sorting out the premise before any code gets written is what saves the afternoon.">
+            <h3 class="quiz-question">You tell an AI assistant: "add support for the new OpenAI image model, matching how we do image generation today." What should you say first, before anything else?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-tests" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Ask it to write tests first, so the change is safe</span>
+              </button>
+              <button class="quiz-option" data-value="opt-correct-premise" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Correct the premise: the app uses Gemini today, CLAUDE.md is out of date — read route.ts and the key pool</span>
+              </button>
+              <button class="quiz-option" data-value="opt-branch" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Ask it to work on a separate branch so nothing breaks</span>
+              </button>
+              <button class="quiz-option" data-value="opt-docs" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Paste in the OpenAI documentation so it has the latest reference</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-replied-text"
+               data-explanation-right="Exactly. A key was handed out, the call went through, and Gemini answered — the loop simply walked the parts and found no inlineData anywhere. The reply was words, most often a safety refusal. Look at the prompt and the uploaded photo, not at keys or networking."
+               data-explanation-wrong="Read the message literally: something came back, and code ran over it looking for a picture. That rules out the key and the network — the failure is at the far end of the journey, in what the model chose to reply with.">
+            <h3 class="quiz-question">A request comes back successfully, but the app reports "No image data found in Gemini API response." What does that tell you about where the failure happened?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-key" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The key pool handed out a burnt-out key</span>
+              </button>
+              <button class="quiz-option" data-value="opt-network" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The connection to Google dropped partway through</span>
+              </button>
+              <button class="quiz-option" data-value="opt-replied-text" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The call worked and the model replied — with text rather than a picture, most likely a refusal</span>
+              </button>
+              <button class="quiz-option" data-value="opt-upload" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The upload to R2 storage failed, so the image URL is missing</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">Try Again</button>
+        </div>
+      </section>
+
+      <!-- ============ SCREEN 10: WRAP + TEASE ============ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">What you can do with this now</h2>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-1)">✍️</div>
+            <div>
+              <strong>Change the output without changing code</strong>
+              <p>The biggest quality lever in an AI feature is the wording of the brief: make / preserve / forbid.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">🚪</div>
+            <div>
+              <strong>Reason about capacity before you build</strong>
+              <p>Rate limits are doors, not fines. Pooling keys buys more doors; it does not make the club bigger.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-3)">🔎</div>
+            <div>
+              <strong>Trust the code over the docs</strong>
+              <p>Ask what a feature actually imports before you accept what any README tells you it does.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🧱</div>
+          <div class="callout-content">
+            <strong class="callout-title">Next: The LEGO Box</strong>
+            <p>The engine is rented. The interface around it is entirely the app&apos;s own — colour tokens, Tailwind, and about thirty reusable bricks that every panel in the generator is built from.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>

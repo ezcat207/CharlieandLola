@@ -1,0 +1,611 @@
+<section class="module" id="module-2">
+  <div class="module-content">
+
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">Front of House, Backstage</h1>
+      <p class="module-subtitle">Every file in this app runs on one of two machines. Here's the wall between them — and how to tell, at a glance, which side any file is on.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- ══════════════ SCREEN 1 — THE HOOK ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The key that pays for everything</h2>
+
+        <p>The <span class="term" data-definition="An API key is a long secret password that identifies your account to an outside service. Whoever holds it can spend your money on that service — so it is treated like a credit card number.">API key</span> that pays Google for every image this app generates is sitting in a file right now. If it ever reached a visitor's <span class="term" data-definition="The browser is the program a visitor uses to view websites — Chrome, Safari, Firefox. It runs on their computer, which means they can inspect and change anything inside it.">browser</span>, a stranger could run up the bill on somebody else's card.</p>
+
+        <p>Module 1 followed one photo from the upload box to the moment it crossed from the browser to the <span class="term" data-definition="A server is a computer the company owns and runs, sitting in a data centre somewhere. Visitors never touch it directly — they can only send it requests and read what it chooses to send back.">server</span>. This module is about that crossing itself: what it is, why it exists, and how to tell which side of it you're standing on.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-content">
+            <strong class="callout-title">This is the #1 thing AI coding assistants get wrong</strong>
+            <p>Ask an AI for a feature in a <span class="term" data-definition="Next.js is the framework this app is built on — a big pre-made toolkit for building websites with React. It is the thing that decides which of your files run on the server and which get sent to browsers.">Next.js</span> app and it will happily put browser-only code in a server file, or read a secret in a browser file. The errors that come back are famously baffling — "useState is not a function", "<span class="term" data-definition="Hydration is the moment the browser takes the finished page the server sent and wires the buttons up so they actually work. A hydration mismatch means the server and the browser disagreed about what the page should say.">hydration</span> mismatch". Spotting the side a file belongs to lets you correct it in one sentence instead of ten rounds of guessing.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 2 — THE METAPHOR ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">A theatre has two halves</h2>
+
+        <p>Front of house is what the audience sees: the stage, the actors, the programme in their hands. Backstage is the fly system, the lighting desk, and the safe in the manager's office with the keys in it.</p>
+
+        <p>The audience can walk right up to the edge of the stage. They can never walk into that office. That single fact is the whole architecture of this app.</p>
+
+        <div class="icon-rows stagger-children">
+          <div class="icon-row animate-in">
+            <div class="icon-circle" style="background: var(--color-actor-3)">🎭</div>
+            <div>
+              <strong>Front of house = the visitor's browser</strong>
+              <p>Buttons, drag-and-drop, spinners, previews. Everything here was shipped to a stranger's laptop, and a stranger can read every line of it.</p>
+            </div>
+          </div>
+          <div class="icon-row animate-in">
+            <div class="icon-circle" style="background: var(--color-actor-5)">🔐</div>
+            <div>
+              <strong>Backstage = the company's server</strong>
+              <p>Translation files, database lookups, the API keys. Nothing here is ever sent out — only the <em>results</em> of what happens here.</p>
+            </div>
+          </div>
+          <div class="icon-row animate-in">
+            <div class="icon-circle" style="background: var(--color-accent)">🚪</div>
+            <div>
+              <strong>The stage door = one line of text</strong>
+              <p>A file that starts with <code class="badge-code">'use client'</code> is front of house. A file without it stays backstage. That's it — that's the whole mechanism.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 3 — THE CAST ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Meet the cast</h2>
+
+        <p>Five files do almost all the work in this feature. Click any of them to hear what they do — and notice which side of the wall each one lives on.</p>
+
+        <div class="arch-diagram">
+          <h4 class="arch-zone-label">🎭 Front of house — the visitor's browser · anyone can read this</h4>
+          <div class="arch-zone">
+            <div class="arch-component" data-desc="ImagenClient (imagen-client.tsx, 893 lines) — everything you can touch: drag-and-drop, image previews, the Generate button, spinners, toasts, and remembering your last settings. It runs on a stranger's laptop, so it gets no secrets and no direct line to Google.">
+              <div class="arch-icon">🖐️</div>
+              <span>ImagenClient</span>
+            </div>
+          </div>
+
+          <h4 class="arch-zone-label">🚪 ── the stage door: <code>'use client'</code> ──</h4>
+
+          <h4 class="arch-zone-label">🔐 Backstage — the company's server · nobody outside can look in</h4>
+          <div class="arch-zone">
+            <div class="arch-component" data-desc="The Page (page.tsx) — the homepage itself. It renders the generator at the top plus about ten marketing sections below it. It runs entirely on the server and only its finished HTML is sent out.">
+              <div class="arch-icon">📄</div>
+              <span>The Page</span>
+            </div>
+            <div class="arch-component" data-desc="ImagenWrapper (index.tsx) — looks up every piece of English or Chinese text the generator needs, bundles it into one plain object, and hands it down to ImagenClient. Nothing interactive, no buttons — just fetching words.">
+              <div class="arch-icon">🎁</div>
+              <span>ImagenWrapper</span>
+            </div>
+            <div class="arch-component" data-desc="The route (api/generate-cyberpunk/route.ts) — the only door between the two worlds. It checks who you are, spends your credits, calls Gemini, and stores the result. Every request from the browser comes through here or not at all.">
+              <div class="arch-icon">🚦</div>
+              <span>The route</span>
+            </div>
+            <div class="arch-component" data-desc="The key pool (gemini-api-pool.ts) — holds the Gemini API keys read from the server's environment. It never leaves the building, and Module 3 covers how it rotates between up to six of them.">
+              <div class="arch-icon">🗝️</div>
+              <span>The key pool</span>
+            </div>
+          </div>
+
+          <div class="arch-description">Click any actor to see what it does.</div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 4 — HERO: GROUP CHAT ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The backstage group chat</h2>
+
+        <p>Here's what those five say to each other in the half-second after a visitor loads the homepage. Play it through — the last four messages are the whole point of this module.</p>
+
+        <div class="chat-window" id="chat-module2">
+          <div class="chat-messages">
+
+            <div class="chat-message" data-msg="0" data-sender="page" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-1)">P</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-1)">The Page</span>
+                <p>Visitor incoming, <span class="term" data-definition="A locale is the code for a visitor's language and region — 'en' for English, 'zh' for Chinese. The app uses it to decide which set of words to show.">locale</span> <code>en</code>. Wrapper, you're up.</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="1" data-sender="wrapper" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">W</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">ImagenWrapper</span>
+                <p>On it. Pulling all 40-odd strings from the <code>imagen</code> <span class="term" data-definition="A namespace is a labelled drawer that keeps names from colliding. All the text for the image generator lives in the 'imagen' drawer, so its 'title' does not clash with the pricing page's 'title'.">namespace</span>… badge, title, upload prompts, error messages. Bundling.</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="2" data-sender="client" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">C</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">ImagenClient</span>
+                <p>Just send me the finished words. I can't read translation files — I run on a stranger's laptop.</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="3" data-sender="wrapper" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">W</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">ImagenWrapper</span>
+                <p>Here. One plain object, already in English. 📦 <code>translations</code></p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="4" data-sender="client" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">C</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">ImagenClient</span>
+                <p>Great. I'll take it from here — drag-and-drop, previews, the button. Route, stand by.</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="5" data-sender="route" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-4)">R</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-4)">The route</span>
+                <p>Standing by. Nobody talks to Gemini except me.</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="6" data-sender="client" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">C</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">ImagenClient</span>
+                <p>Can I just have the API key? It'd save a round trip.</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="7" data-sender="keypool" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-5)">K</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-5)">The key pool</span>
+                <p>Absolutely not. 😊</p>
+              </div>
+            </div>
+
+            <div class="chat-message" data-msg="8" data-sender="route" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-4)">R</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-4)">The route</span>
+                <p>It'd be in the <span class="term" data-definition="Page source is the raw text of a web page. Right-click any website and choose View Page Source to see it — everything the site sent your browser, secrets included, if anyone was careless enough to send one.">page source</span> in about four seconds. Send me the photo, I'll send you a picture.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="chat-typing" id="chat-module2-typing" style="display:none">
+            <div class="chat-avatar" id="chat-module2-typing-avatar">?</div>
+            <div class="chat-typing-dots">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+
+          <div class="chat-controls">
+            <button class="btn chat-next-btn">Next Message</button>
+            <button class="btn btn-primary chat-all-btn">Play All</button>
+            <button class="btn chat-reset-btn">Replay</button>
+            <span class="chat-progress"></span>
+          </div>
+        </div>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Aha — the browser is a hostile environment you don't control</strong>
+            <p>Everything you send to a browser can be read, edited and replayed by whoever's holding the laptop. The client/server line isn't bureaucracy — it's the only place a secret can actually hide.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 5 — THE STAGE DOOR ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The stage door is one line long</h2>
+
+        <p>This is the top of <code class="badge-code">imagen-client.tsx</code>, the 893-line file behind every button in the generator. The first line is what makes it front of house.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line"><span class="code-string">'use client'</span>;</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="code-keyword">import</span> React, { useState, useRef, useEffect } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { useSession } <span class="code-keyword">from</span> <span class="code-string">'next-auth/react'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { Card, CardContent } <span class="code-keyword">from</span> <span class="code-string">'@/components/ui/card'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { Button } <span class="code-keyword">from</span> <span class="code-string">'@/components/ui/button'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { cn } <span class="code-keyword">from</span> <span class="code-string">'@/lib/utils'</span>;</span>
+<span class="code-line"><span class="code-keyword">import</span> { useUserCredits } <span class="code-keyword">from</span> <span class="code-string">'@/hooks/useUserCredits'</span>;</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">"Ship this whole file to the visitor's browser." That one line turns everything below it into a <span class="term" data-definition="A client component is a file that gets sent to the visitor's browser and runs there. It can respond to clicks and typing — but it can never hold a secret, because the visitor can read it.">client component</span>.</p>
+              <p class="tl">A blank line — just breathing room.</p>
+              <p class="tl">Borrow the tools for <span class="term" data-definition="State is a component's short-term memory — which image you uploaded, whether the spinner is showing. Only browser code can have it, because only the browser is watching the visitor in real time.">remembering things</span> and reacting to changes. These only work front of house, which is exactly why the file needs line 1.</p>
+              <p class="tl">Borrow a way to ask "is anyone logged in right now?"</p>
+              <p class="tl">Borrow the ready-made Card box that the generator panel sits inside.</p>
+              <p class="tl">Borrow the ready-made Button, so every button in the app looks the same.</p>
+              <p class="tl">Borrow a small helper for combining styling names tidily.</p>
+              <p class="tl">Borrow a way to read how many credits the logged-in visitor has left.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">📌</div>
+          <div class="callout-content">
+            <strong class="callout-title">Useful phrase for talking to an AI</strong>
+            <p>"Put the interactive part in a <code>'use client'</code> component and keep the data fetching on the server." That one sentence resolves most of the confusion an assistant will get into in a Next.js project.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 6 — THE WRAPPER ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Backstage: fetching the words</h2>
+
+        <p><code class="badge-code">ImagenWrapper</code> has no line 1, so it stays backstage — it's a <span class="term" data-definition="A server component is a file that runs only on the company's server. It can read secrets and wait for slow lookups, and only its finished output is sent to the visitor. In Next.js this is the default for every file.">server component</span>. Its entire job is looking up text in the right language and handing it over.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line"><span class="code-keyword">export default async function</span> <span class="code-function">ImagenWrapper</span>({ locale = <span class="code-string">'en'</span> }: ImagenWrapperProps = {}) {</span>
+<span class="code-line">  <span class="code-comment">// Set the request locale for server-side translations</span></span>
+<span class="code-line">  <span class="code-function">setRequestLocale</span>(locale);</span>
+<span class="code-line"></span>
+<span class="code-line">  <span class="code-comment">// Get the translations on the server side with explicit locale</span></span>
+<span class="code-line">  <span class="code-keyword">const</span> t = <span class="code-keyword">await</span> <span class="code-function">getTranslations</span>({ locale, <span class="code-property">namespace</span>: <span class="code-string">'imagen'</span> });</span>
+<span class="code-line"></span>
+<span class="code-line">  <span class="code-comment">// Pass translations as props to the client component</span></span>
+<span class="code-line">  <span class="code-keyword">const</span> translations = {</span>
+<span class="code-line">    <span class="code-property">badge</span>: { <span class="code-property">text</span>: <span class="code-function">t</span>(<span class="code-string">'badge.text'</span>) },</span>
+<span class="code-line">    <span class="code-property">title</span>: { <span class="code-property">main</span>: <span class="code-function">t</span>(<span class="code-string">'title.main'</span>), <span class="code-property">subtitle</span>: <span class="code-function">t</span>(<span class="code-string">'title.subtitle'</span>) },</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Define the wrapper. The word <span class="term" data-definition="Async is short for asynchronous — code that is allowed to pause, go do something slow like a lookup, and carry on when the answer arrives. Server components may do this; browser components may not.">async</span> is the giveaway that this runs on the server: only a backstage file is allowed to pause. If no language is given, use English.</p>
+              <p class="tl">A note from the original author explaining the next line.</p>
+              <p class="tl">Tell the translation system which language this particular visitor gets.</p>
+              <p class="tl">Blank line.</p>
+              <p class="tl">Another author's note.</p>
+              <p class="tl">Go and load the <span class="term" data-definition="Internationalisation, usually shortened to i18n, is the practice of keeping every visible sentence in separate language files so the same app can be shown in English, Chinese, or anything else without rewriting it.">translation</span> file, and <span class="term" data-definition="Await means pause here until the answer comes back, then continue. It is only legal in code that is allowed to wait — which browser components are not.">wait</span> for it. Then call the result <code>t</code> — a lookup tool for words in the <code>imagen</code> drawer.</p>
+              <p class="tl">Blank line.</p>
+              <p class="tl">The author telling us exactly what happens next.</p>
+              <p class="tl">Start building one plain package of finished text.</p>
+              <p class="tl">Look up the badge wording and put it in the package.</p>
+              <p class="tl">Look up the headline and subheadline too. About forty more lookups follow this one.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Seventy lines later, the package is complete and the hand-off happens on a single line:</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">  <span class="code-keyword">return</span> &lt;<span class="code-tag">ImagenClient</span> <span class="code-attr">translations</span>={translations} /&gt;;</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Hand the finished package of words to ImagenClient as a <span class="term" data-definition="A prop is a value one component passes down to another, like handing over a labelled box. The receiving component can read it but not change it.">prop</span>, and let the front of house take over. Passing one bundled object rather than forty separate ones keeps this from turning into <span class="term" data-definition="Prop drilling is when a value has to be passed down through layer after layer of components to reach the one that needs it — tedious, and easy to break. Bundling everything into a single object is one common way to avoid it.">prop drilling</span>. This is the whole crossing: words go out, the translation files stay in.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🎬</div>
+          <div class="callout-content">
+            <strong class="callout-title">Why not let ImagenClient fetch its own text?</strong>
+            <p>Because doing it backstage means the correct words are already in the page before any JavaScript runs — the visitor sees real text instantly, and search engines see real text too. Fetching it front of house would mean a flash of emptiness first.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 7 — SECRETS ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">What only backstage can see</h2>
+
+        <p>This is the key pool reading Google's API keys out of the server's <span class="term" data-definition="Environment variables are settings stored on the machine running the app rather than written into the code — the standard hiding place for passwords and keys, so they never end up in a shared code repository.">environment variables</span>. It has no <code>'use client'</code>, so no visitor will ever see it.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">    <span class="code-comment">// Get all Gemini API keys from environment variables</span></span>
+<span class="code-line">    <span class="code-keyword">const</span> geminiKeys = [</span>
+<span class="code-line">      process.env.GEMINI_API_KEY,</span>
+<span class="code-line">      process.env.GEMINI_API_KEY_1,</span>
+<span class="code-line">      process.env.GEMINI_API_KEY_2, </span>
+<span class="code-line">      process.env.GEMINI_API_KEY_3,</span>
+<span class="code-line">      process.env.GEMINI_API_KEY_4,</span>
+<span class="code-line">      process.env.GEMINI_API_KEY_5,</span>
+<span class="code-line">    ].<span class="code-function">filter</span>(key =&gt; key &amp;&amp; key.<span class="code-function">trim</span>() !== <span class="code-string">''</span>);</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">The author's note: we're about to collect the keys.</p>
+              <p class="tl">Make a list to hold them.</p>
+              <p class="tl">Reach into <span class="term" data-definition="process.env is how code asks the machine it is running on for its settings. On the server it returns real values; anything read this way is invisible to visitors unless its name says otherwise.">the machine's settings</span> for the main key.</p>
+              <p class="tl">And the first spare.</p>
+              <p class="tl">And the second.</p>
+              <p class="tl">And the third.</p>
+              <p class="tl">And the fourth.</p>
+              <p class="tl">And the fifth — six slots in total, though most may be empty.</p>
+              <p class="tl">Throw away any slot that's missing or blank, so only real keys survive. Module 3 is entirely about what happens next.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="screen-heading">The one exception, and it's spelled out in the name</h3>
+
+        <p>Deep inside the browser file, there <em>is</em> a setting being read. It's allowed out only because of how it's named.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code><span class="code-line">                    {t.buttons.generate}</span>
+<span class="code-line">                    &lt;<span class="code-tag">span</span> <span class="code-attr">className</span>=<span class="code-value">"text-cl-blue font-medium"</span>&gt;</span>
+<span class="code-line">                      {process.env.NEXT_PUBLIC_FREE_MODE_ENABLED === <span class="code-string">'true'</span> </span>
+<span class="code-line">                        ? <span class="code-string">`(${t.buttons.limited_free})`</span></span>
+<span class="code-line">                        : <span class="code-string">`(${modelOptions.<span class="code-function">find</span>(m =&gt; m.value === selectedModel)?.credits || <span class="code-number">10</span>} credits)`</span></span>
+<span class="code-line">                      }</span>
+<span class="code-line">                    &lt;/<span class="code-tag">span</span>&gt;</span></code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Print the button's label — "Generate", in whichever language the wrapper sent.</p>
+              <p class="tl">Open a small styled piece of text right next to it.</p>
+              <p class="tl">Check a setting: is the app currently in free mode? The <code>NEXT_PUBLIC_</code> prefix is why this one is readable here at all.</p>
+              <p class="tl">If yes, show the "limited free" wording in brackets.</p>
+              <p class="tl">If no, look up how many credits the chosen model costs and show that instead — falling back to 10 if it can't tell.</p>
+              <p class="tl">Done choosing.</p>
+              <p class="tl">Close the styled text.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">GEMINI_API_KEY</code>
+            <span class="badge-desc">No prefix → stripped out of anything sent to browsers. Server only. This is the default and the safe one.</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">NEXT_PUBLIC_FREE_MODE_ENABLED</code>
+            <span class="badge-desc">Prefixed → baked into the <span class="term" data-definition="A bundle is the single big file of JavaScript — the code that makes a page interactive — that gets packed up and downloaded by every visitor. Anything inside it is readable by anyone who cares to look.">bundle</span> every visitor downloads. A promise you're making: "it is fine for strangers to read this."</span>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">✍️</div>
+          <div class="callout-content">
+            <strong class="callout-title">Naming is the entire security mechanism</strong>
+            <p>There's no vault and no permission list — the framework decides purely by reading the name. Which means adding six characters to the front of a key's name is a real, published leak.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 8 — HOW TO TELL ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Three ways to tell which side you're on</h2>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">1️⃣</div>
+            <h4 class="pattern-title">Read the top line</h4>
+            <p class="pattern-desc"><code>'use client'</code> on line 1 means front of house. No line 1 means backstage — that's the default in this app.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">2️⃣</div>
+            <h4 class="pattern-title">Look at what it touches</h4>
+            <p class="pattern-desc">Clicks, typing, remembering, spinners → must be front of house. Waiting on a lookup, reading secrets → must be backstage.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">3️⃣</div>
+            <h4 class="pattern-title">Ask who's allowed to see it</h4>
+            <p class="pattern-desc">If a stranger reading this file would be a problem, it cannot be front of house. No exceptions, no clever workarounds.</p>
+          </div>
+        </div>
+
+        <div class="file-tree">
+          <div class="ft-folder open">
+            <span class="ft-name">src/</span>
+            <span class="ft-desc">All the app's own code</span>
+            <div class="ft-children">
+              <div class="ft-folder open">
+                <span class="ft-name">app/</span>
+                <span class="ft-desc">Pages visitors land on, and the doors they knock at</span>
+                <div class="ft-children">
+                  <div class="ft-file">
+                    <span class="ft-name">[locale]/(default)/page.tsx</span>
+                    <span class="ft-desc">🔐 backstage — the homepage</span>
+                  </div>
+                  <div class="ft-file">
+                    <span class="ft-name">api/generate-cyberpunk/route.ts</span>
+                    <span class="ft-desc">🔐 backstage — the only door between the two worlds</span>
+                  </div>
+                </div>
+              </div>
+              <div class="ft-folder open">
+                <span class="ft-name">components/blocks/imagen-wrapper/</span>
+                <span class="ft-desc">The generator panel, in two halves</span>
+                <div class="ft-children">
+                  <div class="ft-file">
+                    <span class="ft-name">index.tsx</span>
+                    <span class="ft-desc">🔐 backstage — fetches the words, hands them down</span>
+                  </div>
+                  <div class="ft-file">
+                    <span class="ft-name">imagen-client.tsx</span>
+                    <span class="ft-desc">🎭 front of house — 893 lines of everything you can touch</span>
+                  </div>
+                </div>
+              </div>
+              <div class="ft-folder open">
+                <span class="ft-name">lib/</span>
+                <span class="ft-desc">Shared helpers</span>
+                <div class="ft-children">
+                  <div class="ft-file">
+                    <span class="ft-name">gemini-api-pool.ts</span>
+                    <span class="ft-desc">🔐 backstage — the drawer with the keys in it</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p>One honest observation: 893 lines in a single front-of-house file is a lot. It works, and it shipped — but every visitor downloads all of it, and every change risks the whole panel.</p>
+      </section>
+
+      <!-- ══════════════ SCREEN 9 — QUIZ ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Try it on real situations</h2>
+
+        <p>No score, no pass mark. Each of these is a thing that genuinely happens when you're building with an AI assistant.</p>
+
+        <div class="quiz-container" id="quiz-module2">
+
+          <div class="quiz-question-block"
+               data-correct="opt-b"
+               data-explanation-right="Exactly. Remembering a choice is state, and state only exists front of house. The one-line correction is: 'Put that dropdown in imagen-client.tsx instead — it needs state, so it has to be a client component.' You have just saved yourself six rounds of confusing error messages."
+               data-explanation-wrong="Not quite — think about what 'remembers' means. Remembering the last pick is state, and state only works in a file that ships to the browser. index.tsx is backstage, so it cannot hold any. The fix is a one-liner to the AI: put the dropdown in imagen-client.tsx, or make a new component with 'use client' at the top.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p>You ask an AI to "add a dropdown that remembers the last style the user picked." It writes the code into <code>index.tsx</code> — the wrapper. What happens, and what do you say back?</p>
+              </div>
+            </div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It works, but the dropdown will be slow because the server has to re-render it every time.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It breaks — remembering means state, and state only exists front of house. Tell it to put the dropdown in <code>imagen-client.tsx</code> instead.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It works fine — the wrapper already handles the translations, so it can handle the dropdown too.</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-c"
+               data-explanation-right="Right on both counts. Without the prefix the value is stripped out and arrives as nothing, so the call to Google just fails. And the tempting 'fix' — renaming it to NEXT_PUBLIC_GEMINI_API_KEY — would publish the key to every single visitor. The honest fix is to leave the key backstage and let the route make the call."
+               data-explanation-wrong="Close, but there are two failures stacked here. First, without the NEXT_PUBLIC_ prefix the value never reaches the browser at all, so the code gets nothing and the call fails. Second, and worse, the obvious way to 'fix' that is to rename it with the prefix — which would publish the key to every visitor who loads the page.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p>A teammate adds <code>process.env.GEMINI_API_KEY</code> to <code>imagen-client.tsx</code> to "skip the round trip and speed things up." What actually happens?</p>
+              </div>
+            </div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It works and is genuinely faster — one less hop through the server.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Next.js refuses to build the app and prints a security error.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>It arrives empty because the name has no <code>NEXT_PUBLIC_</code> prefix — and "fixing" that by adding the prefix would publish the key to every visitor.</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-a"
+               data-explanation-right="Exactly. The right words are chosen per visitor, per language, backstage — so they are already sitting in the page before a single line of JavaScript runs. The visitor sees real text instantly, and search engines see real text too, not an empty box waiting to be filled."
+               data-explanation-wrong="Think about timing rather than tidiness. If ImagenClient fetched its own text, the visitor would get an empty panel first and the words a moment later. Doing the lookup backstage means the finished words are baked into the page before it is even sent — instant for the visitor, and readable by search engines.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p>Someone proposes deleting <code>ImagenWrapper</code> entirely and letting <code>ImagenClient</code> fetch its own text. Why does the wrapper exist?</p>
+              </div>
+            </div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>So the right words are already in the page before any JavaScript runs — instant for the visitor, and visible to search engines.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Because translation files contain secrets that visitors must never see.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Purely as a style choice — the team likes small files, and it makes no practical difference.</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="opt-b"
+               data-explanation-right="That is the honest answer. It works, it shipped, and it is the file you would split first. Every visitor downloads all 893 lines whether they generate an image or not, and a small change to the download button sits in the same file as the upload logic."
+               data-explanation-wrong="It is tempting to call it a bug, but it is not — the app works. The real cost is quieter: everything in a front-of-house file ships to every visitor, so the whole 893 lines get downloaded by someone who only came to read the marketing copy. And with upload, preview, prompt editing, download and share all in one place, any change risks the entire panel.">
+            <div class="scenario-block">
+              <div class="scenario-context">
+                <span class="scenario-label">Scenario</span>
+                <p><code>imagen-client.tsx</code> is 893 lines holding upload, preview, prompt editing, download and share. What's the practical cost of that?</p>
+              </div>
+            </div>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="opt-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>None — file length is purely a matter of taste and has no effect on anything.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>All of it ships to every visitor, and any change risks the whole panel. It works, but it's the file you'd split first.</span>
+              </button>
+              <button class="quiz-option" data-value="opt-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The API keys inside it become easier for visitors to find.</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module2')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module2')">Try Again</button>
+        </div>
+      </section>
+
+      <!-- ══════════════ SCREEN 10 — HANDOFF ══════════════ -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Next: through the stage door</h2>
+
+        <p>You can now look at any file in a Next.js project and say which machine it runs on — which is most of what you need to steer an AI assistant through one.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">🗝️</div>
+          <div class="callout-content">
+            <strong class="callout-title">Module 3 — Commissioning the Artist</strong>
+            <p>Backstage, there's a drawer with up to six keys in it. Only one gets used per request, and the drawer remembers which ones are burnt.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>

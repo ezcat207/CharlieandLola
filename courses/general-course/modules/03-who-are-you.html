@@ -1,0 +1,567 @@
+<section class="module" id="module-3" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">Who Are You? Sign-In, Sessions, and Trust</h1>
+      <p class="module-subtitle">How a click on "Sign in with Google" turns into a stamped, tamper-evident wristband your Browser carries everywhere.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1: The wristband metaphor -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Two Very Different Jobs</h2>
+        <p>You can use this app without signing in — you just can't <em>download</em>. Last module we spotted the image route quietly calling <code>getUserUuid()</code> and promised we'd open that box. This is that box.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">🎟️</div>
+            <h4 class="pattern-title">The Gate</h4>
+            <p class="pattern-desc">Once, you queue up and prove who you are the hard way — passport, booking reference, a good look at your face.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">🎫</div>
+            <h4 class="pattern-title">The Wristband</h4>
+            <p class="pattern-desc">After that, nobody checks your passport again. Every bar, every stage, every backstage door just glances at the wristband.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">⏳</div>
+            <h4 class="pattern-title">Tamper-Evident, and It Expires</h4>
+            <p class="pattern-desc">You can't peel it off and hand it to a friend without it showing. And it stops working at the end of the weekend.</p>
+          </div>
+        </div>
+
+        <p>The gate is the sign-in flow. The wristband is a
+          <span class="term" data-definition="A session is the record of you being recognized as logged-in, kept alive as you move around a site or app without having to prove yourself again on every page.">session</span> —
+          a signed
+          <span class="term" data-definition="A cookie is a small piece of data a website asks your Browser to store, which the Browser then automatically sends back on every later visit to that site.">cookie</span>
+          holding a signed
+          <span class="term" data-definition="A token is a piece of data that proves a fact — like who you are — in a way that's very hard to fake, usually because it's digitally signed with a secret key only the server knows.">token</span>.
+          "Show me your wristband" is <code>getUserUuid()</code>.
+        </p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Key Insight</strong>
+            <p><span class="term" data-definition="Authentication is the act of proving who you are — showing ID at the gate, not showing a ticket.">Authenticating</span> you is expensive and happens <em>once</em>. Remembering who you are is cheap and happens on <em>every single request</em>. That's different from <span class="term" data-definition="Authorisation is deciding what someone who's already proven who they are is allowed to do — like a wristband color deciding which backstage areas you can enter.">authorisation</span>, which comes after. Confusing these jobs is where most auth bugs come from — and this app never stores your Google password. It never even sees it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: Three doors into the same building -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Three Doors Into the Same Building</h2>
+        <p>The app offers several ways to prove who you are. Every one of them is a different door — but they all lead into the same room.</p>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">G</div>
+            <h4 class="pattern-title">Google</h4>
+            <p class="pattern-desc">Standard <span class="term" data-definition="OAuth is a standard way for one app to let you log in through another service — like Google or GitHub — without ever handing your password to the first app.">OAuth</span> <span class="term" data-definition="A redirect is when a server tells your Browser to load a different page or site instead — like being pointed to a different queue.">redirect</span>. Your Browser leaves for Google and comes back.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-3)">
+            <div class="pattern-icon" style="background: var(--color-actor-3)">🐙</div>
+            <h4 class="pattern-title">GitHub</h4>
+            <p class="pattern-desc">The same redirect pattern, for developers who'd rather use their GitHub account.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-4)">
+            <div class="pattern-icon" style="background: var(--color-actor-4)">⚡</div>
+            <h4 class="pattern-title">Google One Tap</h4>
+            <p class="pattern-desc">The "Continue as…" bubble top-right. It hands over a token the server checks against Google's own <span class="term" data-definition="An endpoint is a specific address on a server designed to answer one particular kind of request — like a numbered counter at a service desk.">tokeninfo endpoint</span>.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-actor-5)">
+            <div class="pattern-icon" style="background: var(--color-actor-5)">🔑</div>
+            <h4 class="pattern-title">Email + Password</h4>
+            <p class="pattern-desc">Only switched on if enabled. The app <em>does</em> store something here — but only a scrambled fingerprint, never the actual password.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-accent)">
+            <div class="pattern-icon" style="background: var(--color-accent)">🧩</div>
+            <h4 class="pattern-title">API Key</h4>
+            <p class="pattern-desc">For developers calling the app by code, not by browser. A key that starts with <code>sk-</code>.</p>
+          </div>
+        </div>
+
+        <p>Here's the clever bit: none of these
+          <span class="term" data-definition="A provider is the outside service vouching for who you are during sign-in — Google, GitHub, or a plain email-and-password check.">providers</span>
+          are hard-coded "on". Each one only exists if the matching
+          <span class="term" data-definition="An environment variable is a setting stored outside your code — like a name tag stuck on the server — that changes how the app behaves without anyone editing the code itself.">environment variables</span>
+          are set. The list of sign-in buttons is literally computed from the server's configuration at startup.
+        </p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-comment">// Google Auth</span></span>
+<span class="code-line"><span class="code-keyword">if</span> (</span>
+<span class="code-line">  process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED === <span class="code-string">"true"</span> &&</span>
+<span class="code-line">  process.env.AUTH_GOOGLE_ID &&</span>
+<span class="code-line">  process.env.AUTH_GOOGLE_SECRET</span>
+<span class="code-line">) {</span>
+<span class="code-line">  providers.push(</span>
+<span class="code-line">    <span class="code-function">GoogleProvider</span>({</span>
+<span class="code-line">      <span class="code-property">clientId</span>: process.env.AUTH_GOOGLE_ID,</span>
+<span class="code-line">      <span class="code-property">clientSecret</span>: process.env.AUTH_GOOGLE_SECRET,</span>
+<span class="code-line">    })</span>
+<span class="code-line">  );</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Just a label — this chunk of code is about the Google door.</p>
+              <p class="tl">Before doing anything, check three things: is Google sign-in switched on, and are both of Google's secret keys present?</p>
+              <p class="tl">If — and only if — all three checks pass, add Google to the list of sign-in buttons users will see.</p>
+              <p class="tl">Hand Google the two <span class="term" data-definition="Credentials are the pieces of information — like an ID and a secret key, or a username and password — used to prove identity.">credentials</span> it needs to verify people later: an ID and a secret.</p>
+              <p class="tl">Close everything up. Google is now one of the doors — but only because someone set those environment variables.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Every other provider follows this exact same if-it's-configured pattern:</p>
+        <div class="badge-list">
+          <div class="badge-item">
+            <code class="badge-code">NEXT_PUBLIC_AUTH_GOOGLE_ENABLED</code>
+            <span class="badge-desc">Master switch — must literally be "true" or the Google door doesn't exist</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">AUTH_GOOGLE_ID</code>
+            <span class="badge-desc">The public half of this app's Google credentials</span>
+          </div>
+          <div class="badge-item">
+            <code class="badge-code">AUTH_GOOGLE_SECRET</code>
+            <span class="badge-desc">The private half — miss either one and Google never makes it onto the list</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: The gate — flow animation + wristband printed -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Gate: Watch a Sign-In Happen</h2>
+        <p>Follow one real click of "Sign in with Google" from the Browser all the way to a cookie sitting in your browser.</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-1","label":"You click Sign in with Google."},
+          {"highlight":"flow-actor-1","label":"Browser redirects to Google. The app never sees your password.","packet":true,"from":"actor-1","to":"actor-2"},
+          {"highlight":"flow-actor-2","label":"Google verifies you and sends the Browser back with a signed proof.","packet":true,"from":"actor-2","to":"actor-1"},
+          {"highlight":"flow-actor-3","label":"The jwt callback fires on the Server.","packet":true,"from":"actor-1","to":"actor-3"},
+          {"highlight":"flow-actor-3","label":"Server asks the Database: seen this email before?","packet":true,"from":"actor-3","to":"actor-4"},
+          {"highlight":"flow-actor-4","label":"New user? Create a record and grant 30 free credits."},
+          {"highlight":"flow-actor-3","label":"Server packs uuid, email and nickname into a signed token."},
+          {"highlight":"flow-actor-3","label":"Token is stored as a cookie in your Browser. Every later request carries it automatically.","packet":true,"from":"actor-3","to":"actor-1"}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-1">
+              <div class="flow-actor-icon" style="background: var(--color-actor-2)">🌐</div>
+              <span>Browser</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-2">
+              <div class="flow-actor-icon" style="background: var(--color-actor-4)">G</div>
+              <span>Google</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-3">
+              <div class="flow-actor-icon" style="background: var(--color-accent)">🖥️</div>
+              <span>Server</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4">
+              <div class="flow-actor-icon" style="background: var(--color-actor-3)">🗄️</div>
+              <span>Database</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet"></div>
+          <div class="flow-step-label" id="flow-label">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <p>Step 4 is the hinge of the whole module — a
+          <span class="term" data-definition="A callback is a function you hand off to run automatically the moment something else finishes — like leaving your number so the host calls you the second your table is ready.">callback</span>
+          called <code>jwt</code>, short for
+          <span class="term" data-definition="JWT stands for JSON Web Token — a compact, signed token format many apps use to store session data like your user id, in a way that's tamper-evident.">JWT</span>,
+          that fires the instant sign-in succeeds. This is where the wristband gets printed.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">async</span> <span class="code-function">jwt</span>({ token, user, account }) {</span>
+<span class="code-line">      <span class="code-comment">// Persist the OAuth access_token and or the user id to the token right after signin</span></span>
+<span class="code-line">      <span class="code-keyword">try</span> {</span>
+<span class="code-line">        <span class="code-keyword">if</span> (!user || !account) {</span>
+<span class="code-line">          <span class="code-keyword">return</span> token;</span>
+<span class="code-line">        }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">        <span class="code-keyword">const</span> userInfo = <span class="code-keyword">await</span> <span class="code-function">handleSignInUser</span>(user, account);</span>
+<span class="code-line">        <span class="code-keyword">if</span> (!userInfo) {</span>
+<span class="code-line">          <span class="code-keyword">throw new</span> Error(<span class="code-string">"save user failed"</span>);</span>
+<span class="code-line">        }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">        token.user = {</span>
+<span class="code-line">          <span class="code-property">uuid</span>: userInfo.uuid,</span>
+<span class="code-line">          <span class="code-property">email</span>: userInfo.email,</span>
+<span class="code-line">          <span class="code-property">nickname</span>: userInfo.nickname,</span>
+<span class="code-line">          <span class="code-property">avatar_url</span>: userInfo.avatar_url,</span>
+<span class="code-line">          <span class="code-property">created_at</span>: userInfo.created_at,</span>
+<span class="code-line">        };</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">        <span class="code-keyword">return</span> token;</span>
+<span class="code-line">      } <span class="code-keyword">catch</span> (e) {</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">This function fires the moment someone signs in successfully — the wristband-printing machine turns on.</p>
+              <p class="tl">A note for future readers: this saves the sign-in info onto the token.</p>
+              <p class="tl">If there's no user or account info yet, hand back the token unchanged and stop here.</p>
+              <p class="tl">Call <code>handleSignInUser</code> to look up or create this person's account. If that fails, raise an error.</p>
+              <p class="tl">Stamp five facts onto the token: this person's <span class="term" data-definition="A UUID (Universally Unique Identifier) is a long random ID used to tell every user apart safely, without relying on something guessable like a number that counts up.">uuid</span>, email, nickname, avatar, and join date.</p>
+              <p class="tl">Hand back the freshly-stamped token. The wristband is printed.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: Your first 30 credits -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Your First 30 Credits</h2>
+        <p>Inside <code>handleSignInUser</code> is where the app decides: have we met this email before, or not?</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">const</span> existUser = <span class="code-keyword">await</span> <span class="code-function">findUserByEmail</span>(user.email);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">    <span class="code-keyword">if</span> (!existUser) {</span>
+<span class="code-line">      <span class="code-comment">// user not exist, create a new user</span></span>
+<span class="code-line">      <span class="code-keyword">if</span> (!user.uuid) {</span>
+<span class="code-line">        user.uuid = <span class="code-function">getUuid</span>();</span>
+<span class="code-line">      }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">      console.log(<span class="code-string">"user to be inserted:"</span>, user);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">      <span class="code-keyword">const</span> dbUser = <span class="code-keyword">await</span> <span class="code-function">insertUser</span>(user <span class="code-keyword">as</span> <span class="code-keyword">typeof</span> users.$inferInsert);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">      <span class="code-comment">// increase credits for new user, expire in one year</span></span>
+<span class="code-line">      <span class="code-keyword">await</span> <span class="code-function">increaseCredits</span>({</span>
+<span class="code-line">        <span class="code-property">user_uuid</span>: user.uuid,</span>
+<span class="code-line">        <span class="code-property">trans_type</span>: CreditsTransType.NewUser,</span>
+<span class="code-line">        <span class="code-property">credits</span>: CreditsAmount.NewUserGet,</span>
+<span class="code-line">        <span class="code-property">expired_at</span>: <span class="code-function">getOneYearLaterTimestr</span>(),</span>
+<span class="code-line">      });</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Ask the Database: does anyone already have this email?</p>
+              <p class="tl">If nobody does, this is a brand-new person — give them a fresh unique id if they don't already have one.</p>
+              <p class="tl">Log what's about to be saved, then insert a new
+                <span class="term" data-definition="A database record is a single saved entry in a database — like one card in a filing cabinet, with fields for name, email, and so on.">database record</span>
+                for them.
+              </p>
+              <p class="tl">Now the reward: hand this brand-new user free starting credits, set to expire exactly one year from today.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pattern-cards">
+          <div class="pattern-card" style="border-top: 3px solid var(--color-success)">
+            <div class="pattern-icon" style="background: var(--color-success)">✨</div>
+            <h4 class="pattern-title">New Email</h4>
+            <p class="pattern-desc">Create the account, then grant 30 free credits, expiring in one year.</p>
+          </div>
+          <div class="pattern-card" style="border-top: 3px solid var(--color-info)">
+            <div class="pattern-icon" style="background: var(--color-info)">🔁</div>
+            <h4 class="pattern-title">Existing Email</h4>
+            <p class="pattern-desc">Just load their existing record. No new credits — they already have their history.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: Show me your wristband -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Show Me Your Wristband</h2>
+        <p>Every protected action in the app starts with the same question, asked of the same function.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export async function</span> <span class="code-function">getUserUuid</span>() {</span>
+<span class="code-line">  <span class="code-keyword">let</span> user_uuid = <span class="code-string">""</span>;</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">  <span class="code-keyword">const</span> token = <span class="code-keyword">await</span> <span class="code-function">getBearerToken</span>();</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">  <span class="code-keyword">if</span> (token) {</span>
+<span class="code-line">    <span class="code-comment">// api key</span></span>
+<span class="code-line">    <span class="code-keyword">if</span> (token.startsWith(<span class="code-string">"sk-"</span>)) {</span>
+<span class="code-line">      <span class="code-keyword">const</span> user_uuid = <span class="code-keyword">await</span> <span class="code-function">getUserUuidByApiKey</span>(token);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">      <span class="code-keyword">return</span> user_uuid || <span class="code-string">""</span>;</span>
+<span class="code-line">    }</span>
+<span class="code-line">  }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">  <span class="code-keyword">const</span> session = <span class="code-keyword">await</span> <span class="code-function">auth</span>();</span>
+<span class="code-line">  <span class="code-keyword">if</span> (session && session.user && session.user.uuid) {</span>
+<span class="code-line">    user_uuid = session.user.uuid;</span>
+<span class="code-line">  }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">  <span class="code-keyword">return</span> user_uuid;</span>
+<span class="code-line">}</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Start by assuming this visitor is a guest: an empty id.</p>
+              <p class="tl">Check whether the request came with a
+                <span class="term" data-definition="A bearer token is a token that works like cash — whoever is holding it can use it, no extra proof of identity required.">bearer token</span>
+                instead of a cookie.
+              </p>
+              <p class="tl">If that token starts with <code>sk-</code>, it's a developer's
+                <span class="term" data-definition="An API key is a secret, password-like string that lets a program — not a person sitting at a keyboard — prove who it is when calling a service.">API key</span>. Look up whose it is and return that.
+              </p>
+              <p class="tl">Otherwise, ask NextAuth for the current
+                <span class="term" data-definition="Server-side means code that runs on the company's own computer, not in your browser — a visitor can't see it or tamper with it.">server-side</span>
+                session — the signed, verified wristband.
+              </p>
+              <p class="tl">If there's a valid session with a user id, use it.</p>
+              <p class="tl">Hand back whatever was found — a real id, or still just an empty string.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">🎫</div>
+          <div class="callout-content">
+            <strong class="callout-title">Being a Guest Isn't an Error</strong>
+            <p><code>getUserUuid()</code> never throws, never says "unauthorized". It just returns an empty string for a guest. That single design choice is <em>why</em> this app can let logged-out visitors generate images for free — a guest isn't a failure state, it's just another answer.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: The golden rule + spot the bug -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Golden Rule</h2>
+        <p><code>getUserUuid()</code> reads the session <strong>on the Server</strong>. The Browser sends the cookie; the Server checks its signature before believing a single word of it.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-content">
+            <strong class="callout-title">The Server Never Takes the Browser's Word</strong>
+            <p>An AI assistant will happily write
+              <span class="term" data-definition="Client-side means code that runs inside your own browser — fully visible and editable by anyone using dev tools, unlike code that runs privately on the server.">client-side</span>
+              code that reads <code>session.user.uuid</code> and sends it to the server as a plain parameter. Anyone can open dev tools and rewrite that value to someone else's id before it's sent. <strong>Rule: identity comes from the verified session, never from anything the Browser typed into a request.</strong> (Cookies can also be marked "secure", meaning they're only ever sent over <span class="term" data-definition="HTTPS is the secure, encrypted version of the web's HTTP protocol — the padlock icon you see in your browser's address bar.">HTTPS</span>, never plain, unencrypted HTTP.)</p>
+          </div>
+        </div>
+
+        <div class="bug-challenge">
+          <h3>Find the bug in this "download" button:</h3>
+          <div class="bug-code">
+            <div class="bug-line" data-line="1" onclick="checkBugLine(this, false)">
+              <span class="line-num">1</span>
+              <code>'use client';</code>
+            </div>
+            <div class="bug-line" data-line="2" onclick="checkBugLine(this, false)">
+              <span class="line-num">2</span>
+              <code>function DownloadButton({ imageId }) {</code>
+            </div>
+            <div class="bug-line" data-line="3" onclick="checkBugLine(this, false)">
+              <span class="line-num">3</span>
+              <code>&nbsp;&nbsp;const { data: session } = useSession();</code>
+            </div>
+            <div class="bug-line" data-line="4" onclick="checkBugLine(this, false)">
+              <span class="line-num">4</span>
+              <code>&nbsp;&nbsp;async function handleClick() {</code>
+            </div>
+            <div class="bug-line" data-line="5" onclick="checkBugLine(this, false)">
+              <span class="line-num">5</span>
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;await fetch('/api/download', {</code>
+            </div>
+            <div class="bug-line" data-line="6" onclick="checkBugLine(this, false)">
+              <span class="line-num">6</span>
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method: 'POST',</code>
+            </div>
+            <div class="bug-line bug-target" data-line="7" onclick="checkBugLine(this, true)">
+              <span class="line-num">7</span>
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify({ user_uuid: session.user.uuid, imageId }),</code>
+            </div>
+            <div class="bug-line" data-line="8" onclick="checkBugLine(this, false)">
+              <span class="line-num">8</span>
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;});</code>
+            </div>
+            <div class="bug-line" data-line="9" onclick="checkBugLine(this, false)">
+              <span class="line-num">9</span>
+              <code>&nbsp;&nbsp;}</code>
+            </div>
+            <div class="bug-line" data-line="10" onclick="checkBugLine(this, false)">
+              <span class="line-num">10</span>
+              <code>&nbsp;&nbsp;return &lt;button onClick={handleClick}&gt;Download&lt;/button&gt;;</code>
+            </div>
+            <div class="bug-line" data-line="11" onclick="checkBugLine(this, false)">
+              <span class="line-num">11</span>
+              <code>}</code>
+            </div>
+          </div>
+          <div class="bug-feedback" id="bug-feedback"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 7: hashes -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">A One-Way Blender</h2>
+        <p>Sign-in with a password is one of the doors — but the app never stores the password itself, only a
+          <span class="term" data-definition="A hash is a one-way scramble of data — easy to create from the original, but practically impossible to reverse back into it.">hash</span>.
+        </p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">          <span class="code-keyword">if</span> (!user || !user.password_hash) {</span>
+<span class="code-line">            <span class="code-keyword">return null</span>;</span>
+<span class="code-line">          }</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">          <span class="code-comment">// Verify password</span></span>
+<span class="code-line">          <span class="code-keyword">const</span> isValidPassword = <span class="code-keyword">await</span> <span class="code-function">verifyPassword</span>(password, user.password_hash);</span>
+<span class="code-line">&nbsp;</span>
+<span class="code-line">          <span class="code-keyword">if</span> (!isValidPassword) {</span>
+<span class="code-line">            <span class="code-keyword">return null</span>;</span>
+<span class="code-line">          }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">If there's no matching user, or they have no password hash on file, stop and return nothing.</p>
+              <p class="tl">Blend the password the visitor just typed and compare fingerprints against the one stored on file.</p>
+              <p class="tl">If the fingerprints don't match, stop and return nothing — the exact same response as "no such user".</p>
+            </div>
+          </div>
+        </div>
+
+        <p>You can turn "hunter2" into a fingerprint, but you can't turn the fingerprint back into "hunter2". Notice too: a wrong password and a non-existent account both return the same nothing — the app never tells an attacker which one it was. That's the opposite of storing passwords in
+          <span class="term" data-definition="Plain text means unencrypted, unscrambled data — readable by literally anyone who gets access to it, which is exactly what you never want a password to be.">plain text</span>, the classic disaster.
+        </p>
+      </section>
+
+      <!-- SCREEN 8: Quiz -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">Check Your Understanding</h2>
+        <p>Four scenarios. Think like the engineer who has to actually fix these.</p>
+
+        <div class="quiz-container" id="quiz-module3">
+
+          <div class="quiz-question-block"
+               data-correct="q1-a"
+               data-explanation-right="Exactly — getting signed out on every refresh is almost always a cookie problem: it's not being written, it's expiring immediately, or a secure-cookie setting is rejecting it over plain HTTP."
+               data-explanation-wrong="Not quite. Nothing about a Google account or the Database changes on a page refresh — but the cookie gets re-checked every single time. Start there.">
+            <h3 class="quiz-question">Users report they get signed out every time they refresh the page. Where do you look first?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q1-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The cookie/token setup — is it being set at all, expiring too fast, or blocked because it expects HTTPS on a plain-HTTP site?</span>
+              </button>
+              <button class="quiz-option" data-value="q1-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Their Google account settings</span>
+              </button>
+              <button class="quiz-option" data-value="q1-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The Database</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="scenario-block">
+            <div class="scenario-context">
+              <span class="scenario-label">Scenario</span>
+              <p>An AI assistant writes a client component that reads <code>session.user.uuid</code> in the browser and sends it to the server as part of the request body, so the server can figure out whose data to touch.</p>
+            </div>
+            <div class="quiz-question-block"
+                 data-correct="q2-b"
+                 data-explanation-right="Exactly — the Browser is not a trusted narrator. Anyone can rewrite that request before it leaves their machine. The server must call getUserUuid() itself and read its own verified session — never take a visitor's word for who they are."
+                 data-explanation-wrong="Think about who controls the Browser. If a value the Browser sends decides whose data gets touched, anyone with dev tools can edit it and impersonate someone else.">
+              <h3 class="quiz-question">What is wrong with that approach?</h3>
+              <div class="quiz-options">
+                <button class="quiz-option" data-value="q2-a" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Nothing — the id came from their own session, so it's trustworthy</span>
+                </button>
+                <button class="quiz-option" data-value="q2-b" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>Anyone can open dev tools and edit that value before it's sent, letting a visitor claim to be a different user</span>
+                </button>
+                <button class="quiz-option" data-value="q2-c" onclick="selectOption(this)">
+                  <div class="quiz-option-radio"></div>
+                  <span>It's a performance problem, not a security one</span>
+                </button>
+              </div>
+              <div class="quiz-feedback"></div>
+            </div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q3-b"
+               data-explanation-right="Exactly — remember, every provider is wrapped in an if that checks its environment variables. Locally you had a .env file with those values; production is missing them, so the provider was silently never added to the list."
+               data-explanation-wrong="GitHub itself being down is very unlikely, and a working local setup rules out a code bug. What's different between your machine and production? Usually: environment variables.">
+            <h3 class="quiz-question">You add a "Sign in with GitHub" button, but nothing happens in production — even though it works fine locally. What's the most likely cause?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q3-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>GitHub's servers are down</span>
+              </button>
+              <button class="quiz-option" data-value="q3-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The environment variables gating that provider aren't set on the production server, so it was never added to the list</span>
+              </button>
+              <button class="quiz-option" data-value="q3-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The Database isn't connected</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="q4-b"
+               data-explanation-right="Exactly — if sign-in fully works, the jwt callback and the Database connection are clearly fine. The credit grant only happens inside the branch that runs for brand-new emails, so it most likely never ran for them."
+               data-explanation-wrong="If sign-in works end to end, the jwt callback and the Database are both clearly fine. The credit grant is one specific branch inside that flow — think about what could make the app believe they weren't actually new.">
+            <h3 class="quiz-question">New signups aren't receiving their 30 free credits, but they <em>can</em> sign in just fine. Which step most likely failed?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="q4-a" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The jwt callback isn't firing at all</span>
+              </button>
+              <button class="quiz-option" data-value="q4-b" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The branch that only runs for brand-new emails — maybe they'd already signed up under a different provider, so the app treated them as returning</span>
+              </button>
+              <button class="quiz-option" data-value="q4-c" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The Database is offline</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">Try Again</button>
+        </div>
+
+        <p>New users get 30 credits. An image costs 10. So what happens on the fourth one? That's a payment question — and payments have a plot twist.</p>
+      </section>
+
+    </div>
+  </div>
+</section>

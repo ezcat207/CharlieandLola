@@ -1,0 +1,516 @@
+<section class="module" id="module-1" style="background: var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">What Happens When You Click "Generate"</h1>
+      <p class="module-subtitle">Ten seconds, five pieces of code, one message traveling there and back.</p>
+    </header>
+
+    <div class="module-body">
+
+      <!-- SCREEN 1 — What this app even is -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">What This App Even Is</h2>
+        <p>You pick a photo of yourself, hit Generate, watch a spinner for about ten seconds, and a cartoon version of you appears in the Charlie &amp; Lola style. Those ten seconds are basically this whole course, running in miniature — let's slow them down.</p>
+
+        <div class="icon-rows">
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-1)">📷</div>
+            <div>
+              <strong><span class="term" data-definition="To upload is to send a file from your device to a server somewhere else on the internet. Uploading is the opposite of downloading.">Upload</span> a photo</strong>
+              <p>Any selfie or portrait, straight from your camera roll.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-3)">🎨</div>
+            <div>
+              <strong>Get a cartoon</strong>
+              <p>A Charlie &amp; Lola style version, drawn by an AI <span class="term" data-definition="In AI, a model is the trained system that actually does the work — recognizing images, generating text, or in this case, drawing a cartoon. Different models are good at different tasks.">model</span>.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-4)">🆓</div>
+            <div>
+              <strong>Free to try</strong>
+              <p>No account needed just to see a preview.</p>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-circle" style="background: var(--color-actor-2)">💳</div>
+            <div>
+              <strong>Sign in for credits</strong>
+              <p>Downloading full resolution and generating more costs credits.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Under the hood this is a full commercial product — payments, accounts, two languages, an AI model — packed into roughly 330 <span class="term" data-definition="TypeScript is a version of JavaScript that adds strict rules about what type of data (text, number, etc.) each piece of code expects, which helps catch mistakes before the code even runs.">TypeScript</span> files. That's more machinery than it looks like from the outside.</p>
+      </section>
+
+      <!-- SCREEN 2 — The photo lab metaphor -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Envelope You Never See Behind</h2>
+        <p>Picture a one-hour photo lab. You slide your film into a paper envelope, write "matte finish, 4x6" on the outside, and post it through a slot in the wall. You never see what happens back there.</p>
+
+        <div class="step-cards">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>You write your options on the envelope</strong>
+              <p>Your photo, plus the finish and size you want.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>You push it through the slot in the wall</strong>
+              <p>It leaves your hands entirely.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>The back room develops it</strong>
+              <p>You cannot see this part happening — you just wait.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>An envelope of prints comes back out</strong>
+              <p>The finished result, handed back to you.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Your <span class="term" data-definition="The browser is the app running on your own computer or phone — Chrome, Safari, and so on. It's the 'client': the one asking for things, as opposed to the server that provides them.">browser</span> and the <span class="term" data-definition="A server is a computer sitting somewhere else, waiting to receive requests and act on them. In this app, it validates your photo, talks to the AI, and hands back a cartoon.">server</span> are two separate computers that can only pass each other messages — nothing more. Everything an app does is really just: package a message, send it, wait, unpack the reply.</p>
+
+        <p>In this app: the envelope is your <span class="term" data-definition="A request is a message sent from one computer to another asking it to do something, like a note passed through a mail slot. It carries data plus instructions about what you want back.">request</span>; the slot is the <span class="term" data-definition="API stands for Application Programming Interface — a defined way for one piece of software to ask another for something, like a menu of requests a computer will accept. When instructing an AI, you might say 'call the API' to mean 'ask the server for this.'">API</span> <span class="term" data-definition="An endpoint is one specific address a server listens on, like a numbered door in a building. Each endpoint handles one kind of request — this app's image endpoint is /api/generate-cyberpunk.">endpoint</span>; the back room is the server; and the prints coming back are the <span class="term" data-definition="A response is the message a server sends back after handling a request — the reply to your note. It carries the result, or an explanation of what went wrong.">response</span>.</p>
+
+        <div class="callout callout-accent">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong class="callout-title">Key Insight</strong>
+            <p>The entire internet is just this loop, over and over: package a message, send it, wait, unpack the reply. Once you can see that loop, nothing on the internet is actually mysterious — just message after message.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3 — The envelope (Snippet A) -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Envelope</h2>
+        <p>When you click Generate, the browser doesn't send your photo file all by itself — it builds a <span class="term" data-definition="FormData is a browser feature for bundling a file (like your photo) together with other form fields into one package ready to send. Think of it as a box you can drop files and labels into before mailing it.">FormData</span> package first: your photo, plus every option you picked.</p>
+
+        <p>The photo itself started life as a giant <span class="term" data-definition="Base64 is a way of turning a photo's raw bytes into a long string of letters and numbers, so it can be stored or sent as plain text. It isn't compression — it just repackages the same picture as text.">base64</span> text string, sitting quietly in memory and <span class="term" data-definition="localStorage is a small storage locker inside your browser that keeps data on your device even after you close the tab, until something clears it.">localStorage</span> the moment you dropped it in — long before you ever clicked Generate.</p>
+
+        <p>This whole exchange is powered by a single JavaScript command called <span class="term" data-definition="fetch() is the browser's built-in tool for sending a request to a server and waiting for the reply. It's the JavaScript equivalent of typing a URL and hitting enter, but from inside code.">fetch</span>. Here's the actual code that packs and sends the envelope:</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">      <span class="code-keyword">const</span> formData = <span class="code-keyword">new</span> <span class="code-function">FormData</span>();</span>
+<span class="code-line"></span>
+<span class="code-line">      formData.<span class="code-function">append</span>(<span class="code-string">'mode'</span>, <span class="code-string">'image2image'</span>);</span>
+<span class="code-line">      formData.<span class="code-function">append</span>(<span class="code-string">'style'</span>, <span class="code-string">'charlie-lola'</span>); <span class="code-comment">// Fixed style for Charlie and Lola</span></span>
+<span class="code-line">      formData.<span class="code-function">append</span>(<span class="code-string">'aspectRatio'</span>, aspectRatio);</span>
+<span class="code-line">      formData.<span class="code-function">append</span>(<span class="code-string">'outputFormat'</span>, outputFormat);</span>
+<span class="code-line">      formData.<span class="code-function">append</span>(<span class="code-string">'model'</span>, <span class="code-string">'standard'</span>); <span class="code-comment">// Fixed model</span></span>
+<span class="code-line"></span>
+<span class="code-line">      <span class="code-keyword">if</span> (customPrompt.trim()) {</span>
+<span class="code-line">        formData.<span class="code-function">append</span>(<span class="code-string">'customPrompt'</span>, customPrompt);</span>
+<span class="code-line">      }</span>
+<span class="code-line"></span>
+<span class="code-line">      <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = 0; i &lt; uploadedImages.length; i++) {</span>
+<span class="code-line">        <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(uploadedImages[i]);</span>
+<span class="code-line">        <span class="code-keyword">const</span> blob = <span class="code-keyword">await</span> response.<span class="code-function">blob</span>();</span>
+<span class="code-line">        formData.<span class="code-function">append</span>(`image_${i}`, blob);</span>
+<span class="code-line">      }</span>
+<span class="code-line"></span>
+<span class="code-line">      formData.<span class="code-function">append</span>(<span class="code-string">'imageCount'</span>, uploadedImages.length.<span class="code-function">toString</span>());</span>
+<span class="code-line"></span>
+<span class="code-line">      <span class="code-keyword">const</span> apiResponse = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'/api/generate-cyberpunk'</span>, {</span>
+<span class="code-line">        method: <span class="code-string">'POST'</span>,</span>
+<span class="code-line">        body: formData,</span>
+<span class="code-line">      });</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Create an empty envelope you can put things inside.</p>
+              <p class="tl">Label it: this is a Charlie &amp; Lola image-to-image job.</p>
+              <p class="tl">Note the aspect ratio and file format you asked for.</p>
+              <p class="tl">The model setting is fixed to "standard" — always the same.</p>
+              <p class="tl">If you typed a custom instruction, tuck that in too.</p>
+              <p class="tl">Loop through every photo you uploaded (up to 5) and turn each one into raw bytes.</p>
+              <p class="tl">Drop each photo into the envelope, one by one.</p>
+              <p class="tl">Write down how many photos are inside.</p>
+              <p class="tl">Push the whole envelope through the slot in the wall — a <span class="term" data-definition="POST is a type of request that sends data to the server to create or change something, as opposed to GET, which just asks to read something. Uploading your photo is a POST.">POST</span> request to /api/generate-cyberpunk.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4 — The back room -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Back Room</h2>
+        <p>Behind the slot, code called an API route unpacks your envelope and <span class="term" data-definition="To validate something is to check that it meets the rules before acting on it — right size, right format, right permissions. Servers validate requests so they don't waste work on bad data.">validates</span> it before doing anything expensive: valid aspect ratio? a photo actually attached? each under 10 <span class="term" data-definition="MB stands for megabyte, a unit of file size. A typical phone photo is a few MB — this app rejects any single image over 10 MB.">MB</span>? enough credits, if you're signed in? a free AI key available right now?</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line"><span class="code-keyword">export async function</span> <span class="code-function">POST</span>(request: Request) {</span>
+<span class="code-line">  <span class="code-keyword">try</span> {</span>
+<span class="code-line">    <span class="code-keyword">const</span> formData = <span class="code-keyword">await</span> request.<span class="code-function">formData</span>();</span>
+<span class="code-line">    <span class="code-keyword">const</span> style = formData.<span class="code-function">get</span>(<span class="code-string">'style'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">'charlie-lola'</span>;</span>
+<span class="code-line">    <span class="code-keyword">const</span> mode = formData.<span class="code-function">get</span>(<span class="code-string">'mode'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">'image2image'</span>; <span class="code-comment">// Charlie and Lola style transformation</span></span>
+<span class="code-line">    <span class="code-keyword">const</span> customPrompt = formData.<span class="code-function">get</span>(<span class="code-string">'customPrompt'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">''</span>;</span>
+<span class="code-line">    <span class="code-keyword">const</span> aspectRatio = formData.<span class="code-function">get</span>(<span class="code-string">'aspectRatio'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">'4:3'</span>;</span>
+<span class="code-line">    <span class="code-keyword">const</span> outputFormat = formData.<span class="code-function">get</span>(<span class="code-string">'outputFormat'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">'png'</span>;</span>
+<span class="code-line">    <span class="code-keyword">const</span> model = formData.<span class="code-function">get</span>(<span class="code-string">'model'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">'standard'</span>;</span>
+<span class="code-line">    <span class="code-keyword">const</span> imageCount = <span class="code-function">parseInt</span>(formData.<span class="code-function">get</span>(<span class="code-string">'imageCount'</span>) <span class="code-keyword">as</span> <span class="code-keyword">string</span> || <span class="code-string">'0'</span>);</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">This function runs whenever a POST request hits this address.</p>
+              <p class="tl">Try to open the envelope and read what's inside.</p>
+              <p class="tl">Pull out the style — default to "charlie-lola" if nothing was sent.</p>
+              <p class="tl">Pull out the mode — this is an image-to-image transformation.</p>
+              <p class="tl">Pull out any custom instructions you typed.</p>
+              <p class="tl">Pull out the aspect ratio and file format you chose.</p>
+              <p class="tl">Pull out the model setting.</p>
+              <p class="tl">Pull out how many photos you said you were sending.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>If everything checks out, the server builds the actual instruction for the AI — the <span class="term" data-definition="A prompt is the plain-English instructions sent to an AI model telling it what to do. In this app, it's just a string of text sitting in a code file — anyone who can edit that string can change what the AI produces.">prompt</span>.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">const</span> imageEditPrompt = [</span>
+<span class="code-line">      { text: charlieLolaPrompt },</span>
+<span class="code-line">      {</span>
+<span class="code-line">        inlineData: {</span>
+<span class="code-line">          mimeType: mimeType,</span>
+<span class="code-line">          data: base64Image,</span>
+<span class="code-line">        },</span>
+<span class="code-line">      },</span>
+<span class="code-line">    ];</span>
+<span class="code-line"></span>
+<span class="code-line">    console.<span class="code-function">log</span>(<span class="code-string">"🔄 Generating Charlie and Lola style image..."</span>);</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="code-keyword">let</span> response;</span>
+<span class="code-line">    <span class="code-keyword">try</span> {</span>
+<span class="code-line">      <span class="code-comment">// Generate edited image using Gemini 2.5 Flash Image Preview</span></span>
+<span class="code-line">      response = <span class="code-keyword">await</span> ai.models.<span class="code-function">generateContent</span>({</span>
+<span class="code-line">        model: <span class="code-string">"gemini-2.5-flash-image-preview"</span>,</span>
+<span class="code-line">        contents: imageEditPrompt,</span>
+<span class="code-line">      });</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Build the actual message to the AI: instructions plus your photo.</p>
+              <p class="tl">The instructions are one big block of English text called charlieLolaPrompt.</p>
+              <p class="tl">The photo rides along too — its file type and its base64 bytes.</p>
+              <p class="tl">Print a log line so developers can see this step happening.</p>
+              <p class="tl">Send it all to Google's Gemini model and wait for the answer.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Tucked inside that prompt is a whole paragraph of do-nots: <em>"No realistic shading, no detailed rendering, no anime or manga style, no 3D modeling, no photographic textures!"</em> It's just text in a file — anyone who can edit that string can change the entire product.</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-content">
+            <strong class="callout-title">The Name Lies</strong>
+            <p>This endpoint is called <code>/api/generate-cyberpunk</code> even though the app makes Charlie &amp; Lola cartoons — a leftover name from an earlier version of the product. Real codebases drift like this constantly, which is exactly why you should describe <em>behavior</em> to an AI assistant, not guess from a filename.</p>
+          </div>
+        </div>
+
+        <p>Here's the whole journey, start to finish. Click through it:</p>
+
+        <div class="flow-animation" data-steps='[
+          {"highlight":"flow-actor-1","label":"Browser packs your photo and chosen options into a FormData envelope."},
+          {"highlight":"flow-actor-2","label":"POST to /api/generate-cyberpunk — the envelope goes through the slot.","packet":true,"from":"actor-1","to":"actor-2"},
+          {"highlight":"flow-actor-2","label":"Server checks the envelope: valid aspect ratio? photo present? under 10MB? enough credits? a free AI key available?"},
+          {"highlight":"flow-actor-3","label":"Server sends the prompt plus your photo bytes to Gemini and waits.","packet":true,"from":"actor-2","to":"actor-3"},
+          {"highlight":"flow-actor-2","label":"Gemini finishes drawing and sends back raw image data.","packet":true,"from":"actor-3","to":"actor-2"},
+          {"highlight":"flow-actor-4","label":"Server uploads the image to Cloudflare R2 storage and gets a URL back.","packet":true,"from":"actor-2","to":"actor-4"},
+          {"highlight":"flow-actor-1","label":"Server sends back one JSON reply containing that imageUrl.","packet":true,"from":"actor-2","to":"actor-1"},
+          {"highlight":"flow-actor-1","label":"Browser puts the URL into an image tag and pops up a toast. Done."}
+        ]'>
+          <div class="flow-actors">
+            <div class="flow-actor" id="flow-actor-1">
+              <div class="flow-actor-icon">🌐</div>
+              <span>Browser</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-2">
+              <div class="flow-actor-icon">🖥️</div>
+              <span>Server</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-3">
+              <div class="flow-actor-icon">✨</div>
+              <span>Gemini</span>
+            </div>
+            <div class="flow-actor" id="flow-actor-4">
+              <div class="flow-actor-icon">☁️</div>
+              <span>Storage</span>
+            </div>
+          </div>
+
+          <div class="flow-packet" id="flow-packet"></div>
+
+          <div class="flow-step-label" id="flow-label">Click "Next Step" to begin</div>
+
+          <div class="flow-controls">
+            <button class="btn flow-next-btn">Next Step</button>
+            <button class="btn flow-reset-btn">Restart</button>
+            <span class="flow-progress"></span>
+          </div>
+        </div>
+
+        <p>Notice that the reply gets a <span class="term" data-definition="A URL is a web address — the string you'd paste into a browser bar to go straight to one specific thing, like an image.">URL</span> from <span class="term" data-definition="Cloud storage is a service that keeps files (like your generated cartoon) on someone else's servers permanently, and gives you a URL to fetch them later instead of storing them on your own device.">cloud storage</span> before it ever reaches you — Gemini itself never hands out a link, only raw pixels.</p>
+      </section>
+
+      <!-- SCREEN 5 — The prints come back -->
+      <section class="screen animate-in">
+        <h2 class="screen-heading">The Prints Come Back</h2>
+        <p>Gemini's answer arrives as raw image bytes, not a link. So the server uploads it, then packages the whole result as one <span class="term" data-definition="JSON is a plain-text way of packaging data as labeled fields, like a filled-out form: { &quot;name&quot;: &quot;value&quot; }. It's the format almost every API uses to send replies.">JSON</span> object.</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">    <span class="code-keyword">return</span> <span class="code-function">respData</span>({</span>
+<span class="code-line">      imageUrl: responseImageUrl,</span>
+<span class="code-line">      filename: storedFilename,</span>
+<span class="code-line">      message: <span class="code-string">"Charlie and Lola style transformation completed successfully"</span>,</span>
+<span class="code-line">      provider: <span class="code-string">"google.gemini"</span>,</span>
+<span class="code-line">      model: <span class="code-string">"gemini-2.5-flash-image-preview"</span>,</span>
+<span class="code-line">      creditsUsed: isRegisteredUser ? requiredCredits : 0,</span>
+<span class="code-line">      aspectRatio,</span>
+<span class="code-line">      outputFormat: fileExtension,</span>
+<span class="code-line">      style: style,</span>
+<span class="code-line">      storedLocally: hasStorageConfig &amp;&amp; !finalImageUrl.startsWith(<span class="code-string">'data:'</span>),</span>
+<span class="code-line">      requiresRegistration,</span>
+<span class="code-line">      isPreview: !isRegisteredUser,</span>
+<span class="code-line">      downloadUrl: isRegisteredUser ? responseImageUrl : null,</span>
+<span class="code-line">    });</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Package the final reply as one object.</p>
+              <p class="tl">imageUrl is where your cartoon actually lives now.</p>
+              <p class="tl">message and provider are just friendly labels about what happened.</p>
+              <p class="tl">creditsUsed says how many credits this cost — zero if you weren't signed in.</p>
+              <p class="tl">requiresRegistration and downloadUrl are the fields that decide whether you see a Sign In button or a working Download button.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>Watch the same journey play out as a conversation between the three main characters:</p>
+
+        <div class="chat-window" id="chat-module1">
+          <div class="chat-messages">
+            <div class="chat-message" data-msg="0" data-sender="browser" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-1)">🌐</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-1)">Browser</span>
+                <p>Here's a photo and some options — make it Charlie &amp; Lola.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="1" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">Server</span>
+                <p>Hold on — aspect ratio valid? image present? under 10MB? ok.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="2" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">Server → Gemini</span>
+                <p>Turn this person into a Charlie &amp; Lola character. No 3D, no anime, no photographic textures.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="3" data-sender="gemini" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-3)">✨</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-3)">Gemini</span>
+                <p>...done. Here's the raw pixels.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="4" data-sender="server" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-2)">🖥️</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-2)">Server</span>
+                <p>Filing a copy in storage. Here's your URL.</p>
+              </div>
+            </div>
+            <div class="chat-message" data-msg="5" data-sender="browser" style="display:none">
+              <div class="chat-avatar" style="background: var(--color-actor-1)">🌐</div>
+              <div class="chat-bubble">
+                <span class="chat-sender" style="color: var(--color-actor-1)">Browser</span>
+                <p>🎉</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-typing" id="chat-typing" style="display:none">
+            <div class="chat-avatar" id="typing-avatar">?</div>
+            <div class="chat-typing-dots">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+
+          <div class="chat-controls">
+            <button class="btn chat-next-btn">Next Message</button>
+            <button class="btn chat-all-btn">Play All</button>
+            <button class="btn chat-reset-btn">Replay</button>
+            <span class="chat-progress"></span>
+          </div>
+        </div>
+
+        <p>Now here's the code on the browser's side, unpacking that exact reply:</p>
+
+        <div class="translation-block animate-in">
+          <div class="translation-code">
+            <span class="translation-label">CODE</span>
+            <pre><code>
+<span class="code-line">      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> apiResponse.<span class="code-function">json</span>();</span>
+<span class="code-line"></span>
+<span class="code-line">      <span class="code-keyword">if</span> (result.code === 0 &amp;&amp; result.data?.imageUrl) {</span>
+<span class="code-line">        <span class="code-function">setGeneratedImage</span>(result.data.imageUrl);</span>
+<span class="code-line"></span>
+<span class="code-line">        <span class="code-comment">// Handle different response types</span></span>
+<span class="code-line">        <span class="code-keyword">if</span> (result.data.requiresRegistration &amp;&amp; !session) {</span>
+<span class="code-line">          toast.<span class="code-function">success</span>(<span class="code-string">"Image generated! Sign in to download full resolution image."</span>);</span>
+<span class="code-line">        } <span class="code-keyword">else if</span> (result.msg === <span class="code-string">'QUEUE_REQUIRED'</span>) {</span>
+<span class="code-line">          toast.<span class="code-function">warning</span>(<span class="code-string">"🚧 Service is busy. You're in the queue. Upgrade to premium to skip the queue!"</span>);</span>
+<span class="code-line">        } <span class="code-keyword">else</span> {</span>
+<span class="code-line">          toast.<span class="code-function">success</span>(t.messages.success.generated);</span>
+<span class="code-line">          <span class="code-keyword">if</span> (session) {</span>
+<span class="code-line">            <span class="code-function">refreshCredits</span>();</span>
+<span class="code-line">          }</span>
+<span class="code-line">        }</span>
+            </code></pre>
+          </div>
+          <div class="translation-english">
+            <span class="translation-label">PLAIN ENGLISH</span>
+            <div class="translation-lines">
+              <p class="tl">Read the server's reply and unpack the JSON.</p>
+              <p class="tl">If the reply says code 0 and there's an imageUrl, save that URL into this component's <span class="term" data-definition="State is the data a piece of the interface currently remembers, like 'which image is showing right now.' When state changes, the screen updates to match it.">state</span> — the picture appears immediately.</p>
+              <p class="tl">If you're not signed in, a <span class="term" data-definition="A toast is the small pop-up notification that briefly appears on screen (like 'Image generated!') and then fades away on its own.">toast</span> reminds you that signing in unlocks the full download.</p>
+              <p class="tl">Otherwise, if the service is busy, a different toast tells you you're in a queue.</p>
+              <p class="tl">Otherwise, celebrate: show a success toast and refresh your credit balance.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>That JSON became <span class="term" data-definition="React is the JavaScript library this app's interface is built with. It lets the page update itself automatically whenever the underlying state changes.">React</span> state the instant it arrived — that single change is what makes the picture appear and the toast slide in.</p>
+
+        <h2 class="screen-heading" style="margin-top: var(--space-12)">Quick Check</h2>
+        <div class="quiz-container" id="quiz-module1">
+
+          <div class="quiz-question-block"
+               data-correct="check-request"
+               data-explanation-right="Exactly — open the browser's Network tab and see how far the envelope actually got. That one question turns 'it's broken' into a specific, fixable claim."
+               data-explanation-wrong="Not quite. Rewriting the prompt or the button color assumes you already know where the problem is — but you don't yet. The first move is always to trace the message.">
+            <h3 class="quiz-question">A user says "I clicked Generate and nothing happened — the spinner just spins forever." Where do you look FIRST, and why?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="rewrite-prompt" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Rewrite the AI prompt</span>
+              </button>
+              <button class="quiz-option" data-value="check-request" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Check whether the request left the browser, and what the server replied</span>
+              </button>
+              <button class="quiz-option" data-value="change-color" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Change the button's color</span>
+              </button>
+              <button class="quiz-option" data-value="reinstall" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Reinstall the app</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="edit-prompt"
+               data-explanation-right="Exactly! The prompt is just an English string sitting in the API route. No new AI model, no database change — you'd just tell the AI to keep the background instead of dropping it."
+               data-explanation-wrong="Not quite. Nothing about swapping backgrounds needs a different model or a new database table — the instructions the AI follows are plain text, and that text is the only thing that has to change.">
+            <h3 class="quiz-question">You want the cartoon characters to keep a background instead of a transparent one. What actually has to change?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="new-model" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Swap in a different AI model</span>
+              </button>
+              <button class="quiz-option" data-value="edit-prompt" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Edit the prompt text inside the API route</span>
+              </button>
+              <button class="quiz-option" data-value="new-db-table" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Add a new database table</span>
+              </button>
+              <button class="quiz-option" data-value="change-css" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>Change the button's CSS color</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <div class="quiz-question-block"
+               data-correct="requiresregistration-field"
+               data-explanation-right="Exactly — requiresRegistration and downloadUrl (which is null for guests) are what the button checks. The image itself is already there; it's these two fields that gate the download."
+               data-explanation-wrong="Not quite. imageUrl, creditsUsed, and provider are all present for everyone, guest or not — they don't distinguish who gets to download. Look at the fields that are specifically about registration.">
+            <h3 class="quiz-question">Guests see the generated image, but the download button asks them to sign in. Based on the JSON reply from Screen 5, which fields is the app checking?</h3>
+            <div class="quiz-options">
+              <button class="quiz-option" data-value="imageurl-field" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The imageUrl field</span>
+              </button>
+              <button class="quiz-option" data-value="creditsused-field" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The creditsUsed field</span>
+              </button>
+              <button class="quiz-option" data-value="requiresregistration-field" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>requiresRegistration, and downloadUrl being null</span>
+              </button>
+              <button class="quiz-option" data-value="provider-field" onclick="selectOption(this)">
+                <div class="quiz-option-radio"></div>
+                <span>The provider field</span>
+              </button>
+            </div>
+            <div class="quiz-feedback"></div>
+          </div>
+
+          <button class="quiz-check-btn" onclick="checkQuiz('quiz-module1')">Check Answers</button>
+          <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module1')">Try Again</button>
+        </div>
+
+        <p style="margin-top: var(--space-10)">We just watched a message travel through five different pieces of code without ever asking <em>who</em> those pieces are, or why the code is split up the way it is. That's next, in <strong>Meet the Cast</strong>.</p>
+      </section>
+
+    </div>
+  </div>
+</section>
