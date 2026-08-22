@@ -31,6 +31,7 @@ export default async function ImagenWrapper({ locale = 'en' }: ImagenWrapperProp
       generating: t('buttons.generating'),
       download: t('buttons.download'),
       share: t('buttons.share'),
+      try_chatgpt: t('buttons.try_chatgpt'),
     },
     upload: {
       title: t('upload.title'),

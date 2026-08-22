@@ -181,7 +181,9 @@
       "login_required": "Generate Now",
       "generating": "Generating...",
       "download": "Download",
-      "share": "Share"
+      "share": "Share",
+      "limited_free": "Limited Free",
+      "try_chatgpt": "Try this prompt in ChatGPT"
     },
     "upload": {
       "title": "Reference Images",

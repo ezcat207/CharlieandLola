@@ -30,6 +30,7 @@ interface Translations {
     generating: string;
     download: string;
     share: string;
+    try_chatgpt: string;
   };
   upload: {
     title: string;
@@ -775,10 +776,26 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                   <div className="flex items-center gap-2">
                     {t.buttons.generate}
                     <span className="text-cl-blue font-medium">
-                      ({modelOptions.find(m => m.value === selectedModel)?.credits || 10} credits)
+                      {process.env.NEXT_PUBLIC_FREE_MODE_ENABLED === 'true' 
+                        ? `(${t.buttons.limited_free})`
+                        : `(${modelOptions.find(m => m.value === selectedModel)?.credits || 10} credits)`
+                      }
                     </span>
                   </div>
                 )}
+              </Button>
+
+              {/* Try the same prompt in ChatGPT */}
+              <Button asChild variant="outline" size="lg">
+                <a
+                  href={`https://chatgpt.com/?prompt=${encodeURIComponent(
+                    styleOptions.find((s) => s.value === selectedStyle)?.prompt || ''
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t.buttons.try_chatgpt}
+                </a>
               </Button>
             </section>
 

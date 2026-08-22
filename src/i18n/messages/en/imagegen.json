@@ -32,7 +32,8 @@
     "login_required": "Generate (Login for Full Quality)",
     "generating": "Creating Your Character...",
     "download": "Download",
-    "share": "Share"
+    "share": "Share",
+    "try_chatgpt": "Try this prompt in ChatGPT"
   },
   "upload": {
     "title": "Upload Your Photos",

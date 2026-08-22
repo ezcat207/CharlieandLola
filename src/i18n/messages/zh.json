@@ -179,7 +179,9 @@
       "login_required": "请先登录",
       "generating": "生成中...",
       "download": "下载",
-      "share": "分享"
+      "share": "分享",
+      "limited_free": "限免",
+      "try_chatgpt": "在 ChatGPT 中试用此提示词"
     },
     "upload": {
       "title": "参考图像",

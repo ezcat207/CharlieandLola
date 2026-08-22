@@ -32,7 +32,8 @@
     "login_required": "生成（登录获取高清版）",
     "generating": "正在创建您的角色...",
     "download": "下载",
-    "share": "分享"
+    "share": "分享",
+    "try_chatgpt": "在 ChatGPT 中试用此提示词"
   },
   "upload": {
     "title": "上传您的照片",
