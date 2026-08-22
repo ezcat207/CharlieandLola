@@ -134,7 +134,7 @@ export async function POST(request: Request) {
     try {
       // Generate edited image using Gemini 2.5 Flash Image Preview
       response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-image-preview",
+        model: "gemini-2.5-flash-image",
         contents: imageEditPrompt,
       });
     } catch (error: any) {
@@ -238,7 +238,7 @@ export async function POST(request: Request) {
       filename: storedFilename,
       message: "Charlie and Lola style transformation completed successfully",
       provider: "google.gemini",
-      model: "gemini-2.5-flash-image-preview",
+      model: "gemini-2.5-flash-image",
       creditsUsed: isRegisteredUser ? requiredCredits : 0,
       aspectRatio,
       outputFormat: fileExtension,
