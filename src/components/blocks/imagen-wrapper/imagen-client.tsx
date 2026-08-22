@@ -32,6 +32,7 @@ interface Translations {
     share: string;
     try_chatgpt: string;
     limited_free: string;
+    invite_friends: string;
   };
   upload: {
     title: string;
@@ -69,6 +70,7 @@ interface Translations {
       generated: string;
       downloaded: string;
       url_copied: string;
+      link_copied: string;
     };
     errors: {
       login_required: string;
@@ -481,6 +483,35 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
     }
   };
 
+  const shareApp = async () => {
+    const siteUrl = process.env.NEXT_PUBLIC_WEB_URL || 'https://charlielola.com';
+    const shareTitle = 'Charlie & Lola AI';
+    const shareText = 'I turned my photo into a Charlie and Lola style character! Try it free:';
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: shareTitle, text: shareText, url: siteUrl });
+        return;
+      } catch (error) {
+        // User cancelled the native share sheet, or it's unsupported for this call - fall through to clipboard copy
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(`${shareText} ${siteUrl}`);
+      toast.success(t.messages.success.link_copied);
+    } catch (error) {
+      console.error('Share app failed:', error);
+      const tempInput = document.createElement('input');
+      tempInput.value = `${shareText} ${siteUrl}`;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      toast.success(t.messages.success.link_copied);
+    }
+  };
+
   return (
     <div>
       <section className="min-h-screen relative overflow-hidden bg-background text-foreground">
@@ -836,6 +867,16 @@ export default function ImagenClient({ translations: t }: ImagenClientProps) {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                             {t.buttons.download}
+                          </Button>
+                          <Button
+                            onClick={shareApp}
+                            size="sm"
+                            variant="outline"
+                          >
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                            </svg>
+                            {t.buttons.invite_friends}
                           </Button>
                         </div>
                       </div>

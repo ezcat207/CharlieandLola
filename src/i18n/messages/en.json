@@ -183,7 +183,8 @@
       "download": "Download",
       "share": "Share",
       "limited_free": "Limited Free",
-      "try_chatgpt": "Try this prompt in ChatGPT"
+      "try_chatgpt": "Try this prompt in ChatGPT",
+      "invite_friends": "Invite Friends"
     },
     "upload": {
       "title": "Reference Images",
@@ -232,7 +233,8 @@
       "success": {
         "generated": "Charlie & Lola AI art generated successfully!",
         "downloaded": "Character image downloaded successfully!",
-        "url_copied": "Character image URL copied to clipboard!"
+        "url_copied": "Character image URL copied to clipboard!",
+        "link_copied": "Link copied! Share it with your friends."
       },
       "errors": {
         "login_required": "Please log in first",

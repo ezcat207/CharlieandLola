@@ -33,6 +33,7 @@ export default async function ImagenWrapper({ locale = 'en' }: ImagenWrapperProp
       share: t('buttons.share'),
       try_chatgpt: t('buttons.try_chatgpt'),
       limited_free: t('buttons.limited_free'),
+      invite_friends: t('buttons.invite_friends'),
     },
     upload: {
       title: t('upload.title'),
@@ -71,6 +72,7 @@ export default async function ImagenWrapper({ locale = 'en' }: ImagenWrapperProp
         generated: t('messages.success.generated'),
         downloaded: t('messages.success.downloaded'),
         url_copied: t('messages.success.url_copied'),
+        link_copied: t('messages.success.link_copied'),
       },
       errors: {
         login_required: t('messages.errors.login_required'),
