@@ -31,6 +31,7 @@ interface Translations {
     download: string;
     share: string;
     try_chatgpt: string;
+    limited_free: string;
   };
   upload: {
     title: string;
