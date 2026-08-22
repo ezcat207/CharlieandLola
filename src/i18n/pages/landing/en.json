@@ -326,7 +326,7 @@
     "items": [
       {
         "title": "What is Charlie and Lola Style Converter?",
-        "description": "Charlie and Lola Style Converter is a magical AI transformation service that turns any photo into charming characters inspired by Lauren Child's beloved children's books. Using advanced Gemini 2.5 Flash Image Preview technology, we perfectly capture the series' distinctive art style."
+        "description": "Charlie and Lola Style Converter is a magical AI transformation service that turns any photo into charming characters inspired by Lauren Child's beloved children's books. Using advanced AI image transformation technology, we perfectly capture the series' distinctive art style."
       },
       {
         "title": "How is this different from other character generators?",
@@ -338,7 +338,7 @@
       },
       {
         "title": "How long does the transformation take?",
-        "description": "Character transformations typically complete within 30-60 seconds using our advanced Gemini 2.5 Flash Image Preview technology. Simply upload your photo and watch the Charlie and Lola magic happen!"
+        "description": "Character transformations typically complete within 30-60 seconds using our advanced AI image transformation technology. Simply upload your photo and watch the Charlie and Lola magic happen!"
       },
       {
         "title": "How authentic is the Charlie and Lola style?",
@@ -373,7 +373,7 @@
     "name": "footer",
     "brand": {
       "title": "Charlie and Lola Style Converter",
-      "description": "Magical AI-powered character transformation service. Transform any photo into beloved Charlie and Lola style characters using advanced Gemini technology. Perfect for families and children.",
+      "description": "Magical AI-powered character transformation service. Transform any photo into beloved Charlie and Lola style characters using advanced AI technology. Perfect for families and children.",
       "logo": {
         "src": "/logo.png",
         "alt": "Charlie and Lola Style Converter"

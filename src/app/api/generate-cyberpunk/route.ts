@@ -3,8 +3,12 @@ import { getUuid } from "@/lib/hash";
 import { newStorage } from "@/lib/storage";
 import { systemCreditManager, CreditUsageType } from "@/services/system-credits";
 import { getUserUuid } from "@/services/user";
-import { decreaseCredits, CreditsTransType, CreditsAmount, getUserCredits } from "@/services/credit";
-import { geminiApiPool } from "@/lib/gemini-api-pool";
+import { CreditsAmount, getUserCredits } from "@/services/credit";
+
+const KIE_API_BASE = "https://api.kie.ai/api/v1/playground";
+const KIE_MODEL = "google/nano-banana-edit";
+const POLL_INTERVAL_MS = 3000;
+const MAX_POLL_ATTEMPTS = 40; // ~120s timeout
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +20,7 @@ export async function POST(request: Request) {
     const outputFormat = formData.get('outputFormat') as string || 'png';
     const model = formData.get('model') as string || 'standard';
     const imageCount = parseInt(formData.get('imageCount') as string || '0');
-    
+
     // Get multiple images
     const images: File[] = [];
     for (let i = 0; i < Math.min(imageCount, 5); i++) {
@@ -51,7 +55,7 @@ export async function POST(request: Request) {
     // Get user info
     const userUuid = await getUserUuid();
     const isRegisteredUser = !!userUuid;
-    
+
     // Check credits for registered users
     if (isRegisteredUser) {
       const userCredits = await getUserCredits(userUuid);
@@ -59,16 +63,12 @@ export async function POST(request: Request) {
         return respErr(`Insufficient credits. You need ${CreditsAmount.ImageGeneration} credits but only have ${userCredits.left_credits}. Please recharge to continue.`, 'INSUFFICIENT_CREDITS');
       }
     }
-    
-    // Check if we have available API keys
-    if (!geminiApiPool.hasAvailableKeys()) {
-      return respErr("Service is currently at capacity. Please try again later or upgrade to premium for priority access.", 'QUEUE_REQUIRED');
-    }
-    
-    // Get API key from pool
-    const geminiApiKey = geminiApiPool.getNextAvailableKey();
-    if (!geminiApiKey) {
-      return respErr("All API keys are currently busy. Please try again in a few moments.", 'QUEUE_REQUIRED');
+
+    // Check for Kie.ai API key
+    const kieApiKey = process.env.KIEAI_API_KEY;
+    if (!kieApiKey) {
+      console.error("Kie.ai API key is not configured");
+      return respErr("Image generation service is not configured. Please contact support.");
     }
 
     // Validate that at least one image is provided for Charlie and Lola transformation
@@ -80,15 +80,49 @@ export async function POST(request: Request) {
     const image = images[0];
     const bytes = await image.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
+
     // Validate image size
     if (buffer.length > 10 * 1024 * 1024) { // 10MB limit
       return respErr("Image is too large. Please use images smaller than 10MB.");
     }
 
-    // Convert image to base64
-    const base64Image = buffer.toString("base64");
     const mimeType = image.type;
+
+    // Kie.ai needs a publicly reachable URL for the input image (no inline base64),
+    // so storage is required for this provider.
+    const hasStorageConfig = process.env.STORAGE_ENDPOINT &&
+                            process.env.STORAGE_ACCESS_KEY &&
+                            process.env.STORAGE_SECRET_KEY &&
+                            process.env.STORAGE_BUCKET;
+
+    if (!hasStorageConfig) {
+      console.error("Storage is not configured; Kie.ai requires a public input image URL");
+      return respErr("Image generation service is not configured. Please contact support.");
+    }
+
+    const storage = newStorage();
+    const batch = getUuid();
+
+    let inputImageUrl: string;
+    try {
+      const inputExtension = mimeType.split('/')[1] || 'png';
+      const inputKey = `input/charlie-lola-${batch}.${inputExtension}`;
+
+      const uploadResult = await storage.uploadFile({
+        body: buffer,
+        key: inputKey,
+        contentType: mimeType,
+        disposition: "inline",
+      });
+
+      if (!uploadResult.url) {
+        throw new Error("Upload did not return a URL");
+      }
+      inputImageUrl = uploadResult.url;
+    } catch (uploadError) {
+      console.error("Failed to upload input image:", uploadError);
+      return respErr("Failed to process uploaded image. Please try again.");
+    }
 
     // Charlie and Lola style prompt
     const charlieLolaPrompt = customPrompt.trim() || "Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children's cartoon). Match the official cartoon look - thin sketchy outlines, flat colors, childlike proportions, playful hand-drawn charm, and simple textures. Retain the subject's original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression - but reinterpret them as if they belong in the Charlie and Lola world. Clothing should be simplified into flat shapes and bright colors, while keeping the overall outfit recognizable. Background: transparent to keep the focus on the character. Negative Prompt: No realistic shading, no detailed rendering, no anime or manga style, no 3D modeling, no photographic textures!";
@@ -104,146 +138,144 @@ export async function POST(request: Request) {
     console.log("User UUID:", userUuid || "Guest user");
     console.log("===========================================");
 
-    let ai;
-    try {
-      // Initialize Gemini API
-      const { GoogleGenAI } = require("@google/genai");
-      ai = new GoogleGenAI({
-        apiKey: geminiApiKey,
-      });
-    } catch (error) {
-      console.error('Failed to initialize Gemini API:', error);
-      geminiApiPool.markKeyAsUnavailable(geminiApiKey, 'Failed to initialize');
-      return respErr("Failed to initialize AI service. Please try again.");
-    }
+    console.log("🔄 Generating Charlie and Lola style image via Kie.ai...");
 
-    // Prepare the image editing prompt
-    const imageEditPrompt = [
-      { text: charlieLolaPrompt },
-      {
-        inlineData: {
-          mimeType: mimeType,
-          data: base64Image,
+    // Create the Kie.ai generation task
+    let taskId: string;
+    try {
+      const createResponse = await fetch(`${KIE_API_BASE}/createTask`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${kieApiKey}`,
+          'Content-Type': 'application/json',
         },
-      },
-    ];
-
-    console.log("🔄 Generating Charlie and Lola style image...");
-
-    let response;
-    try {
-      // Generate edited image using Gemini 2.5 Flash Image Preview
-      response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-image",
-        contents: imageEditPrompt,
+        body: JSON.stringify({
+          model: KIE_MODEL,
+          callBackUrl: `${process.env.NEXT_PUBLIC_WEB_URL || 'https://charlielola.com'}/api/callback`,
+          input: {
+            prompt: charlieLolaPrompt,
+            image_urls: [inputImageUrl],
+            num_images: "1",
+          },
+        }),
       });
-    } catch (error: any) {
-      console.error('Gemini API error:', error);
-      
-      // Check if it's a quota/limit error
-      if (error.message?.includes('quota') || error.message?.includes('limit') || error.status === 429) {
-        geminiApiPool.markKeyAsUnavailable(geminiApiKey, 'Quota exceeded');
-        return respErr("Too many users online! VIP users get priority access. You're in queue, please wait a moment or upgrade to VIP for instant access.", 'QUEUE_REQUIRED');
+
+      const createResult = await createResponse.json();
+
+      if (!createResponse.ok || createResult.code !== 200 || !createResult.data?.taskId) {
+        console.error("Kie.ai createTask error:", createResult);
+        return respErr("Failed to generate image. Please try again.");
       }
-      
-      geminiApiPool.markKeyAsUnavailable(geminiApiKey, error.message || 'Unknown error');
+
+      taskId = createResult.data.taskId;
+    } catch (error) {
+      console.error("Kie.ai createTask request failed:", error);
       return respErr("Failed to generate image. Please try again.");
     }
 
-    if (!response.candidates || response.candidates.length === 0) {
-      return respErr("No image generated by Gemini API");
-    }
+    // Poll for task completion
+    let resultImageUrl: string | null = null;
+    for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
 
-    // Find the generated image in the response
-    let generatedImageData = null;
-    let generatedImageMimeType = 'image/png';
+      try {
+        const statusResponse = await fetch(`${KIE_API_BASE}/recordInfo?taskId=${taskId}`, {
+          headers: { 'Authorization': `Bearer ${kieApiKey}` },
+        });
+        const statusResult = await statusResponse.json();
 
-    for (const part of response.candidates[0].content.parts) {
-      if (part.inlineData) {
-        generatedImageData = part.inlineData.data;
-        generatedImageMimeType = part.inlineData.mimeType;
-        break;
+        if (statusResult.code !== 200) {
+          continue;
+        }
+
+        const state = statusResult.data?.state;
+
+        if (state === 'success') {
+          try {
+            const resultJson = statusResult.data?.resultJson ? JSON.parse(statusResult.data.resultJson) : null;
+            resultImageUrl = resultJson?.resultUrls?.[0] || null;
+          } catch (parseError) {
+            console.error("Failed to parse Kie.ai resultJson:", parseError, statusResult.data?.resultJson);
+          }
+          break;
+        }
+
+        if (state === 'fail') {
+          console.error("Kie.ai generation failed:", statusResult.data);
+          return respErr(statusResult.data?.failMsg || "Failed to generate image. Please try again.");
+        }
+
+        // state === 'waiting' (or similar in-progress state) — keep polling
+      } catch (pollError) {
+        console.error("Kie.ai polling error:", pollError);
       }
     }
 
-    if (!generatedImageData) {
-      return respErr("No image data found in Gemini API response");
+    if (!resultImageUrl) {
+      console.error("Kie.ai generation timed out for task:", taskId);
+      return respErr("Image generation timed out. Please try again.");
     }
 
-    // Generate filename and store the image
-    const batch = getUuid();
-    const fileExtension = generatedImageMimeType.split('/')[1];
+    // Re-store the generated image in our own bucket (Kie.ai's URL is temporary)
+    const urlExtensionMatch = resultImageUrl.match(/\.([a-zA-Z0-9]+)(?:\?|$)/);
+    const fileExtension = (urlExtensionMatch?.[1] || outputFormat || 'png').toLowerCase();
     const filename = `charlie-lola-${batch}.${fileExtension}`;
-    
-    let finalImageUrl = `data:${generatedImageMimeType};base64,${generatedImageData}`;
+
+    let finalImageUrl = resultImageUrl;
     let storedFilename = filename;
 
-    // Store image if storage is configured
-    const hasStorageConfig = process.env.STORAGE_ENDPOINT && 
-                            process.env.STORAGE_ACCESS_KEY && 
-                            process.env.STORAGE_SECRET_KEY && 
-                            process.env.STORAGE_BUCKET;
+    try {
+      const key = `output/${filename}`;
+      console.log(`Storing generated Charlie and Lola image to: ${key}`);
 
-    if (hasStorageConfig) {
-      try {
-        const storage = newStorage();
-        const key = `output/${filename}`;
-        const imageBuffer = Buffer.from(generatedImageData, 'base64');
+      const storedImage = await storage.downloadAndUpload({
+        url: resultImageUrl,
+        key,
+        contentType: `image/${fileExtension}`,
+        disposition: "inline",
+      });
 
-        console.log(`Storing generated Charlie and Lola image to: ${key}`);
-
-        const uploadResult = await storage.uploadFile({
-          body: imageBuffer,
-          key,
-          contentType: generatedImageMimeType,
-          disposition: "inline",
-        });
-
-        if (uploadResult.url) {
-          finalImageUrl = uploadResult.url;
-          storedFilename = uploadResult.filename || filename;
-          console.log(`Successfully stored generated image: ${finalImageUrl}`);
-        }
-      } catch (storageError) {
-        console.error("Failed to store generated image:", storageError);
-        console.log("Using base64 data URL as fallback");
-      }
+      finalImageUrl = storedImage.url;
+      storedFilename = storedImage.filename || filename;
+      console.log(`Successfully stored generated image: ${finalImageUrl}`);
+    } catch (storageError) {
+      console.error("Failed to store generated image:", storageError);
+      console.log("Using Kie.ai URL as fallback");
     }
 
     // For free generation, no credits consumed unless user wants to download
     const requiredCredits = CreditsAmount.ImageGeneration; // Cost for generation
-    
+
     // Free generation for all users - return preview/watermarked image
     // For registered users downloading, consume credits and return full image
     let responseImageUrl = finalImageUrl;
     let requiresRegistration = false;
-    
+
     if (!isRegisteredUser) {
       // Guest user - return preview with registration requirement for download
       requiresRegistration = true;
       responseImageUrl = finalImageUrl; // Still show the generated image
     } else {
       // Registered user - can download without additional costs for now
-      // In the future, you might want to implement credit consumption here
       await systemCreditManager.consumeSystemCredits({
         credits: requiredCredits,
         userUuid: userUuid,
         usageType: CreditUsageType.IMAGE_GENERATION,
-        description: `Charlie and Lola style transformation using Gemini 2.5 Flash Image Preview`
+        description: `Charlie and Lola style transformation using Kie.ai nano-banana-edit`,
       });
     }
-    
+
     return respData({
       imageUrl: responseImageUrl,
       filename: storedFilename,
       message: "Charlie and Lola style transformation completed successfully",
-      provider: "google.gemini",
-      model: "gemini-2.5-flash-image",
+      provider: "kie.ai",
+      model: KIE_MODEL,
       creditsUsed: isRegisteredUser ? requiredCredits : 0,
       aspectRatio,
       outputFormat: fileExtension,
       style: style,
-      storedLocally: hasStorageConfig && !finalImageUrl.startsWith('data:'),
+      storedLocally: finalImageUrl !== resultImageUrl,
       requiresRegistration,
       isPreview: !isRegisteredUser,
       downloadUrl: isRegisteredUser ? responseImageUrl : null,

@@ -131,9 +131,9 @@ export default async function LandingPage({
       "name": isZh ? "查理和罗拉风格转换器" : "Charlie and Lola Style Converter",
       "alternateName": isZh ? "查理罗拉角色魔法" : "Charlie Lola Character Magic",
       "url": `${baseUrl}${locale === 'en' ? '' : `/${locale}`}`,
-      "description": isZh 
-        ? "无需注册登录即可免费使用！使用先进的Gemini 2.5 Flash Image Preview技术，将任何照片转换为迷人的查理和罗拉风格角色。完美的儿童绘本风格，创作个性化纪念品和特殊礼物。"
-        : "No sign-up required! Free to use instantly! Transform any photo into charming Charlie and Lola style characters using advanced Gemini 2.5 Flash Image Preview technology. Perfect children's book style for creating personalized keepsakes and special gifts.",
+      "description": isZh
+        ? "无需注册登录即可免费使用！使用先进的AI图像转换技术，将任何照片转换为迷人的查理和罗拉风格角色。完美的儿童绘本风格，创作个性化纪念品和特殊礼物。"
+        : "No sign-up required! Free to use instantly! Transform any photo into charming Charlie and Lola style characters using advanced AI image transformation technology. Perfect children's book style for creating personalized keepsakes and special gifts.",
       "applicationCategory": ["AI Tool", "Character Converter", "Children's Art"],
       "operatingSystem": "Web Browser",
       "browserRequirements": "Requires JavaScript, Modern Web Browser",
